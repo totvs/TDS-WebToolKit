@@ -1,0 +1,3 @@
+codicons
+TOTVS
+webtoolkit
