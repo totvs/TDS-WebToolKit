@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /*
 Copyright 2024 TOTVS S.A
 
@@ -55,11 +57,11 @@ export default function PopupMessage(props: IPopupMessage): JSX.Element {
 	const OFFSET_TOP: number = 2;
 	const type: string = props.fieldState.invalid ? "error" : "info";
 
-	let message: string = buildMessage(props);
+	const message: string = buildMessage(props);
 
-	const preparePopup: any = (event: any): HTMLSpanElement => {
-		var popup = document.getElementById("popup_" + props.field.name) as HTMLElement;
-		var parent = popup.parentElement!.parentElement as HTMLElement;
+	const preparePopup: any = (/*event: any*/): HTMLSpanElement => {
+		const popup = document.getElementById("popup_" + props.field.name) as HTMLElement;
+		const parent = popup.parentElement!.parentElement as HTMLElement;
 
 		if (parent) {
 			popup.style.width = `${parent.clientWidth - OFFSET_LEFT}px`;
@@ -76,8 +78,8 @@ export default function PopupMessage(props: IPopupMessage): JSX.Element {
 		popup.classList.toggle("show");
 	};
 
-	const mouseOut: any = (event: any) => {
-		var popup = document.getElementById("popup_" + props.field.name) as HTMLElement;
+	const mouseOut: any = (/*event: any*/) => {
+		const popup = document.getElementById("popup_" + props.field.name) as HTMLElement;
 		popup.classList.toggle("show");
 	};
 

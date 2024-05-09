@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import "./page.css";
+import React from 'react';
 import TdsHeader from "./header";
 import TdsFooter from "./footer";
 import TdsContent from "./content";

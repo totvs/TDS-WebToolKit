@@ -1,3 +1,5 @@
 codicons
+tlpp
+totvs
 TOTVS
 webtoolkit

@@ -1,4 +1,4 @@
-//@ts-check
+// @ts-nocheck
 
 "use strict";
 const path = require("path");
@@ -8,11 +8,11 @@ const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
 //const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const plugins = []; //new MiniCssExtractPlugin()
+//const plugins: any[] = []; //new MiniCssExtractPlugin()
 
 const BUILD_FOLDER = path.resolve(path.join(
   __dirname,
-  "build"
+  "dist"
 ));
 
 const SOURCE_FOLDER = path.resolve(path.join(
@@ -20,8 +20,7 @@ const SOURCE_FOLDER = path.resolve(path.join(
   "src"
 ));
 
-const CHAT_PATH = path.join(SOURCE_FOLDER, "chat");
-const GENERATE_CODE_PATH = path.join(SOURCE_FOLDER, "generateCode");
+const WEBTOOLKIT_PATH = path.join(SOURCE_FOLDER, "");
 
 module.exports = (env, argv) => {
   const production = (argv.mode === 'production') || (env.NODE_ENV === 'production');
@@ -62,12 +61,11 @@ module.exports = (env, argv) => {
     target: "node",
     devtool: devtool,
     optimization: optimization,
-    plugins: plugins,
+    plugins: [],
     //O webpack, pega todos os fontes tsx e os compacta em um único arquivo .js. Isso é feito para contornar algumas limitações e alguns browsers que não aceitam a instrução import.
     //O entry pode ser definido com um objeto. A chave, ou no nome da propriedade, nesse caso sera o nome de saída do arquivo.
     entry: {
-      chatView: path.join(CHAT_PATH, "index.tsx"),
-      generateCodeView: path.join(GENERATE_CODE_PATH, "index.tsx")
+      index: path.join(WEBTOOLKIT_PATH, "index.ts"),
     },
     output: {
       //Todos os arquivos tsx serão compilados e gerados seus equivalentes js na mesma pasta

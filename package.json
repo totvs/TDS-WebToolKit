@@ -1,41 +1,54 @@
 {
-  "name": "tds-webtoolkit",
+  "name": "@totvs/tds-webtoolkit",
   "displayName": "TDS-WebToolkit",
   "description": "Standard UI for TDS products",
-  "version": "0.0.1",
-  "private": true,
+  "version": "0.0.3",
   "license": "Apache-2.0",
+  "publisher": "TOTVS",
+  "author": {
+    "name": "TOTVS",
+    "email": "tecnologia@totvs.com.br"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "--BUILD--": "",
+    "--COMPILE--": "",
     "compile": "tsc",
+    "copy-files": "npx copyfiles -u 1 src/**/*.css dist/",
     "--WATCH--": "",
     "watch": "tsc -watch",
-    "--MISC--": "",
-    "lint": "eslint src --ext ts",
-    "lint-fix": "eslint src --ext ts --fix",
-    "_lint": "eslint --help"
+    "-- BUILD --": "",
+    "build": "webpack --mode=production",
+    "---RELEASE---": "",
+    "release": "npx standard-version",
+    "tag": "git push --follow-tags",
+    "to_publish": "npm publish",
+    "-prepublishOnly": "npm run clean && npm run build",
+    "---MISC---": "",
+    "link": "npm link",
+    "local-link": "npm link"
   },
   "dependencies": {
     "@vscode/codicons": "^0.0.35",
     "@vscode/webview-ui-toolkit": "^1.4.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-hook-form": "^7.49.3"
+    "react-hook-form": "^7.51.4",
+    "typescript-plugin-css-modules": "^5.1.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.45",
-    "@types/react-dom": "^18.2.18",
-    "@types/vscode-webview": "^1.57.4",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "eslint": "^8.57.0",
-    "eslint-config-standard-with-typescript": "^43.0.1",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "style-loader": "^3.3.3",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "@types/vscode-webview": "^1.57.5",
+    "css-loader": "^7.1.1",
+    "css-minimizer-webpack-plugin": "^7.0.0",
+    "style-loader": "^4.0.0",
+    "terser-webpack-plugin": "^5.3.10",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-stream": "^7.0.0"
   }
 }

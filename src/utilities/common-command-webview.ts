@@ -14,172 +14,198 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { type TAbstractModel } from '../model/modelData'
-import { vscode } from './vscodeWrapper'
+import { TAbstractModel } from "../model/modelData";
+import { vscode } from "./vscodeWrapper";
 
 /**
- * Enumeration of common command names used for communication
+ * Enumeration of common command names used for communication 
  * between the webview and the extension.
  */
 export enum CommonCommandFromPanelEnum {
-  InitialData = 'INITIAL_DATA',
-  UpdateModel = 'UPDATE_MODEL',
-  AfterSelectResource = 'AFTER_SELECT_RESOURCE',
-  Close = 'CLOSE',
-  Ready = 'READY',
-  Reset = 'RESET',
-  Save = 'SAVE',
-  SaveAndClose = 'SAVE_AND_CLOSE',
-  SelectResource = 'SELECT_RESOURCE',
+  InitialData = "INITIAL_DATA",
+  UpdateModel = "UPDATE_MODEL",
+  AfterSelectResource = "AFTER_SELECT_RESOURCE",
+  Close = "CLOSE",
+  Ready = "READY",
+  Reset = "RESET",
+  Save = "SAVE",
+  SaveAndClose = "SAVE_AND_CLOSE",
+  SelectResource = "SELECT_RESOURCE",
 }
 
 /**
  * Enumeration of common command names used for communication
  * between the webview and the extension.
  */
-export type CommonCommandFromPanel = CommonCommandFromPanelEnum
+export type CommonCommandFromPanel = CommonCommandFromPanelEnum;
 
 /**
- * Type for messages received from the webview panel.
+ * Type for messages received from the webview panel. 
  * Contains the command name and data payload.
  * The data payload contains the updated model and any other data.
 */
-export interface ReceiveMessage<C extends CommonCommandFromPanel, T extends TAbstractModel> {
-  command: C
+export type ReceiveMessage<C extends CommonCommandFromPanel, T = any> = {
+  command: C,
   data: {
-    model: T
+    model: T,
+    errors: any
+    //[key: string]: any,
   }
 }
 
 /**
- * Enumeration of command names used for communication
+ * Enumeration of command names used for communication 
  * from the extension to the webview.
  */
 export enum CommonCommandToPanelEnum {
-  Save = 'SAVE',
-  SaveAndClose = 'SAVE_AND_CLOSE',
-  Close = 'CLOSE',
-  Ready = 'READY',
-  Reset = 'RESET',
-  Validate = 'VALIDATE',
-  UpdateModel = 'UPDATE_MODEL',
-  LinkMouseOver = 'LINK_MOUSE_OVER',
-  Feedback = 'FEEDBACK',
-  SelectResource = 'SELECT_RESOURCE',
-  CopyToClipboard = 'COPY_TO_CLIPBOARD'
+  Save = "SAVE",
+  SaveAndClose = "SAVE_AND_CLOSE",
+  Close = "CLOSE",
+  Ready = "READY",
+  Reset = "RESET",
+  Validate = "VALIDATE",
+  UpdateModel = "UPDATE_MODEL",
+  LinkMouseOver = "LINK_MOUSE_OVER",
+  Feedback = "FEEDBACK",
+  SelectResource = "SELECT_RESOURCE",
+  CopyToClipboard = "COPY_TO_CLIPBOARD"
 }
 
-export type CommonCommandToPanel = CommonCommandToPanelEnum
+export type CommonCommandToPanel = CommonCommandToPanelEnum;
 
 /**
- * Type for messages received from the webview panel.
+ * Type for messages received from the webview panel. 
  * Contains the command name and data payload.
  * The data payload contains the updated model and any other data.
 */
-export interface CommandFromPanel<C extends CommonCommandFromPanel, T extends TAbstractModel> {
-  readonly command: C
+export type CommandFromPanel<C extends CommonCommandFromPanel, T = any> = {
+  readonly command: C,
   data: {
-    model: T
+    model: T,
+    [key: string]: any,
   }
 }
 
 /**
- * Type for messages sent from the extension to the webview panel.
+ * Type for messages sent from the extension to the webview panel. 
  * Contains the command name and data payload.
  * The data payload contains the model and any other data.
 */
-export interface TSendMessage<C extends CommonCommandToPanel, T extends TAbstractModel> {
-  command: C
+export type SendMessage<C extends CommonCommandToPanel, T = any> = {
+  command: C,
   data: {
-    model: T | undefined
-    [key: string]: unknown
+    model: T | undefined,
+    [key: string]: any,
   }
 }
 
 /**
- * Sends a ready message to the webview panel
+ * Sends a ready message to the webview panel 
  * indicating the extension is ready for communication.
  */
-export function sendReady(): void {
-  const message: TSendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
+export function sendReady() {
+  const message: SendMessage<CommonCommandToPanelEnum, any> = {
     command: CommonCommandToPanelEnum.Ready,
     data: {
       model: undefined
     }
   }
 
-  vscode.postMessage(message)
+  vscode.postMessage(message);
 }
 
 /**
- * Sends a reset message to the webview panel
+ * Sends a reset message to the webview panel 
  * with the provided model to reset the state.
  */
-export function sendReset<T extends TAbstractModel>(model: T): void {
-  const message: TSendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
+export function sendReset(model: TAbstractModel) {
+  const message: SendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
     command: CommonCommandToPanelEnum.Reset,
     data: {
-      model
+      model: model
     }
   }
 
-  vscode.postMessage(message)
+  vscode.postMessage(message);
+}
+
+/**
+ * Type for props to send when requesting the user to select resources.
+ * 
+ * @param canSelectMany - Whether multiple resources can be selected. 
+ * @param canSelectFiles - Whether files can be selected.
+ * @param canSelectFolders - Whether folders can be selected.
+ * @param currentFolder - The current folder path.
+ * @param title - The title for the resource selection dialog.
+ * @param openLabel - The label for the open button. 
+ * @param filters - The allowed file filters.
+ */
+export type TSendSelectResourceOptions = {
+  canSelectMany: boolean,
+  canSelectFiles: boolean,
+  canSelectFolders: boolean,
+  currentFolder: string,
+  title: string,
+  openLabel: string,
+  filters: {
+    [key: string]: string[]
+  }
 }
 
 /**
  * Sends a validate model message to the webview panel
  * containing the provided model to validate.
  */
-export function sendValidateModel<T extends TAbstractModel>(model: T): void {
-  const message: TSendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
+export function sendValidateModel(model: TAbstractModel) {
+  const message: SendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
     command: CommonCommandToPanelEnum.Validate,
     data: {
-      model
+      model: model
     }
   }
 
-  vscode.postMessage(message)
+  vscode.postMessage(message);
 }
 
 /**
  * Sends a save model message to the webview panel
  * containing the provided model to save.
  */
-export function sendSave<T extends TAbstractModel>(model: T): void {
-  const message: TSendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
+export function sendSave(model: TAbstractModel) {
+  const message: SendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
     command: CommonCommandToPanelEnum.Save,
     data: {
-      model
+      model: model
     }
   }
 
-  vscode.postMessage(message)
+  vscode.postMessage(message);
 }
 
 /**
  * Sends a save and close message to the webview panel
  * containing the provided model to save and close.
  */
-export function sendSaveAndClose<T extends TAbstractModel | undefined>(model: T): void {
-  const message: TSendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
+export function sendSaveAndClose(model: any) {
+  const message: SendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
     command: CommonCommandToPanelEnum.SaveAndClose,
     data: {
-      model
+      model: model
     }
   }
 
-  vscode.postMessage(message)
+  vscode.postMessage(message);
 }
 
 /**
  * Sends an update model message to the webview panel
  * containing the provided model to update.
  */
-export function sendUpdateModel<T extends TAbstractModel>(model: T): void {
-  const message: TSendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
+export function sendUpdateModel(model: any) {
+  const message: SendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
     command: CommonCommandToPanelEnum.UpdateModel,
     data: {
-      model
+      model: model
     }
   }
 
@@ -189,53 +215,33 @@ export function sendUpdateModel<T extends TAbstractModel>(model: T): void {
 /**
  * Sends a close message to the webview panel.
  */
-export function sendClose(): void {
-  const message: TSendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
+export function sendClose() {
+  const message: SendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
     command: CommonCommandToPanelEnum.Close,
     data: {
       model: undefined
     }
   }
 
-  vscode.postMessage(message)
-}
-
-/**
- * Type for options to send when requesting the user to select resources.
- *
- * @param canSelectMany - Whether multiple resources can be selected.
- * @param canSelectFiles - Whether files can be selected.
- * @param canSelectFolders - Whether folders can be selected.
- * @param currentFolder - The current folder path.
- * @param title - The title for the resource selection dialog.
- * @param openLabel - The label for the open button.
- * @param filters - The allowed file filters.
- */
-export interface TSendSelectResourceOptions {
-  canSelectMany: boolean
-  canSelectFiles: boolean
-  canSelectFolders: boolean
-  currentFolder: string
-  title: string
-  openLabel: string
-  filters: Record<string, string[]>
+  vscode.postMessage(message);
 }
 
 /**
 * Sends a message to the webview panel to select a resource.
-*
+* 
 * @param firedBy - The string identifier of the entity that triggered the resource selection.
 * @param props - An object containing the properties related to the resource selection, including the model data.
 */
-export function sendSelectResource<T extends TAbstractModel>(firedBy: string, model: T, options: TSendSelectResourceOptions): void {
-  const message: TSendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
+export function sendSelectResource<M extends TAbstractModel>(firedBy: string, model: M, options: TSendSelectResourceOptions) {
+  const message: SendMessage<CommonCommandToPanelEnum, M> = {
     command: CommonCommandToPanelEnum.SelectResource,
     data: {
-      model,
-      options,
-      firedBy
+      model: model,
+      ...options,
+      firedBy: firedBy
     }
   }
 
-  vscode.postMessage(message)
+  vscode.postMessage(message);
 }
+

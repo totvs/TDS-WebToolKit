@@ -18,14 +18,14 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react",
         "react-hooks"
     ],
     "rules": {
         "space-before-function-paren": "off",
         "@typescript-eslint/space-before-function-paren": "off",
         "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "warn"
+        "react-hooks/exhaustive-deps": "warn",
+        "@typescript-eslint/no-explicit-any": "off"
     },
     "settings": {
         "react": {

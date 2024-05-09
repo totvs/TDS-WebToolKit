@@ -18,7 +18,7 @@ import "./form.css";
 import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
 import { FieldValues, RegisterOptions, UseFormReturn, UseFormSetError, UseFormSetValue, useFormContext } from "react-hook-form";
 import { VSCodeButton, VSCodeLink, VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { sendClose, sendReset } from "../../utilities/common-command-webview";
 
 /**
@@ -75,13 +75,13 @@ export function getDefaultActionsForm(): IFormAction[] {
 *   através dos métodos ``getValues()``, ``setValues()``.
 **/
 
-type TDSFormProps<DataModel extends FieldValues> = {
+type TDSFormProps<M extends FieldValues> = {
 	id?: string;
 	onSubmit: (data: any) => void;
-	methods: UseFormReturn<DataModel>;
+	methods: UseFormReturn<M>;
 	actions?: IFormAction[];
 	children: any
-	isProcessRing?: boolean
+	isProcessRing?: boolean;
 };
 
 /**
@@ -106,6 +106,7 @@ export interface IFormAction {
  * Defines the props shape for form fields.
  */
 export type TdsFieldProps = {
+	//methods: UseFormReturn<M>;
 	name: string;
 	label: string;
 	info?: string;
@@ -187,10 +188,11 @@ let isProcessRing: boolean = false;
  * Renders form content, messages, and action buttons.
  * Handles submit and reset events.
  */
-export function TdsForm<DataModel extends FieldValues>(props: TDSFormProps<DataModel>): JSX.Element {
-	const {
-		formState: { errors, isDirty, isValid, isSubmitting },
-	} = useFormContext();
+export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): JSX.Element {
+	let isSubmitting: boolean = props.methods.formState.isSubmitting;
+	let isDirty: boolean = props.methods.formState.isDirty;
+	let isValid: boolean = props.methods.formState.isValid;
+	let errors: any = props.methods.formState.errors;
 
 	let actions: IFormAction[] = props.actions ? props.actions : getDefaultActionsForm();
 
@@ -253,7 +255,7 @@ export function TdsForm<DataModel extends FieldValues>(props: TDSFormProps<DataM
 						}
 
 						if (action.visible !== undefined) {
-							let isVisible: false;
+							let isVisible: boolean = false;
 
 							if (action.visible = typeof action.visible === "function") {
 								isVisible = (Function)(action.visible)(isDirty, isValid)

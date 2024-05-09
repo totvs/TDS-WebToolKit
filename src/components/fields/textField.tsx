@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 import { VSCodeTextArea, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
-import { useController, useFormContext } from "react-hook-form";
+import { ControllerFieldState, UseFormReturn, useController, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 
 type TdsTextFieldProps = TdsFieldProps & {
+    methods: UseFormReturn<any>;
     textArea?: boolean
     placeholder?: string;
     size?: number;
@@ -41,8 +42,10 @@ type TdsTextFieldProps = TdsFieldProps & {
 export function TdsTextField(props: TdsTextFieldProps): JSX.Element {
     const {
         register
-    } = useFormContext();
-    const { field, fieldState } = useController(props);
+    } = props.methods;
+    //const { field, fieldState } = useController(props);
+    const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
+
     const registerField = register(props.name, props.rules);
 
     // // https://github.com/microsoft/vscode-webview-ui-toolkit/blob/main/src/react/README.md#use-oninput-instead-of-onchange-to-handle-keystrokes
@@ -55,7 +58,7 @@ export function TdsTextField(props: TdsTextFieldProps): JSX.Element {
             className={`tds-field-container tds-text-field ${props.className ? props.className : ''}`}
         >
             <label
-                htmlFor={field.name}
+                htmlFor={props.name}
             >
                 {props.label}
                 {props.rules?.required && <span className="tds-required" />}
@@ -63,22 +66,22 @@ export function TdsTextField(props: TdsTextFieldProps): JSX.Element {
             {props.textArea ?? false ? (
                 <VSCodeTextArea
                     readOnly={props.readOnly || false}
-                    {...registerField}
                     placeholder={props.placeholder}
                     resize="vertical"
                     cols={props.cols ?? 30}
                     rows={props.rows ?? 15}
                     onInput={props.onInput}
+                    {...registerField}
                 >
                     <PopupMessage field={props} fieldState={fieldState} />
                 </VSCodeTextArea>
             ) : (
                 <VSCodeTextField
                     readOnly={props.readOnly || false}
-                    {...registerField}
                     placeholder={props.placeholder}
                     size={props.size ?? 30}
                     onInput={props.onInput}
+                    {...registerField}
                 >
                     <PopupMessage field={props} fieldState={fieldState} />
                 </VSCodeTextField>
