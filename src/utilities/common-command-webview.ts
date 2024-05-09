@@ -14,50 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { TAbstractModel } from "../model/modelData";
+import { TdsAbstractModel } from "../model/modelData";
 import { vscode } from "./vscodeWrapper";
-
-/**
- * Enumeration of common command names used for communication 
- * between the webview and the extension.
- */
-export enum CommonCommandFromPanelEnum {
-  InitialData = "INITIAL_DATA",
-  UpdateModel = "UPDATE_MODEL",
-  AfterSelectResource = "AFTER_SELECT_RESOURCE",
-  Close = "CLOSE",
-  Ready = "READY",
-  Reset = "RESET",
-  Save = "SAVE",
-  SaveAndClose = "SAVE_AND_CLOSE",
-  SelectResource = "SELECT_RESOURCE",
-}
-
-/**
- * Enumeration of common command names used for communication
- * between the webview and the extension.
- */
-export type CommonCommandFromPanel = CommonCommandFromPanelEnum;
-
-/**
- * Type for messages received from the webview panel. 
- * Contains the command name and data payload.
- * The data payload contains the updated model and any other data.
-*/
-export type ReceiveMessage<C extends CommonCommandFromPanel, T = any> = {
-  command: C,
-  data: {
-    model: T,
-    errors: any
-    //[key: string]: any,
-  }
-}
 
 /**
  * Enumeration of command names used for communication 
  * from the extension to the webview.
  */
-export enum CommonCommandToPanelEnum {
+export enum CommonCommandEnum {
   Save = "SAVE",
   SaveAndClose = "SAVE_AND_CLOSE",
   Close = "CLOSE",
@@ -66,19 +30,33 @@ export enum CommonCommandToPanelEnum {
   Validate = "VALIDATE",
   UpdateModel = "UPDATE_MODEL",
   LinkMouseOver = "LINK_MOUSE_OVER",
-  Feedback = "FEEDBACK",
   SelectResource = "SELECT_RESOURCE",
+  AfterSelectResource = "AFTER_SELECT_RESOURCE",
   CopyToClipboard = "COPY_TO_CLIPBOARD"
 }
 
-export type CommonCommandToPanel = CommonCommandToPanelEnum;
+export type TCommonCommand = CommonCommandEnum;
 
 /**
  * Type for messages received from the webview panel. 
  * Contains the command name and data payload.
  * The data payload contains the updated model and any other data.
 */
-export type CommandFromPanel<C extends CommonCommandFromPanel, T = any> = {
+export type ReceiveMessage<C extends TCommonCommand, T = any> = {
+  command: C,
+  data: {
+    model: T,
+    errors: any
+    [key: string]: any,
+  }
+}
+
+/**
+ * Type for messages received from the webview panel. 
+ * Contains the command name and data payload.
+ * The data payload contains the updated model and any other data.
+*/
+export type CommandFromPanel<C extends TCommonCommand, T = any> = {
   readonly command: C,
   data: {
     model: T,
@@ -91,7 +69,7 @@ export type CommandFromPanel<C extends CommonCommandFromPanel, T = any> = {
  * Contains the command name and data payload.
  * The data payload contains the model and any other data.
 */
-export type SendMessage<C extends CommonCommandToPanel, T = any> = {
+export type SendMessage<C extends TCommonCommand, T = any> = {
   command: C,
   data: {
     model: T | undefined,
@@ -104,8 +82,8 @@ export type SendMessage<C extends CommonCommandToPanel, T = any> = {
  * indicating the extension is ready for communication.
  */
 export function sendReady() {
-  const message: SendMessage<CommonCommandToPanelEnum, any> = {
-    command: CommonCommandToPanelEnum.Ready,
+  const message: SendMessage<CommonCommandEnum, any> = {
+    command: CommonCommandEnum.Ready,
     data: {
       model: undefined
     }
@@ -118,9 +96,9 @@ export function sendReady() {
  * Sends a reset message to the webview panel 
  * with the provided model to reset the state.
  */
-export function sendReset(model: TAbstractModel) {
-  const message: SendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
-    command: CommonCommandToPanelEnum.Reset,
+export function sendReset(model: TdsAbstractModel) {
+  const message: SendMessage<CommonCommandEnum, TdsAbstractModel> = {
+    command: CommonCommandEnum.Reset,
     data: {
       model: model
     }
@@ -156,9 +134,9 @@ export type TSendSelectResourceOptions = {
  * Sends a validate model message to the webview panel
  * containing the provided model to validate.
  */
-export function sendValidateModel(model: TAbstractModel) {
-  const message: SendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
-    command: CommonCommandToPanelEnum.Validate,
+export function sendValidateModel(model: TdsAbstractModel) {
+  const message: SendMessage<CommonCommandEnum, TdsAbstractModel> = {
+    command: CommonCommandEnum.Validate,
     data: {
       model: model
     }
@@ -171,9 +149,9 @@ export function sendValidateModel(model: TAbstractModel) {
  * Sends a save model message to the webview panel
  * containing the provided model to save.
  */
-export function sendSave(model: TAbstractModel) {
-  const message: SendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
-    command: CommonCommandToPanelEnum.Save,
+export function sendSave(model: TdsAbstractModel) {
+  const message: SendMessage<CommonCommandEnum, TdsAbstractModel> = {
+    command: CommonCommandEnum.Save,
     data: {
       model: model
     }
@@ -187,8 +165,8 @@ export function sendSave(model: TAbstractModel) {
  * containing the provided model to save and close.
  */
 export function sendSaveAndClose(model: any) {
-  const message: SendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
-    command: CommonCommandToPanelEnum.SaveAndClose,
+  const message: SendMessage<CommonCommandEnum, TdsAbstractModel> = {
+    command: CommonCommandEnum.SaveAndClose,
     data: {
       model: model
     }
@@ -202,8 +180,8 @@ export function sendSaveAndClose(model: any) {
  * containing the provided model to update.
  */
 export function sendUpdateModel(model: any) {
-  const message: SendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
-    command: CommonCommandToPanelEnum.UpdateModel,
+  const message: SendMessage<CommonCommandEnum, TdsAbstractModel> = {
+    command: CommonCommandEnum.UpdateModel,
     data: {
       model: model
     }
@@ -216,8 +194,8 @@ export function sendUpdateModel(model: any) {
  * Sends a close message to the webview panel.
  */
 export function sendClose() {
-  const message: SendMessage<CommonCommandToPanelEnum, TAbstractModel> = {
-    command: CommonCommandToPanelEnum.Close,
+  const message: SendMessage<CommonCommandEnum, TdsAbstractModel> = {
+    command: CommonCommandEnum.Close,
     data: {
       model: undefined
     }
@@ -232,9 +210,9 @@ export function sendClose() {
 * @param firedBy - The string identifier of the entity that triggered the resource selection.
 * @param props - An object containing the properties related to the resource selection, including the model data.
 */
-export function sendSelectResource<M extends TAbstractModel>(firedBy: string, model: M, options: TSendSelectResourceOptions) {
-  const message: SendMessage<CommonCommandToPanelEnum, M> = {
-    command: CommonCommandToPanelEnum.SelectResource,
+export function sendSelectResource<M extends TdsAbstractModel>(firedBy: string, model: M, options: TSendSelectResourceOptions) {
+  const message: SendMessage<CommonCommandEnum, M> = {
+    command: CommonCommandEnum.SelectResource,
     data: {
       model: model,
       ...options,

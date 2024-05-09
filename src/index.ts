@@ -19,8 +19,7 @@ limitations under the License.
 
 import { IFormAction } from './components/form/form'
 import { setDataModel, getDefaultActionsForm } from './components/form/form'
-import { CommonCommandFromPanelEnum } from './utilities/common-command-webview'
-import { sendSave, sendReady, sendClose, sendReset, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel } from './utilities/common-command-webview'
+import { sendSave, sendReady, sendClose, sendReset, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel, TCommonCommand } from './utilities/common-command-webview'
 
 import { TdsCheckBoxField } from './components/fields/checkBoxField'
 import { TdsForm } from './components/form/form'
@@ -33,8 +32,8 @@ import { TdsSimpleCheckBoxField } from './components/fields/simpleCheckBoxField'
 import { TdsSimpleTextField } from './components/fields/simpleTextField'
 import { TdsTextField } from './components/fields/textField'
 
-import { TAbstractModel } from './model/modelData'
-import { CommonCommandToPanelEnum } from './utilities/common-command-webview'
+import { TdsAbstractModel } from './model/modelData'
+import { CommonCommandEnum } from './utilities/common-command-webview'
 import { vscode as tdsVscode } from './utilities/vscodeWrapper';
 import { ReceiveMessage } from './utilities/common-command-webview';
 
@@ -42,7 +41,8 @@ import { ReceiveMessage } from './utilities/common-command-webview';
 export {
   IFormAction,
   setDataModel, getDefaultActionsForm,
-  CommonCommandFromPanelEnum,
+  TCommonCommand,
+  CommonCommandEnum,
   sendSave, sendReady, sendClose, sendReset, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel,
   TdsCheckBoxField,
   TdsForm,
@@ -54,9 +54,7 @@ export {
   TdsSimpleCheckBoxField,
   TdsSimpleTextField,
   TdsTextField,
-  TAbstractModel as TdsAbstractModel,
-  CommonCommandToPanelEnum,
+  TdsAbstractModel,
   tdsVscode,
   ReceiveMessage,
-  
 }

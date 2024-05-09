@@ -20,7 +20,7 @@ import { FieldValues } from "react-hook-form";
 * Represents the shape of an abstract model object.
 * This type can be used to define the structure of a model object that contains arbitrary properties.
 */
-export interface TAbstractModel extends FieldValues {
+export interface TdsAbstractModel extends FieldValues {
   //[key: string]: any
   //errors?: any
 }
