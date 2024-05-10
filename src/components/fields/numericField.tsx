@@ -1,5 +1,5 @@
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
-import { useController, useFormContext } from "react-hook-form";
+import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 
@@ -18,12 +18,10 @@ type TdsNumericFieldProps = TdsFieldProps & {
  *
  * @returns
  */
-export function TdsNumericField(props: TdsNumericFieldProps): JSX.Element {
-	const {
-		register,
-		setValue,
-		formState: { isDirty }
-	} = useFormContext();
+export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement {
+	const { register } = props.methods;
+	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
+
 	const rules = {
 		...props.rules,
 		valueAsNumber: true,
@@ -32,15 +30,14 @@ export function TdsNumericField(props: TdsNumericFieldProps): JSX.Element {
 			message: `[${props.label}] only accepts numbers`
 		},
 	};
-	const { field, fieldState } = useController({ ...props, rules: rules });
-	const registerField = register(props.name);
+	const registerField = register(props.name, props.rules);
 
 	return (
 		<section
 			className={`tds-field-container tds-numeric-field ${props.className ? props.className : ''}`}
 		>
 			<label
-				htmlFor={field.name}
+				htmlFor={props.name}
 			>
 				{props.label}
 				{props.rules?.required && <span className="tds-required" />}

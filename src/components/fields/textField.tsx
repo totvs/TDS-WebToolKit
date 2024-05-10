@@ -20,7 +20,6 @@ import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 
 type TdsTextFieldProps = TdsFieldProps & {
-    methods: UseFormReturn<any>;
     textArea?: boolean
     placeholder?: string;
     size?: number;
@@ -39,13 +38,9 @@ type TdsTextFieldProps = TdsFieldProps & {
  *
  * @returns
  */
-export function TdsTextField(props: TdsTextFieldProps): JSX.Element {
-    const {
-        register
-    } = props.methods;
-    //const { field, fieldState } = useController(props);
+export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
+    const { register } = props.methods;
     const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
-
     const registerField = register(props.name, props.rules);
 
     // // https://github.com/microsoft/vscode-webview-ui-toolkit/blob/main/src/react/README.md#use-oninput-instead-of-onchange-to-handle-keystrokes

@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IFormAction } from './components/form/form'
+import { IFormAction, setErrorModel } from './components/form/form'
 import { setDataModel, getDefaultActionsForm } from './components/form/form'
 import { sendSave, sendReady, sendClose, sendReset, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel, TCommonCommand } from './utilities/common-command-webview'
 
@@ -27,7 +27,7 @@ import { TdsLabelField } from './components/fields/labelField'
 import { TdsNumericField } from './components/fields/numericField'
 import { TdsPage } from './components/page/page'
 import { TdsSelectionField } from './components/fields/selectionField'
-import { TdsSelectionResourceField } from './components/fields/selectionResourceField'
+import { TdsSelectionFileField, TdsSelectionFolderField, TdsSelectionResourceField } from './components/fields/selectionResourceField'
 import { TdsSimpleCheckBoxField } from './components/fields/simpleCheckBoxField'
 import { TdsSimpleTextField } from './components/fields/simpleTextField'
 import { TdsTextField } from './components/fields/textField'
@@ -40,10 +40,19 @@ import { ReceiveMessage } from './utilities/common-command-webview';
 
 export {
   IFormAction,
-  setDataModel, getDefaultActionsForm,
+  setDataModel,
+  setErrorModel,
+  getDefaultActionsForm,
   TCommonCommand,
   CommonCommandEnum,
-  sendSave, sendReady, sendClose, sendReset, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel,
+  sendSave,
+  sendReady,
+  sendClose,
+  sendReset,
+  sendSaveAndClose,
+  sendSelectResource,
+  sendUpdateModel,
+  sendValidateModel,
   TdsCheckBoxField,
   TdsForm,
   TdsLabelField,
@@ -54,6 +63,8 @@ export {
   TdsSimpleCheckBoxField,
   TdsSimpleTextField,
   TdsTextField,
+  TdsSelectionFolderField,
+  TdsSelectionFileField,
   TdsAbstractModel,
   tdsVscode,
   ReceiveMessage,

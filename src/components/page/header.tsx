@@ -29,7 +29,7 @@ export interface IHeader {
  * @param props.title - Page title to display
  * @param [props.linkToDoc] - Optional help link to render
  */
-export default function TdsHeader(props: IHeader) {
+export default function TdsHeader(props: IHeader): React.ReactElement {
 	const re: RegExp = /\[(.*)]\]?(.*)/g;
 	let match: RegExpExecArray | null = re.exec(props.linkToDoc || "");
 	let text: string;

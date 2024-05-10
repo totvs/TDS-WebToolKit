@@ -1,5 +1,5 @@
 import { VSCodeDropdown, VSCodeOption } from "@vscode/webview-ui-toolkit/react";
-import { useController, useFormContext } from "react-hook-form";
+import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 
@@ -8,7 +8,6 @@ type TdsSelectionFieldProps = TdsFieldProps & {
 		value: string;
 		text: string;
 	}[]
-	//onChange?: (event: ChangeEvent<HTMLInputElement>) => any;
 }
 
 /**
@@ -22,23 +21,19 @@ type TdsSelectionFieldProps = TdsFieldProps & {
  *
  * @returns
  */
-export function TdsSelectionField(props: TdsSelectionFieldProps): JSX.Element {
-	const {
-		register,
-		getValues,
-		formState: { isDirty }
-	} = useFormContext();
-	const { field, fieldState } = useController(props);
+export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactElement {
+	const { register } = props.methods;
+	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
 	const registerField = register(props.name, props.rules);
 	const options = props.options || [];
-	const currentValue: string = getValues(props.name) as string;
+	const currentValue: string = props.methods.getValues(props.name) as string;
 
 	return (
 		<section
 			className={`tds-field-container tds-selection-field ${props.className ? props.className : ''}`}
 		>
 			<label
-				htmlFor={field.name}
+				htmlFor={props.name}
 			>
 				{props.label}
 				{props.rules?.required && <span className="tds-required" />}

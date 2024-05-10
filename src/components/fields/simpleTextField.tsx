@@ -1,5 +1,5 @@
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
-import { useController, useFormContext } from "react-hook-form";
+import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 
@@ -16,13 +16,9 @@ type TdsSimpleTextFieldProps = Omit<TdsFieldProps, "label">;
  *
  * @returns
  */
-export function TdsSimpleTextField(props: TdsSimpleTextFieldProps): JSX.Element {
-	const {
-		register,
-		setValue,
-		formState: { isDirty }
-	} = useFormContext();
-	const { field, fieldState } = useController(props);
+export function TdsSimpleTextField(props: TdsSimpleTextFieldProps): React.ReactElement {
+	const { register } = props.methods;
+	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
 	const registerField = register(props.name, props.rules);
 
 	return (

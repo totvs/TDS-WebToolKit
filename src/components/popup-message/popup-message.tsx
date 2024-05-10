@@ -52,7 +52,7 @@ function buildMessage(props: IPopupMessage): string {
  * 
  * @returns A JSX element containing the popup message if needed.
  */
-export default function PopupMessage(props: IPopupMessage): JSX.Element {
+export default function PopupMessage(props: IPopupMessage): React.ReactElement {
 	const OFFSET_LEFT: number = 20;
 	const OFFSET_TOP: number = 2;
 	const type: string = props.fieldState.invalid ? "error" : "info";

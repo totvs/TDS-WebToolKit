@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useController, useFormContext } from "react-hook-form";
+import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 
@@ -33,13 +33,9 @@ type TdsLabelFieldProps = TdsFieldProps & {
  *
  * @returns
  */
-export function TdsLabelField(props: TdsLabelFieldProps): JSX.Element {
-	const {
-		register,
-		formState: { isDirty }
-	} = useFormContext();
-	const { field, fieldState } = useController(props);
-
+export function TdsLabelField(props: TdsLabelFieldProps): React.ReactElement {
+	const { register } = props.methods;
+	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
 	const registerField = register(props.name, props.rules);
 
 	return (

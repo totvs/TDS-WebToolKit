@@ -1,5 +1,5 @@
 import { VSCodeCheckbox } from "@vscode/webview-ui-toolkit/react";
-import { useController, useFormContext } from "react-hook-form";
+import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 
@@ -18,15 +18,11 @@ type TdsSimpleCheckBoxFieldProps = TdsFieldProps & {
  *
  * @returns
  */
-export function TdsSimpleCheckBoxField(props: TdsSimpleCheckBoxFieldProps): JSX.Element {
-	const {
-		register,
-		getValues,
-		setValue,
-		formState: { isDirty }
-	} = useFormContext();
-	const { field, fieldState } = useController(props);
+export function TdsSimpleCheckBoxField(props: TdsSimpleCheckBoxFieldProps): React.ReactElement {
+	const { register } = props.methods;
+	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
 	const registerField = register(props.name, props.rules);
+
 	const originalChange = registerField.onChange;
 	registerField.onChange = (e) => {
 		if (originalChange) {
@@ -34,21 +30,25 @@ export function TdsSimpleCheckBoxField(props: TdsSimpleCheckBoxFieldProps): JSX.
 		}
 
 		if ((e.target as HTMLInputElement).indeterminate) {
-			setValue(registerField.name, null);
+			props.methods.setValue(registerField.name, null);
 		} else {
-			setValue(registerField.name, e.target.checked ? true : false);
+			props.methods.setValue(registerField.name, e.target.checked ? true : false);
 		}
 
 		return e.target.checked;
 	}
+
+	console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX");
+	console.log(props.methods.getValues(props.name));
+	console.log(props.methods.getValues(props.name).toString());
 
 	return (
 		<section
 			className={`tds-field-container tds-simple-checkbox-field  ${props.className ? props.className : ''}`}
 		>
 			<VSCodeCheckbox
-				checked={field.value.toString() === "true"}
-				indeterminate={field.value.toString() !== "true" && field.value.toString() !== "false"}
+				checked={props.methods.getValues(props.name).toString() === "true"}
+				indeterminate={props.methods.getValues(props.name).toString() !== "true" && props.methods.getValues(props.name).toString() !== "false"}
 				readOnly={props.readOnly || false}
 				{...registerField}
 			>

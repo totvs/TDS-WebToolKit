@@ -36,7 +36,7 @@ export interface IPageView {
  * @param props.children - Content to render in main section
  * @param props.footerContent - Content to render in footer
  */
-export function TdsPage(props: IPageView) {
+export function TdsPage(props: IPageView): React.ReactElement {
 
 	return (
 		<section className="tds-page">

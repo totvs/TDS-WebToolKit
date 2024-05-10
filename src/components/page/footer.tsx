@@ -28,7 +28,7 @@ export interface IFooter {
  * @param props - The footer component props.
  * @param props.children - The content to render within the footer.
  */
-export default function TdsFooter(props: IFooter) {
+export default function TdsFooter(props: IFooter): React.ReactElement {
 	// const re: RegExp = /\[(.*)]\]?(.*)/g;
 	// let match: RegExpExecArray | null = re.exec(props.linkToDoc || "");
 	// let text: string;
