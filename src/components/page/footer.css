@@ -21,8 +21,7 @@ limitations under the License.
 	flex-basis: auto;
 	align-self: auto;
 	order: 0;
-	/* width: 100%; */
-	flex-direction: row;
+	flex-direction: column;
 	align-items: flex-end;
 	margin-top: calc(var(--tds-hor-spacing)/2);
 }

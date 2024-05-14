@@ -24,7 +24,6 @@ export interface IPageView {
 	title: string;
 	linkToDoc: string
 	children: any;
-	footerContent?: any;
 }
 
 /**
@@ -44,9 +43,7 @@ export function TdsPage(props: IPageView): React.ReactElement {
 			<TdsContent>
 				{props.children}
 			</TdsContent>
-			<TdsFooter>
-				{props.footerContent}
-			</TdsFooter>
+			<TdsFooter />
 		</section>
 	);
 }

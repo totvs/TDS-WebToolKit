@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { VSCodeDivider, VSCodePanels } from "@vscode/webview-ui-toolkit/react";
 import "./footer.css";
 import React from "react";
+import { VSCodeLink } from '@vscode/webview-ui-toolkit/react';
 
 export interface IFooter {
 	//linkToDoc?: string
-	children: any
+	//children: any
 }
 
 /**
@@ -29,33 +31,15 @@ export interface IFooter {
  * @param props.children - The content to render within the footer.
  */
 export default function TdsFooter(props: IFooter): React.ReactElement {
-	// const re: RegExp = /\[(.*)]\]?(.*)/g;
-	// let match: RegExpExecArray | null = re.exec(props.linkToDoc || "");
-	// let text: string;
-	// let href: string;
-
-	// if (match && match.length > 1) {
-	// 	text = "Help";  //match[1];
-	// 	href = "https://github.com/totvs/tds-vscode/blob/master/docs/" + match[2];
-	// } else {
-	// 	text = props.linkToDoc || "";
-	// 	href = props.linkToDoc || ""
-	// }
-
-	const children = React.Children.toArray(props.children);
-
-	//{props.linkToDoc && <div className="tds-help-doc"><VSCodeLink href={href}>{text}</VSCodeLink></div>}
 	return (
 		<section className="tds-footer">
-			{children.length > 0 && <>
-				<div className="tds-logo">
-					<img src="..\..\icons\totvs-32x32.png" alt="TOTVS S.A." />
-				</div>
-				<div className="tds-footer-content">
-					{...children}
-				</div>
-			</>
-			}
+			<VSCodeDivider role="presentation" />
+			<div className="tds-logo">
+				<img src="/icons/totvs-24x24.png" alt="TOTVS S.A." />
+			</div>
+			<div className="tds-footer-content">
+				(c) <VSCodeLink href="https://wwww.totvs.com" target="_blank">TOTVS S.A. </VSCodeLink>
+			</div>
 		</section>
 	);
 }

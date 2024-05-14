@@ -15,9 +15,11 @@ limitations under the License.
 */
 
 .tds-content {
+	display: flex;
 	flex-grow: 1;
 	flex-shrink: 1;
 	flex-basis: auto;
-	align-self: auto;
+	overflow-x: auto;
+	overflow-y: hidden;
 	order: 0;
 }

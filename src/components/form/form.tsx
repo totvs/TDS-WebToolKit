@@ -83,6 +83,7 @@ type TDSFormProps<M extends FieldValues> = {
 	actions?: IFormAction[];
 	children: any
 	isProcessRing?: boolean;
+	description?: string;
 };
 
 /**
@@ -219,6 +220,7 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 				onReset={() => sendReset(props.methods.getValues())}
 				autoComplete="off"
 			>
+				{props.description && <h3>{props.description}</h3>}
 				<section className={"tds-form-content"}>
 					{...children}
 				</section>

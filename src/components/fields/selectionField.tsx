@@ -38,7 +38,6 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 				{props.label}
 				{props.rules?.required && <span className="tds-required" />}
 			</label>
-			<br />
 			<VSCodeDropdown
 				{...registerField}
 			>

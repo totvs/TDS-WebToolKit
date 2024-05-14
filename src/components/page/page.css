@@ -13,27 +13,36 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+:root {
+	--tds-hor-spacing: 12px;
+}
 
 .tds-page {
-	margin: 0px;
-	margin-left: auto;
-	margin-right: auto;
+	display: flex;
+	flex-direction: column;
+	height: 90vh;
+	margin: 5vh;
+	overflow: hidden;
 }
 
 .tds-error {
 	background-color: var(--vscode-inputValidation-errorBackground);
 	border-color: var(--vscode-inputValidation-errorBorder);
-	color: var(--vscode-egaiarError-foreground);
+	color: var(--vscode-editorError-foreground);
 }
 
 .tds-warning {
 	background-color: var(--vscode-inputValidation-warningBackground);
 	border-color: var(--vscode-inputValidation-warningBorder);
-	color: var(--vscode-egaiarWarning-foreground);
+	color: var(--vscode-editorWarning-foreground);
 }
 
 .tds-info {
 	background-color: var(--vscode-inputValidation-infoBackground);
 	border-color: var(--vscode-inputValidation-infoBorder);
 	color: var(--vscode-descriptionForeground);
+}
+
+.codicon[class*='codicon-'] {
+	background-color: transparent;
 }

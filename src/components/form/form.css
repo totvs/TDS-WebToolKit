@@ -17,6 +17,13 @@ limitations under the License.
 .tds-form {
 	display: flex;
 	flex-direction: column;
+	width: 100%;
+	overflow: hidden;
+}
+
+.tds-form h3 {
+	font-weight: normal;
+	margin-top: 0px;
 }
 
 .tds-form .tds-form-content {
