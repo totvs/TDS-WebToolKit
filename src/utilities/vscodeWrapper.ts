@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import type { WebviewApi } from 'vscode-webview'
+import { L10n, l10n } from './l10n'
 
 /**
  * A utility wrapper around the acquireVsCodeApi() function, which enables
@@ -87,6 +88,10 @@ class VSCodeAPIWrapper {
       localStorage.setItem('vscodeState', JSON.stringify(newState))
       return newState
     }
+  }
+
+  get l10n(): L10n {
+    return l10n;
   }
 }
 

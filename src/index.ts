@@ -37,7 +37,6 @@ import { CommonCommandEnum } from './utilities/common-command-webview'
 import { vscode as tdsVscode } from './utilities/vscodeWrapper';
 import { ReceiveMessage } from './utilities/common-command-webview';
 
-
 export {
   IFormAction,
   setDataModel,
@@ -68,4 +67,11 @@ export {
   TdsAbstractModel,
   tdsVscode,
   ReceiveMessage,
+}
+
+declare global {
+  interface Window {
+    initialData: any;
+    translations: any;
+  }
 }
