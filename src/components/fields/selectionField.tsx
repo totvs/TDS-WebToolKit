@@ -28,6 +28,16 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 	const options = props.options || [];
 	const currentValue: string = props.methods.getValues(props.name) as string;
 
+	registerField.onChange = (e) => {
+		return new Promise(() => {
+			if (props.onInput) {
+				props.onInput(e)
+			};
+
+			return true;
+		});
+	}
+
 	return (
 		<section
 			className={`tds-field-container tds-selection-field ${props.className ? props.className : ''}`}

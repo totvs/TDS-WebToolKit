@@ -27,9 +27,7 @@
     "tag": "git push --follow-tags",
     "to_publish": "npm publish",
     "-prepublishOnly": "npm run clean && npm run build",
-    "---MISC---": "",
-    "link": "npm link",
-    "local-link": "npm link"
+    "---MISC---": ""
   },
   "dependencies": {
     "@vscode/codicons": "^0.0.35",

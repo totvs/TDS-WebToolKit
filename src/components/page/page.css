@@ -22,6 +22,8 @@ limitations under the License.
 	flex-direction: column;
 	height: 90vh;
 	margin: 5vh;
+	margin-left: auto;
+	margin-right: auto;
 	overflow: hidden;
 }
 

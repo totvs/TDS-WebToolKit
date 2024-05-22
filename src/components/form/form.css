@@ -144,7 +144,7 @@ revisar
 }
 
 .tds-field-container label {
-	line-height: cal(--line-height * 250%);
+	margin-bottom: calc(var(--tds-hor-spacing) / 2);
 }
 
 .tds-scroll {

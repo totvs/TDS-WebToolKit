@@ -1,3 +1,4 @@
+codicon
 codicons
 tlpp
 totvs

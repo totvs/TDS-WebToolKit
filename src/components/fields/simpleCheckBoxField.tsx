@@ -38,10 +38,6 @@ export function TdsSimpleCheckBoxField(props: TdsSimpleCheckBoxFieldProps): Reac
 		return e.target.checked;
 	}
 
-	console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX");
-	console.log(props.methods.getValues(props.name));
-	console.log(props.methods.getValues(props.name).toString());
-
 	return (
 		<section
 			className={`tds-field-container tds-simple-checkbox-field  ${props.className ? props.className : ''}`}

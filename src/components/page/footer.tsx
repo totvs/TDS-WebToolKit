@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { VSCodeDivider, VSCodePanels } from "@vscode/webview-ui-toolkit/react";
+import { VSCodeDivider } from "@vscode/webview-ui-toolkit/react";
 import "./footer.css";
 import React from "react";
 import { VSCodeLink } from '@vscode/webview-ui-toolkit/react';
@@ -35,10 +35,10 @@ export default function TdsFooter(props: IFooter): React.ReactElement {
 		<section className="tds-footer">
 			<VSCodeDivider role="presentation" />
 			<div className="tds-logo">
-				<img src="/icons/totvs-24x24.png" alt="TOTVS S.A." />
+				<img src="/icons/totvs24x24.png" alt="TOTVS S.A." />
 			</div>
 			<div className="tds-footer-content">
-				(c) <VSCodeLink href="https://wwww.totvs.com" target="_blank">TOTVS S.A. </VSCodeLink>
+				<VSCodeLink href="https://wwww.totvs.com" target="_blank">TOTVS S.A. </VSCodeLink>
 			</div>
 		</section>
 	);

@@ -19,6 +19,7 @@ import "./header.css";
 
 export interface IHeader {
 	title: string;
+	//@deprecated
 	linkToDoc?: string
 }
 
@@ -30,26 +31,26 @@ export interface IHeader {
  * @param [props.linkToDoc] - Optional help link to render
  */
 export default function TdsHeader(props: IHeader): React.ReactElement {
-	const re: RegExp = /\[(.*)]\]?(.*)/g;
-	let match: RegExpExecArray | null = re.exec(props.linkToDoc || "");
-	let text: string;
-	let href: string;
+	// const re: RegExp = /\[(.*)]\]?(.*)/g;
+	// let match: RegExpExecArray | null = re.exec(props.linkToDoc || "");
+	//let text: string;
+	//let href: string;
 
-	if (match && match.length > 1) {
-		text = "Help";  //match[1];
-		href = "https://github.com/totvs/tds-vscode/blob/master/docs/" + match[2];
-	} else {
-		text = props.linkToDoc || "";
-		href = props.linkToDoc || ""
-	}
+	// if (match && match.length > 1) {
+	// 	text = "Help";  //match[1];
+	// 	href = "https://github.com/totvs/tds-vscode/blob/master/docs/" + match[2];
+	// } else {
+	// 	text = props.linkToDoc || "";
+	// 	href = props.linkToDoc || ""
+	// }
 
+	//{href && <div className="tds-help-doc"><VSCodeLink href={href}>{text}</VSCodeLink></div>}
 	return (
 		<section className="tds-header">
 			<div className="tds-logo">
 				<img src="..\..\icons\totvs-32x32.png" alt="TOTVS S.A." />
 			</div>
 			<h1>{props.title}</h1>
-			{props.linkToDoc && <div className="tds-help-doc"><VSCodeLink href={href}>{text}</VSCodeLink></div>}
 		</section>
 	);
 }

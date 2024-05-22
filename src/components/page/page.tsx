@@ -19,6 +19,7 @@ import React from 'react';
 import TdsHeader from "./header";
 import TdsFooter from "./footer";
 import TdsContent from "./content";
+import { ErrorBoundary } from "../error-boundary";
 
 export interface IPageView {
 	title: string;
@@ -38,12 +39,14 @@ export interface IPageView {
 export function TdsPage(props: IPageView): React.ReactElement {
 
 	return (
-		<section className="tds-page">
-			<TdsHeader title={props.title} linkToDoc={props.linkToDoc} />
-			<TdsContent>
-				{props.children}
-			</TdsContent>
-			<TdsFooter />
-		</section>
+		<ErrorBoundary>
+			<section className="tds-page">
+				<TdsHeader title={props.title} linkToDoc={props.linkToDoc} />
+				<TdsContent>
+					{props.children}
+				</TdsContent>
+				<TdsFooter />
+			</section>
+		</ErrorBoundary>
 	);
 }
