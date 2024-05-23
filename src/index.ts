@@ -34,7 +34,7 @@ import { TdsTextField } from './components/fields/textField'
 
 import { TdsAbstractModel } from './model/modelData'
 import { CommonCommandEnum } from './utilities/common-command-webview'
-import { vscode as tdsVscode } from './utilities/vscodeWrapper';
+import { tdsVscode } from './utilities/vscodeWrapper';
 import { ReceiveMessage } from './utilities/common-command-webview';
 
 export {

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { TdsAbstractModel } from "../model/modelData";
-import { vscode } from "./vscodeWrapper";
+import { tdsVscode } from "./vscodeWrapper";
 
 /**
  * Enumeration of command names used for communication 
@@ -89,7 +89,7 @@ export function sendReady() {
     }
   }
 
-  vscode.postMessage(message);
+  tdsVscode.postMessage(message);
 }
 
 /**
@@ -104,7 +104,7 @@ export function sendReset(model: TdsAbstractModel) {
     }
   }
 
-  vscode.postMessage(message);
+  tdsVscode.postMessage(message);
 }
 
 /**
@@ -142,7 +142,7 @@ export function sendValidateModel(model: TdsAbstractModel) {
     }
   }
 
-  vscode.postMessage(message);
+  tdsVscode.postMessage(message);
 }
 
 /**
@@ -157,7 +157,7 @@ export function sendSave(model: TdsAbstractModel) {
     }
   }
 
-  vscode.postMessage(message);
+  tdsVscode.postMessage(message);
 }
 
 /**
@@ -172,7 +172,7 @@ export function sendSaveAndClose(model: any) {
     }
   }
 
-  vscode.postMessage(message);
+  tdsVscode.postMessage(message);
 }
 
 /**
@@ -187,7 +187,7 @@ export function sendUpdateModel(model: any) {
     }
   }
 
-  vscode.postMessage(message);
+  tdsVscode.postMessage(message);
 }
 
 /**
@@ -201,7 +201,7 @@ export function sendClose() {
     }
   }
 
-  vscode.postMessage(message);
+  tdsVscode.postMessage(message);
 }
 
 /**
@@ -220,6 +220,6 @@ export function sendSelectResource<M extends TdsAbstractModel>(firedBy: string, 
     }
   }
 
-  vscode.postMessage(message);
+  tdsVscode.postMessage(message);
 }
 
