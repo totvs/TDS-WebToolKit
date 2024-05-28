@@ -17,9 +17,8 @@
   "scripts": {
     "--COMPILE--": "",
     "compile": "tsc",
-    "copy-files": "npx copyfiles -u 1 src/**/*.css dist/",
-    "--WATCH--": "",
     "watch": "tsc -watch",
+    "copy-files": "npx copyfiles -u 1 src/**/*.css dist/",
     "-- BUILD --": "",
     "build": "webpack --mode=production",
     "---RELEASE---": "",
