@@ -192,10 +192,18 @@ let isProcessRing: boolean = false;
  */
 
 export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.ReactElement {
-	let isSubmitting: boolean = props.methods.formState.isSubmitting;
+	const isSubmitting: boolean = props.methods.formState.isSubmitting;
+	const errors: any = props.methods.formState.errors;
+	const firstErrors: any = Object.keys(props.methods.formState.errors)
+		.filter((key: string, index: number) => index == 0)
+		.map((key: string) => {
+			console.log("key: ", key);
+			console.log("errors[key]: ", errors[key]);
+			return errors[key];
+		});
 	let isDirty: boolean = props.methods.formState.isDirty;
-	let isValid: boolean = props.methods.formState.isValid;
-	let errors: any = props.methods.formState.errors;
+	let isValid: boolean = props.methods.formState.isValid &&
+		(Object.keys(errors).filter((key: string) => key !== "root").length === 0);
 
 	let actions: IFormAction[] = props.actions ? props.actions : getDefaultActionsForm();
 
@@ -225,7 +233,7 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 			</section>
 			<section className="tds-form-footer">
 				<div className="tds-message">
-					{errors.root && <span className={`tds-error`}>{errors.root.message}.</span>}
+					{firstErrors.length > 0 && <span className={`tds-error`}>{firstErrors[0].message}.</span>}
 					{isProcessRing && <><VSCodeProgressRing /><span>Wait please. Processing...</span></>}
 				</div>
 				<div className="tds-actions">
