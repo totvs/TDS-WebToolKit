@@ -36,6 +36,7 @@ import { TdsAbstractModel } from './model/modelData'
 import { CommonCommandEnum } from './utilities/common-command-webview'
 import { tdsVscode } from './utilities/vscodeWrapper';
 import { ReceiveMessage } from './utilities/common-command-webview';
+import { ErrorBoundary } from './components/error-boundary'
 
 export {
   IFormAction,
@@ -67,6 +68,7 @@ export {
   TdsAbstractModel,
   tdsVscode,
   ReceiveMessage,
+  ErrorBoundary
 }
 
 declare global {
