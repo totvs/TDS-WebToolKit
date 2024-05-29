@@ -24,26 +24,6 @@ export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactEleme
 	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
 	const registerField = register(props.name, props.rules);
 
-	const originalChange = registerField.onChange;
-
-	// if (props.onInput) {
-	// 	registerField.onChange = props.onChange;
-	// }
-
-	// registerField.onChange = (e) => {
-	// 	if (originalChange) {
-	// 		originalChange(e)
-	// 	}
-
-	// 	if ((e.target as HTMLInputElement).indeterminate) {
-	// 		setValue(registerField.name, null);
-	// 	} else {
-	// 		setValue(registerField.name, e.target.checked ? true : false);
-	// 	}
-
-	// 	return e.target.checked;
-	// }
-
 	return (
 		<section
 			className={`tds-field-container tds-checkbox-field ${props.className ? props.className : ''}`}

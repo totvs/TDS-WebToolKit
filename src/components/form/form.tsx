@@ -20,7 +20,6 @@ import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
 import { FieldValues, RegisterOptions, UseFormReturn, UseFormSetError, UseFormSetValue } from "react-hook-form";
 import { VSCodeButton, VSCodeLink, VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react";
 import { sendClose, sendReset } from "../../utilities/common-command-webview";
-import { ErrorBoundary } from "../error-boundary";
 
 /**
  * Returns the default set of actions for the form.
