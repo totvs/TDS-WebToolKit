@@ -16,13 +16,39 @@ limitations under the License.
 
 export class L10n {
   private _translations: any = {};
+  private _formatDate: string = "";
+
+  public set translations(value: any) {
+    this._translations = value.translations || {};
+    this._formatDate = value.formatDate || "";
+  }
 
   public get translations(): any {
     return this._translations;
   }
 
-  public set translations(value: any) {
-    this._translations = value || {};
+  public formatDate(value: Date): string {
+    let result: string = value.toLocaleString();
+
+    if (this._formatDate !== "") {
+      try {
+        const options: Intl.DateTimeFormatOptions = {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric"
+        };
+        const dateTimeFormat1 = new Intl.DateTimeFormat(this._formatDate, options);
+
+        result = dateTimeFormat1.format(value);
+      } catch (error) {
+        result = value.toLocaleString()
+      }
+    }
+
+    return result;
   }
 
   public t(
