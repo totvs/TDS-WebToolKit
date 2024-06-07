@@ -119,6 +119,7 @@ export function sendReset(model: TdsAbstractModel) {
  * @param filters - The allowed file filters.
  */
 export type TSendSelectResourceOptions = {
+  fileSystem?: string;
   canSelectMany: boolean,
   canSelectFiles: boolean,
   canSelectFolders: boolean,

@@ -46,6 +46,7 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 		currentFolder: props.currentFolder,
 		title: props.title,
 		openLabel: props.openLabel,
+		fileSystem: props.fileSystem,
 		filters: props.filters ? {
 			...props.filters
 		} : {}
@@ -105,6 +106,7 @@ export function TdsSelectionFolderField(props: Partial<TdsSelectionFolderFieldPr
 		openLabel={props.openLabel || "Select Folder"}
 		filters={{}}
 		readOnly={props.readOnly || false}
+		fileSystem={props.fileSystem}
 	/>)
 }
 

@@ -43,11 +43,6 @@ export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
     const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
     const registerField = register(props.name, props.rules);
 
-    // // https://github.com/microsoft/vscode-webview-ui-toolkit/blob/main/src/react/README.md#use-oninput-instead-of-onchange-to-handle-keystrokes
-    //  if (props.onInput) {
-    // //     registerField.onInput = props.onInput;
-    // // }
-
     return (
         <section
             className={`tds-field-container tds-text-field ${props.className ? props.className : ''}`}
