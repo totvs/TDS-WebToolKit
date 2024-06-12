@@ -27,22 +27,40 @@ export class L10n {
     return this._translations;
   }
 
-  public formatDate(value: Date): string {
+
+  public formatDate(value: Date, type: "date" | "time" | "datetime"): string {
     let result: string = value.toLocaleString();
 
     if (this._formatDate !== "") {
       try {
-        const options: Intl.DateTimeFormatOptions = {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric"
-        };
-        const dateTimeFormat1 = new Intl.DateTimeFormat(this._formatDate, options);
+        let options: Intl.DateTimeFormatOptions = {};
 
-        result = dateTimeFormat1.format(value);
+        if (type === "date") {
+          options = {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          };
+        } else if (type === "time") {
+          options = {
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric"
+          };
+        } else if (type === "datetime") {
+          options = {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric"
+          };
+        }
+
+        const dateTimeFormat = new Intl.DateTimeFormat(this._formatDate, options);
+
+        result = dateTimeFormat.format(value);
       } catch (error) {
         result = value.toLocaleString()
       }
