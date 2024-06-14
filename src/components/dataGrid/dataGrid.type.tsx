@@ -84,13 +84,14 @@ export type TTdsDataGridProps = {
 	id: string;
 	columnDef: TTdsDataGridColumnDef[]
 	dataSource: any[] //Record<string, string | number | Date | boolean>[]
-	options: {
-		bottomActions: TTdsDataGridAction[];
-		topActions: TTdsDataGridAction[];
-		filter: boolean;
-		pageSize: number,
-		pageSizeOptions: number[],
-		grouping: boolean;
+	options?: {
+		bottomActions?: TTdsDataGridAction[];
+		topActions?: TTdsDataGridAction[];
+		sortable?: boolean;
+		filter?: boolean;
+		grouping?: boolean;
+		pageSize?: number,
+		pageSizeOptions?: number[],
 	}
 	//onFilterChanged?(fieldName: string, filter: string): void;
 }

@@ -164,6 +164,12 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 	const [groupingInfo, setGroupingInfo] = React.useState<TTdsDataGridColumnDef>();
 	const [dataSource, setDataSource] = React.useState((props.dataSource || []).slice(0));
 
+	React.useEffect(() => {
+		setPageSize(props.options.pageSize);
+		setTotalItems(props.dataSource.length);
+		setDataSource(props.dataSource);
+	}, [props.dataSource.length, props.options.pageSize]);
+
 	const handlePageClick = (newPage: number) => {
 		const newOffset = (newPage * (props.options.pageSize)) % dataSource.length;
 
@@ -246,11 +252,28 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 		return values;
 	}
 
-	React.useEffect(() => {
-		setPageSize(props.options.pageSize);
-		setTotalItems(props.dataSource.length);
-		setDataSource(props.dataSource);
-	}, [props.dataSource.length, props.options.pageSize]);
+	if (props.options.topActions == undefined) {
+		props.options.topActions = [];
+	}
+	if (props.options.bottomActions == undefined) {
+		props.options.bottomActions = [];
+	}
+
+	if (props.options.grouping == undefined) {
+		props.options.grouping = true;
+	}
+	if (props.options.filter == undefined) {
+		props.options.filter = true;
+	}
+	if (props.options.sortable == undefined) {
+		props.options.sortable = true;
+	}
+	if (props.options.pageSize == undefined) {
+		props.options.pageSize = 50;
+	}
+	if (props.options.pageSizeOptions == undefined) {
+		props.options.pageSizeOptions = [50, 100, 250, 500, 1000];
+	}
 
 	props.columnDef.forEach((columnDef: TTdsDataGridColumnDef, index: number) => {
 		if (columnDef.visible == undefined) {
@@ -413,7 +436,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 									key={`${props.id}_header_column_${_index}`}
 								>
 									{column.label || column.name}
-									{column.sortable &&
+									{props.options.sortable && column.sortable &&
 										<VSCodeButton
 											appearance="icon"
 											onClick={() => {
