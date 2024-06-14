@@ -166,7 +166,6 @@ export function sendSave(model: TdsAbstractModel) {
  * containing the provided model to save and close.
  */
 export function sendSaveAndClose(model: TdsAbstractModel) {
-  console.log('sendSaveAndClose', model);
   const message: SendMessage<CommonCommandEnum, TdsAbstractModel> = {
     command: CommonCommandEnum.SaveAndClose,
     data: {

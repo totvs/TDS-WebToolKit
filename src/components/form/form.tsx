@@ -40,9 +40,6 @@ export function getDefaultActionsForm(): IFormAction[] {
 			type: "submit",
 			isProcessRing: true,
 			enabled: (isDirty: boolean, isValid: boolean) => {
-				console.log("isDirty: " + isDirty);
-				console.log("isValid: " + isValid);
-				console.log("isDirty && isValid: " + (isDirty && isValid));
 				return isDirty && isValid;
 			},
 		},
@@ -144,19 +141,6 @@ export function setDataModel<DataModel extends FieldValues>
 	}
 }
 
-export function prepareDataModel<DataModel extends FieldValues>(dataModel: Partial<DataModel>): DataModel {
-	let resultModel: DataModel = { ...dataModel } as DataModel;
-
-	console.log("prepareDataModel", dataModel)
-
-	Object.keys(resultModel).forEach((fieldName: string) => {
-		console.log("prepareDataModel", fieldName, dataModel[fieldName]);
-		console.log(typeof resultModel[fieldName]);
-	});
-
-	return resultModel;
-}
-
 type TFieldError = {
 	type: string;
 	message?: string
@@ -177,8 +161,6 @@ export function setErrorModel<DataModel extends FieldValues>(setError: UseFormSe
 	if (errorModel) {
 		Object.keys(errorModel).forEach((fieldName: string) => {
 			if (errorModel[fieldName] !== undefined) {
-				console.log(`Erro no campo ${fieldName}`, errorModel[fieldName]);
-
 				setError(fieldName as any, {
 					message: errorModel[fieldName]?.message,
 					type: errorModel[fieldName]?.type
@@ -216,8 +198,6 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 	//(Object.keys(errors).filter((key: string) => key !== "root").length === 0);
 
 	let actions: IFormAction[] = props.actions ? props.actions : getDefaultActionsForm();
-
-	console.log("TdsForm", "isDirty", isDirty, "isValid", isValid, "formState", methods.formState);
 
 	if (isSubmitting && (actions.length > 0)) {
 		isProcessRing = props.isProcessRing !== undefined ? props.isProcessRing : true;
