@@ -1,7 +1,8 @@
 /*
-import { vscode } from './utilities/vscodeWrapper';
-import { sendClose } from './utilities/common-command-webview';
-import { sendReset } from './utilities/common-command-webview';
+import { TdsDataGrid } from './components/dataGrid/dataGrid copy';
+export { vscode } from './utilities/vscodeWrapper';
+export { sendClose } from './utilities/common-command-webview';
+export { sendReset } from './utilities/common-command-webview';
 Copyright 2024 TOTVS S.A
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,59 +18,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IFormAction, setErrorModel } from './components/form/form'
-import { setDataModel, getDefaultActionsForm } from './components/form/form'
-import { sendSave, sendReady, sendClose, sendReset, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel, TCommonCommand } from './utilities/common-command-webview'
+export { IFormAction, setErrorModel } from './components/form/form'
+export { setDataModel, getDefaultActionsForm } from './components/form/form'
+export { sendSave, sendReady, sendClose, sendReset, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel, TCommonCommand } from './utilities/common-command-webview'
 
-import { TdsCheckBoxField } from './components/fields/checkBoxField'
-import { TdsForm } from './components/form/form'
-import { TdsLabelField } from './components/fields/labelField'
-import { TdsNumericField } from './components/fields/numericField'
-import { TdsPage } from './components/page/page'
-import { TdsSelectionField } from './components/fields/selectionField'
-import { TdsSelectionFileField, TdsSelectionFolderField, TdsSelectionResourceField } from './components/fields/selectionResourceField'
-import { TdsSimpleCheckBoxField } from './components/fields/simpleCheckBoxField'
-import { TdsSimpleTextField } from './components/fields/simpleTextField'
-import { TdsTextField } from './components/fields/textField'
+export { TdsCheckBoxField } from './components/fields/checkBoxField'
+export { TdsForm } from './components/form/form'
+export { TdsNumericField } from './components/fields/numericField'
+export { TdsPage } from './components/page/page'
+export { TdsSelectionField } from './components/fields/selectionField'
+export { TdsSelectionFileField, TdsSelectionFolderField, TdsSelectionResourceField } from './components/fields/selectionResourceField'
+export { TdsSimpleCheckBoxField } from './components/fields/simpleCheckBoxField'
+export { TdsSimpleTextField } from './components/fields/simpleTextField'
+export { TdsTextField } from './components/fields/textField'
 
-import { TdsAbstractModel } from './model/modelData'
-import { CommonCommandEnum } from './utilities/common-command-webview'
-import { tdsVscode } from './utilities/vscodeWrapper';
-import { ReceiveMessage } from './utilities/common-command-webview';
-import { ErrorBoundary } from './components/error-boundary'
+export { TdsAbstractModel } from './model/modelData'
+export { CommonCommandEnum } from './utilities/common-command-webview'
+export { tdsVscode } from './utilities/vscodeWrapper';
+export { ReceiveMessage } from './utilities/common-command-webview';
+export { ErrorBoundary } from './components/error-boundary'
 
-export {
-  IFormAction,
-  setDataModel,
-  setErrorModel,
-  getDefaultActionsForm,
-  TCommonCommand,
-  CommonCommandEnum,
-  sendSave,
-  sendReady,
-  sendClose,
-  sendReset,
-  sendSaveAndClose,
-  sendSelectResource,
-  sendUpdateModel,
-  sendValidateModel,
-  TdsCheckBoxField,
-  TdsForm,
-  TdsLabelField,
-  TdsNumericField,
-  TdsPage,
-  TdsSelectionField,
-  TdsSelectionResourceField,
-  TdsSimpleCheckBoxField,
-  TdsSimpleTextField,
-  TdsTextField,
-  TdsSelectionFolderField,
-  TdsSelectionFileField,
-  TdsAbstractModel,
-  tdsVscode,
-  ReceiveMessage,
-  ErrorBoundary
-}
+export { TdsDataGrid } from './components/dataGrid';
+export type { TTdsDataGridColumnDef, TTdsDataGridAction } from './components/dataGrid/dataGrid.type'
+
+export type { IPopupMessage } from './components/popup-message/popup-message'
+
+
+export { TdsLabelField } from './components/fields/labelField'
+export type { TdsLabelFieldProps } from './components/fields/labelField'
 
 declare global {
   interface Window {

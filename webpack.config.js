@@ -86,7 +86,7 @@ module.exports = (env, argv) => {
         ".json",
         ".bundle.json",
         ".bundle.*.json"
-      ],
+      ]
     },
     module: {
       rules: [

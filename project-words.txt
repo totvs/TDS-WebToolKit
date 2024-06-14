@@ -3,4 +3,6 @@ codicons
 tlpp
 totvs
 TOTVS
+ungroup
+Ungroup
 webtoolkit

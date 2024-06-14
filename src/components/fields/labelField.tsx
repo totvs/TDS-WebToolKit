@@ -18,7 +18,7 @@ import { ControllerFieldState, useController, useFormContext } from "react-hook-
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 
-type TdsLabelFieldProps = TdsFieldProps & {
+export type TdsLabelFieldProps = TdsFieldProps & {
 	//
 }
 
@@ -34,16 +34,16 @@ type TdsLabelFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsLabelField(props: TdsLabelFieldProps): React.ReactElement {
-	const { register } = props.methods;
-	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
-	const registerField = register(props.name, props.rules);
+	const { register, control, getValues, getFieldState } = useFormContext();
+	const fieldState: ControllerFieldState = getFieldState(props.name);
 
 	return (
 		<section
 			className={`tds-field-container tds-label-field ${props.className ? props.className : ''}`}
 		>
 			<label
-				{...registerField}
+				key={props.name}
+				{...register(`${props.name}` as const, props.rules)}
 			>
 				{props.label}
 				<PopupMessage field={props} fieldState={fieldState} />

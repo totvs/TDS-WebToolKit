@@ -1,5 +1,5 @@
 import { VSCodeButton } from "@vscode/webview-ui-toolkit/react";
-import { ControllerFieldState } from "react-hook-form";
+import { ControllerFieldState, useFormContext } from "react-hook-form";
 import { TSendSelectResourceOptions, sendSelectResource } from "../../utilities/common-command-webview";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
@@ -33,11 +33,10 @@ type TdsSelectionFileFieldProps = Omit<TdsSelectionResourceFieldProps, "folders"
  * @returns
  */
 export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps): React.ReactElement {
-	const { register } = props.methods;
-	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
-	const registerField = register(props.name, props.rules);
+	const { register, control, getValues, getFieldState } = useFormContext();
+	const fieldState: ControllerFieldState = getFieldState(props.name);
 
-	registerField.disabled = props.readOnly || false;
+	//	registerField.disabled = props.readOnly || false;
 
 	const options: TSendSelectResourceOptions = {
 		canSelectMany: props.canSelectMany,
@@ -58,9 +57,10 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 		>
 			<VSCodeButton
 				onClick={() => {
-					sendSelectResource(props.name, props.methods.getValues(), options);
+					sendSelectResource(props.name, getValues(), options);
 				}}
-				{...registerField}
+				key={props.name}
+				{...register(`${props.name}` as const, props.rules)}
 			>
 				{props.openLabel}
 				<PopupMessage field={{ ...props, label: props.openLabel }} fieldState={fieldState} />
@@ -96,7 +96,6 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
  */
 export function TdsSelectionFolderField(props: Partial<TdsSelectionFolderFieldProps>): React.ReactElement {
 	return (<TdsSelectionResourceField
-		methods={props.methods}
 		name={props.name || "btnSelectionFolder"}
 		title={props.title || "Select Folder"}
 		canSelectFolders={true}
@@ -139,7 +138,6 @@ export function TdsSelectionFileField(props: Partial<TdsSelectionFileFieldProps>
 	const filters = props.filters ? props.filters : {};
 
 	return (<TdsSelectionResourceField
-		methods={props.methods}
 		name={props.name || "btnSelectionFile"}
 		title={props.title || "Select File"}
 		canSelectFolders={false}

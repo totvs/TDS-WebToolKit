@@ -39,9 +39,8 @@ type TdsTextFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
-    const { register } = props.methods;
-    const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
-    const registerField = register(props.name, props.rules);
+    const { register, control, getValues, getFieldState } = useFormContext();
+    const fieldState: ControllerFieldState = getFieldState(props.name);
 
     return (
         <section
@@ -61,7 +60,8 @@ export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
                     cols={props.cols ?? 30}
                     rows={props.rows ?? 15}
                     onInput={props.onInput}
-                    {...registerField}
+                    key={props.name}
+                    {...register(`${props.name}` as const, props.rules)}
                 >
                     <PopupMessage field={props} fieldState={fieldState} />
                 </VSCodeTextArea>
@@ -71,7 +71,8 @@ export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
                     placeholder={props.placeholder}
                     size={props.size ?? 30}
                     onInput={props.onInput}
-                    {...registerField}
+                    key={props.name}
+                    {...register(`${props.name}` as const, props.rules)}
                 >
                     <PopupMessage field={props} fieldState={fieldState} />
                 </VSCodeTextField>

@@ -19,34 +19,35 @@ type TdsSimpleCheckBoxFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsSimpleCheckBoxField(props: TdsSimpleCheckBoxFieldProps): React.ReactElement {
-	const { register } = props.methods;
-	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
-	const registerField = register(props.name, props.rules);
+	const { register, control, getValues, setValue, getFieldState } = useFormContext();
+	const fieldState: ControllerFieldState = getFieldState(props.name);
+	//const registerField = register(props.name, props.rules);
 
-	const originalChange = registerField.onChange;
-	registerField.onChange = (e) => {
-		if (originalChange) {
-			originalChange(e)
-		}
+	// const originalChange = registerField.onChange;
+	// registerField.onChange = (e) => {
+	// 	if (originalChange) {
+	// 		originalChange(e)
+	// 	}
 
-		if ((e.target as HTMLInputElement).indeterminate) {
-			props.methods.setValue(registerField.name, null);
-		} else {
-			props.methods.setValue(registerField.name, e.target.checked ? true : false);
-		}
+	// 	if ((e.target as HTMLInputElement).indeterminate) {
+	// 		setValue(registerField.name, null);
+	// 	} else {
+	// 		setValue(registerField.name, e.target.checked ? true : false);
+	// 	}
 
-		return e.target.checked;
-	}
+	// 	return e.target.checked;
+	// }
 
 	return (
 		<section
 			className={`tds-field-container tds-simple-checkbox-field  ${props.className ? props.className : ''}`}
 		>
 			<VSCodeCheckbox
-				checked={props.methods.getValues(props.name).toString() === "true"}
-				indeterminate={props.methods.getValues(props.name).toString() !== "true" && props.methods.getValues(props.name).toString() !== "false"}
+				checked={getValues(props.name).toString() === "true"}
+				indeterminate={getValues(props.name).toString() !== "true" && getValues(props.name).toString() !== "false"}
 				readOnly={props.readOnly || false}
-				{...registerField}
+				key={props.name}
+				{...register(`${props.name}` as const, props.rules)}
 			>
 				{props.textLabel}
 				<PopupMessage field={props} fieldState={fieldState} />

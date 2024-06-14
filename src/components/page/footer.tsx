@@ -35,7 +35,7 @@ export default function TdsFooter(props: IFooter): React.ReactElement {
 		<section className="tds-footer">
 			<VSCodeDivider role="presentation" />
 			<div className="tds-logo">
-				<img src="/icons/totvs24x24.png" alt="TOTVS S.A." />
+				{/* <img src="/icons/totvs24x24.png" alt="TOTVS S.A." /> */}
 			</div>
 			<div className="tds-footer-content">
 				<VSCodeLink href="https://wwww.totvs.com" target="_blank">TOTVS S.A. </VSCodeLink>

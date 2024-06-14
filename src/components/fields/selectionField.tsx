@@ -22,21 +22,20 @@ type TdsSelectionFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactElement {
-	const { register } = props.methods;
-	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
-	const registerField = register(props.name, props.rules);
+	const { register, control, getValues, getFieldState } = useFormContext();
+	const fieldState: ControllerFieldState = getFieldState(props.name);
 	const options = props.options || [];
-	const currentValue: string = props.methods.getValues(props.name) as string;
+	const currentValue: string = getValues(props.name) as string;
 
-	registerField.onChange = (e) => {
-		return new Promise(() => {
-			if (props.onInput) {
-				props.onInput(e)
-			};
+	// registerField.onChange = (e) => {
+	// 	return new Promise(() => {
+	// 		if (props.onInput) {
+	// 			props.onInput(e)
+	// 		};
 
-			return true;
-		});
-	}
+	// 		return true;
+	// 	});
+	// }
 
 	return (
 		<section
@@ -49,7 +48,8 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 				{props.rules?.required && <span className="tds-required" />}
 			</label>
 			<VSCodeDropdown
-				{...registerField}
+				key={props.name}
+				{...register(`${props.name}` as const, props.rules)}
 			>
 				{options.map(({ value, text }, index) => {
 					return (

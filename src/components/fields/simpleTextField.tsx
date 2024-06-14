@@ -17,9 +17,8 @@ type TdsSimpleTextFieldProps = Omit<TdsFieldProps, "label">;
  * @returns
  */
 export function TdsSimpleTextField(props: TdsSimpleTextFieldProps): React.ReactElement {
-	const { register } = props.methods;
-	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
-	const registerField = register(props.name, props.rules);
+	const { register, control, getValues, getFieldState } = useFormContext();
+	const fieldState: ControllerFieldState = getFieldState(props.name);
 
 	return (
 		<section
@@ -28,7 +27,7 @@ export function TdsSimpleTextField(props: TdsSimpleTextFieldProps): React.ReactE
 			<VSCodeTextField
 				key={props.name}
 				readOnly={props.readOnly || false}
-				{...registerField}
+				{...register(`${props.name}` as const, props.rules)}
 			>
 				<PopupMessage field={{ ...props, label: "" }} fieldState={fieldState} />
 			</VSCodeTextField>

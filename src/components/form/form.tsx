@@ -17,9 +17,10 @@ limitations under the License.
 import "./form.css";
 import React from "react";
 import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
-import { FieldValues, RegisterOptions, UseFormReturn, UseFormSetError, UseFormSetValue } from "react-hook-form";
+import { FieldValues, FormProvider, RegisterOptions, UseFormReturn, UseFormSetError, UseFormSetValue, useForm } from "react-hook-form";
 import { VSCodeButton, VSCodeLink, VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react";
 import { sendClose, sendReset } from "../../utilities/common-command-webview";
+import { tdsVscode } from "../../utilities/vscodeWrapper";
 
 /**
  * Returns the default set of actions for the form.
@@ -39,6 +40,9 @@ export function getDefaultActionsForm(): IFormAction[] {
 			type: "submit",
 			isProcessRing: true,
 			enabled: (isDirty: boolean, isValid: boolean) => {
+				console.log("isDirty: " + isDirty);
+				console.log("isValid: " + isValid);
+				console.log("isDirty && isValid: " + (isDirty && isValid));
 				return isDirty && isValid;
 			},
 		},
@@ -77,8 +81,8 @@ export function getDefaultActionsForm(): IFormAction[] {
 
 type TDSFormProps<M extends FieldValues> = {
 	id?: string;
-	onSubmit: (data: any) => void;
 	methods: UseFormReturn<M>;
+	onSubmit: (data: any) => void;
 	actions?: IFormAction[];
 	children: any
 	isProcessRing?: boolean;
@@ -107,7 +111,6 @@ export interface IFormAction {
  * Defines the props shape for form fields.
  */
 export type TdsFieldProps = {
-	methods: UseFormReturn<any>;
 	name: string;
 	label: string;
 	info?: string;
@@ -141,6 +144,19 @@ export function setDataModel<DataModel extends FieldValues>
 	}
 }
 
+export function prepareDataModel<DataModel extends FieldValues>(dataModel: Partial<DataModel>): DataModel {
+	let resultModel: DataModel = { ...dataModel } as DataModel;
+
+	console.log("prepareDataModel", dataModel)
+
+	Object.keys(resultModel).forEach((fieldName: string) => {
+		console.log("prepareDataModel", fieldName, dataModel[fieldName]);
+		console.log(typeof resultModel[fieldName]);
+	});
+
+	return resultModel;
+}
+
 type TFieldError = {
 	type: string;
 	message?: string
@@ -161,6 +177,8 @@ export function setErrorModel<DataModel extends FieldValues>(setError: UseFormSe
 	if (errorModel) {
 		Object.keys(errorModel).forEach((fieldName: string) => {
 			if (errorModel[fieldName] !== undefined) {
+				console.log(`Erro no campo ${fieldName}`, errorModel[fieldName]);
+
 				setError(fieldName as any, {
 					message: errorModel[fieldName]?.message,
 					type: errorModel[fieldName]?.type
@@ -191,20 +209,15 @@ let isProcessRing: boolean = false;
  */
 
 export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.ReactElement {
-	const isSubmitting: boolean = props.methods.formState.isSubmitting;
-	const errors: any = props.methods.formState.errors;
-	const firstErrors: any = Object.keys(props.methods.formState.errors)
-		.filter((key: string, index: number) => index == 0)
-		.map((key: string) => {
-			console.log("key: ", key);
-			console.log("errors[key]: ", errors[key]);
-			return errors[key];
-		});
-	let isDirty: boolean = props.methods.formState.isDirty;
-	let isValid: boolean = props.methods.formState.isValid &&
-		(Object.keys(errors).filter((key: string) => key !== "root").length === 0);
+	const methods = props.methods;
+	const isSubmitting: boolean = methods.formState.isSubmitting;
+	let isDirty: boolean = methods.formState.isDirty;
+	let isValid: boolean = methods.formState.isValid;// &&
+	//(Object.keys(errors).filter((key: string) => key !== "root").length === 0);
 
 	let actions: IFormAction[] = props.actions ? props.actions : getDefaultActionsForm();
+
+	console.log("TdsForm", "isDirty", isDirty, "isValid", isValid, "formState", methods.formState);
 
 	if (isSubmitting && (actions.length > 0)) {
 		isProcessRing = props.isProcessRing !== undefined ? props.isProcessRing : true;
@@ -220,75 +233,78 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 	const children = React.Children.toArray(props.children);
 
 	return (
-		<form className="tds-form"
-			id={id}
-			onSubmit={props.methods.handleSubmit(props.onSubmit)}
-			onReset={() => sendReset(props.methods.getValues())}
-			autoComplete="off"
-		>
-			{props.description && <h3>{props.description}</h3>}
-			<section className={"tds-form-content"}>
-				{...children}
-			</section>
-			<section className="tds-form-footer">
-				<div className="tds-message">
-					{firstErrors.length > 0 && <span className={`tds-error`}>{firstErrors[0].message}.</span>}
-					{isProcessRing && <><VSCodeProgressRing /><span>Wait please. Processing...</span></>}
-				</div>
-				<div className="tds-actions">
-					{actions.map((action: IFormAction) => {
-						let propsField: any = {};
-						let visible: string = "";
+		<FormProvider {...methods}>
+			<form className="tds-form"
+				id={id}
+				onSubmit={methods.handleSubmit(props.onSubmit)}
+				onReset={() => sendReset(methods.getValues())}
+				autoComplete="off"
+			>
+				{props.description && <h3>{props.description}</h3>}
+				<section className={"tds-form-content"}>
+					{...children}
+				</section>
+				<section className="tds-form-footer">
+					<div className="tds-message">
+						{!isValid && false && <span className={"tds-error"}>{tdsVscode.l10n.t("There is invalid information. See the error by hovering the mouse over the field marking.")}</span>}
+						{isProcessRing && <><VSCodeProgressRing /><span>Wait please. Processing...</span></>}
+					</div>
+					<div className="tds-actions">
+						{actions.map((action: IFormAction) => {
+							let propsField: any = {};
+							let visible: string = "";
 
-						if (typeof action.id === "string") {
-							propsField["id"] = action.id;
-						}
-
-						propsField["key"] = action.id;
-						propsField["type"] = action.type || "button";
-
-						if (isProcessRing) {
-							propsField["disabled"] = true;
-						} else if (action.enabled !== undefined) {
-							if (typeof action.enabled === "function") {
-								propsField["disabled"] = !(action.enabled as Function)(isDirty, isValid);
-							} else {
-								propsField["disabled"] = !action.enabled;
-							}
-						}
-
-						if (action.appearance) {
-							propsField["appearance"] = action.appearance;
-						}
-
-						if (action.onClick) {
-							propsField["onClick"] = action.onClick;
-						}
-
-						if (action.visible !== undefined) {
-							let isVisible: boolean = false;
-
-							if (action.visible = typeof action.visible === "function") {
-								isVisible = (Function)(action.visible)(isDirty, isValid)
-							} else {
-								isVisible = action.visible;
+							if (typeof action.id === "string") {
+								propsField["id"] = action.id;
 							}
 
-							visible = isVisible ? "" : "tds-hidden";
-						}
+							propsField["type"] = action.type || "button";
 
-						return (action.type == "link" ?
-							<VSCodeLink key={action.id}
-								href={action.href}>{action.caption}
-							</VSCodeLink>
-							: <VSCodeButton
-								className={`tds-button-button ${visible}`}
-								{...propsField} >
-								{action.caption}
-							</VSCodeButton>)
-					})}
-				</div>
-			</section>
-		</form >
+							if (isProcessRing) {
+								propsField["disabled"] = true;
+							} else if (action.enabled !== undefined) {
+								if (typeof action.enabled === "function") {
+									propsField["disabled"] = !(action.enabled as Function)(isDirty, isValid);
+								} else {
+									propsField["disabled"] = !action.enabled;
+								}
+							}
+
+							if (action.appearance) {
+								propsField["appearance"] = action.appearance;
+							}
+
+							if (action.onClick) {
+								propsField["onClick"] = action.onClick;
+							}
+
+							if (action.visible !== undefined) {
+								let isVisible: boolean = false;
+
+								if (action.visible = typeof action.visible === "function") {
+									isVisible = (Function)(action.visible)(isDirty, isValid)
+								} else {
+									isVisible = action.visible;
+								}
+
+								visible = isVisible ? "" : "tds-hidden";
+							}
+
+							return (action.type == "link" ?
+								<VSCodeLink
+									key={action.id}
+									href={action.href}>{action.caption}
+								</VSCodeLink>
+								: <VSCodeButton
+									key={action.id}
+									className={`tds-button-button ${visible}`}
+									{...propsField} >
+									{action.caption}
+								</VSCodeButton>)
+						})}
+					</div>
+				</section>
+			</form >
+		</FormProvider>
 	);
 }

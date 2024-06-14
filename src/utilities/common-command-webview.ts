@@ -165,7 +165,8 @@ export function sendSave(model: TdsAbstractModel) {
  * Sends a save and close message to the webview panel
  * containing the provided model to save and close.
  */
-export function sendSaveAndClose(model: any) {
+export function sendSaveAndClose(model: TdsAbstractModel) {
+  console.log('sendSaveAndClose', model);
   const message: SendMessage<CommonCommandEnum, TdsAbstractModel> = {
     command: CommonCommandEnum.SaveAndClose,
     data: {

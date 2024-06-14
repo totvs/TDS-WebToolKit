@@ -20,9 +20,11 @@ type TdsCheckBoxFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactElement {
-	const { register } = props.methods;
-	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
-	const registerField = register(props.name, props.rules);
+	const { register, control, getValues, getFieldState } = useFormContext();
+	const fieldState: ControllerFieldState = getFieldState(props.name);
+
+	const value: string = getValues(props.name) ? getValues(props.name).toString() : "false";
+	console.dir(value, getValues());
 
 	return (
 		<section
@@ -35,11 +37,11 @@ export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactEleme
 				{props.rules?.required && <span className="tds-required" />}
 			</label>
 			<VSCodeCheckbox
-				checked={props.methods.getValues(props.name).toString() === "true"}
-				indeterminate={props.methods.getValues(props.name).toString() !== "true" && props.methods.getValues(props.name).toString() !== "false"}
+				checked={value === "true" || value === "on"}
+				indeterminate={value !== "true" && value !== "false" && value !== "on" && value !== "off"}
 				readOnly={props.readOnly || false}
-
-				{...registerField}
+				key={props.name}
+				{...register(`${props.name}` as const, props.rules)}
 			>
 				{props.textLabel}
 				{props.info && <PopupMessage field={props} fieldState={fieldState} />}

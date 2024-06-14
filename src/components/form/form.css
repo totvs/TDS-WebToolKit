@@ -54,6 +54,10 @@ limitations under the License.
 	/* margin-bottom: var(--tds-hor-spacing); */
 }
 
+.tds-form-footer {
+	margin-top: var(--tds-hor-spacing);
+}
+
 .tds-form-footer .tds-message {
 	display: flex;
 	flex-grow: 1;

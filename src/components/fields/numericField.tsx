@@ -19,8 +19,8 @@ type TdsNumericFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement {
-	const { register } = props.methods;
-	const fieldState: ControllerFieldState = props.methods.control.getFieldState(props.name);
+	const { register, control, getValues, getFieldState } = useFormContext();
+	const fieldState: ControllerFieldState = getFieldState(props.name);
 
 	const rules = {
 		...props.rules,
@@ -30,7 +30,6 @@ export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement
 			message: `[${props.label}] only accepts numbers`
 		},
 	};
-	const registerField = register(props.name, props.rules);
 
 	return (
 		<section
@@ -44,7 +43,8 @@ export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement
 			</label>
 			<VSCodeTextField
 				readOnly={props.readOnly || false}
-				{...registerField}
+				key={props.name}
+				{...register(`${props.name}` as const, props.rules)}
 			>
 				<PopupMessage field={props} fieldState={fieldState} />
 			</VSCodeTextField>
