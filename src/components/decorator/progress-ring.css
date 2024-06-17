@@ -1,0 +1,37 @@
+/*
+Copyright 2024 TOTVS S.A
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http: //www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+:root {
+    --tds-progress-ring-small: 30px;
+    --tds-progress-ring-medium: calc(var(--tds-progress-ring-small) * 1.25);
+    --tds-progress-ring-larger: calc(var(--tds-progress-ring-medium) * 1.50);
+}
+
+.tds-progress-ring {
+    display: inline-block;
+}
+
+.tds-progress-ring-small {
+    height: var(--tds-progress-ring-small);
+}
+
+.tds-progress-ring-medium {
+    height: var(--tds-progress-ring-medium);
+}
+
+.tds-progress-ring-larger {
+    height: var(--tds-progress-ring-larger);
+}

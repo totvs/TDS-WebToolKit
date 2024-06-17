@@ -21,6 +21,7 @@ import { FieldValues, FormProvider, RegisterOptions, UseFormReturn, UseFormSetEr
 import { VSCodeButton, VSCodeLink, VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react";
 import { sendClose, sendReset } from "../../utilities/common-command-webview";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { TdsProgressRing } from "../decorator/progress-ring";
 
 /**
  * Returns the default set of actions for the form.
@@ -227,7 +228,7 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 				<section className="tds-form-footer">
 					<div className="tds-message">
 						{!isValid && false && <span className={"tds-error"}>{tdsVscode.l10n.t("There is invalid information. See the error by hovering the mouse over the field marking.")}</span>}
-						{isProcessRing && <><VSCodeProgressRing /><span>Wait please. Processing...</span></>}
+						{isProcessRing && <><TdsProgressRing /><span>Wait please. Processing...</span></>}
 					</div>
 					<div className="tds-actions">
 						{actions.map((action: IFormAction) => {

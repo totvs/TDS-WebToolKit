@@ -1,5 +1,6 @@
 /*
 import { TdsDataGrid } from './components/dataGrid/dataGrid copy';
+import { TdsProcessRing } from './components/decorator/process-ring';
 export { vscode } from './utilities/vscodeWrapper';
 export { sendClose } from './utilities/common-command-webview';
 export { sendReset } from './utilities/common-command-webview';
@@ -37,6 +38,8 @@ export { CommonCommandEnum } from './utilities/common-command-webview'
 export { tdsVscode } from './utilities/vscodeWrapper';
 export { ReceiveMessage } from './utilities/common-command-webview';
 export { ErrorBoundary } from './components/error-boundary'
+
+export { TdsProgressRing } from './components/decorator/progress-ring';
 
 export { TdsDataGrid } from './components/dataGrid';
 export type { TTdsDataGridColumnDef, TTdsDataGridAction } from './components/dataGrid/dataGrid.type'

@@ -15,6 +15,7 @@ limitations under the License.
 */
 :root {
 	--tds-hor-spacing: 12px;
+	--tds-ver-spacing: 0px;
 }
 
 .tds-page {
