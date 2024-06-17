@@ -22,9 +22,7 @@ type TdsCheckBoxFieldProps = TdsFieldProps & {
 export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactElement {
 	const { register, control, getValues, getFieldState } = useFormContext();
 	const fieldState: ControllerFieldState = getFieldState(props.name);
-
 	const value: string = getValues(props.name) ? getValues(props.name).toString() : "false";
-	console.dir(value, getValues());
 
 	return (
 		<section

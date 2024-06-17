@@ -21,6 +21,7 @@ type TdsSimpleCheckBoxFieldProps = TdsFieldProps & {
 export function TdsSimpleCheckBoxField(props: TdsSimpleCheckBoxFieldProps): React.ReactElement {
 	const { register, control, getValues, setValue, getFieldState } = useFormContext();
 	const fieldState: ControllerFieldState = getFieldState(props.name);
+	const value: string = getValues(props.name) ? getValues(props.name).toString() : "false";
 	//const registerField = register(props.name, props.rules);
 
 	// const originalChange = registerField.onChange;
@@ -43,14 +44,14 @@ export function TdsSimpleCheckBoxField(props: TdsSimpleCheckBoxFieldProps): Reac
 			className={`tds-field-container tds-simple-checkbox-field  ${props.className ? props.className : ''}`}
 		>
 			<VSCodeCheckbox
-				checked={getValues(props.name).toString() === "true"}
-				indeterminate={getValues(props.name).toString() !== "true" && getValues(props.name).toString() !== "false"}
+				checked={value === "true" || value === "on"}
+				indeterminate={value !== "true" && value !== "false" && value !== "on" && value !== "off"}
 				readOnly={props.readOnly || false}
 				key={props.name}
 				{...register(`${props.name}` as const, props.rules)}
 			>
 				{props.textLabel}
-				<PopupMessage field={props} fieldState={fieldState} />
+				{props.info && <PopupMessage field={props} fieldState={fieldState} />}
 			</VSCodeCheckbox>
 		</section>
 	)
