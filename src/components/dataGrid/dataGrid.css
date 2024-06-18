@@ -40,7 +40,7 @@ limitations under the License.
 	flex-shrink: 1;
 	order: 0;
 	flex-direction: column;
-	overflow: hidden scroll;
+	overflow: auto;
 }
 
 .tds-data-grid-grouping {
@@ -106,4 +106,8 @@ limitations under the License.
 	gap: 10px;
 	flex-grow: 0;
 	flex-shrink: 0;
+}
+
+.tds-data-grid-content vscode-text-field {
+	text-align: right !important;
 }

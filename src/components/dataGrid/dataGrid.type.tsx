@@ -22,6 +22,7 @@ import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
  * @property name - The unique identifier for the column.
  * @property label - The display label for the column.
  * @property type - The data type of the column, which can be "string", "number", "boolean", "date", "time", or "datetime".
+ * @property displayType - Type of formatting to be used to present the value.
  * @property width - The width of the column, specified as a CSS value.
  * @property lookup - An optional object that maps values to display labels for the column.
  * @property sortable - Indicates whether the column is sortable.
@@ -34,6 +35,7 @@ export type TTdsDataGridColumnDef = {
 	name: string;
 	label: string;
 	type: "string" | "number" | "boolean" | "date" | "time" | "datetime";
+	displayType?: "date" | "time" | "datetime" | "int" | "float" | "hex" | "HEX";
 	width?: string;
 	lookup?: Record<string, string>;
 	//align?: "left" | "center" | "right";
@@ -92,6 +94,7 @@ export type TTdsDataGridProps = {
 		grouping?: boolean;
 		pageSize?: number,
 		pageSizeOptions?: number[],
+		moveRow?: boolean
 	}
 	//onFilterChanged?(fieldName: string, filter: string): void;
 }

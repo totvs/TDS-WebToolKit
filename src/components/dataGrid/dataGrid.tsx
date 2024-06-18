@@ -107,19 +107,17 @@ function FieldFilter(props: TFieldFilterProps) {
 }
 
 function fieldData(props: TFieldDataProps) {
-	//const { setValue } = useFormContext();
 	const column = props.fieldDef;
 	const row = props.row;
-	//const fieldName: string = props.fieldName ? props.fieldName : column.name;
 
 	//Campo DATE, TIME e DATETIME
 	if ((column.type == "date") || (column.type == "time") || (column.type == "datetime")) {
-
 		return (
 			<VSCodeTextField
+				data-type={column.type}
 				key={props.fieldName}
 				readOnly={column.readOnly == undefined ? true : column.readOnly}
-				value={tdsVscode.l10n.formatDate(row[column.name], column.type)}
+				value={tdsVscode.l10n.format(row[column.name], (column.displayType || column.type) as "date" | "time" | "datetime")}
 			></VSCodeTextField>
 		)
 	}
@@ -145,10 +143,11 @@ function fieldData(props: TFieldDataProps) {
 
 	return (
 		<VSCodeTextField
+			data-type={column.type}
 			key={props.fieldName}
 			readOnly={column.readOnly == undefined ? true : column.readOnly}
 			value={column.lookup && column.lookup[row[column.name]]
-				? column.lookup[row[column.name]] : row[column.name]}
+				? column.lookup[row[column.name]] : tdsVscode.l10n.format(row[column.name], (column.displayType || column.type))}
 		></VSCodeTextField>
 	)
 }
@@ -258,7 +257,6 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 	if (props.options.bottomActions == undefined) {
 		props.options.bottomActions = [];
 	}
-
 	if (props.options.grouping == undefined) {
 		props.options.grouping = true;
 	}
@@ -274,15 +272,12 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 	if (props.options.pageSizeOptions == undefined) {
 		props.options.pageSizeOptions = [50, 100, 250, 500, 1000];
 	}
-
-	props.columnDef.forEach((columnDef: TTdsDataGridColumnDef, index: number) => {
-		if (columnDef.visible == undefined) {
-			props.columnDef[index].visible = true;
-		}
-		if (columnDef.grouping == undefined) {
-			props.columnDef[index].grouping = false;
-		}
-	});
+	if (props.options.moveRow == undefined) {
+		props.options.moveRow = false;
+	}
+	if (props.options.moveRow) {
+		throw new Error("Sorry. TdsDataGrid.options.moveRow not implemented. Disable it for now.");
+	}
 
 	const filterBlock = () => {
 		return (
@@ -406,6 +401,15 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 			</section>
 		)
 	}
+
+	props.columnDef.forEach((columnDef: TTdsDataGridColumnDef, index: number) => {
+		if (columnDef.visible == undefined) {
+			props.columnDef[index].visible = true;
+		}
+		if (columnDef.grouping == undefined) {
+			props.columnDef[index].grouping = false;
+		}
+	});
 
 	return (
 		<section className="tds-data-grid" id={`${props.id}`}>

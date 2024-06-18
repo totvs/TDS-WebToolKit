@@ -14,24 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+type TDateFormat = "date" | "time" | "datetime";
+type TNumberFormat = "int" | "float" | "hex" | "HEX" | "number";
+
 export class L10n {
   private _translations: any = {};
-  private _formatDate: string = "";
+  private _formatLocale: string = "";
 
   public set translations(value: any) {
     this._translations = value.translations || {};
-    this._formatDate = value.formatDate || "";
+    this._formatLocale = value.formatLocale || "";
   }
 
   public get translations(): any {
     return this._translations;
   }
 
-
-  public formatDate(value: Date, type: "date" | "time" | "datetime"): string {
+  /**
+   * Formats a date or date&time value using the specified format type and the configured locale.
+   *
+   * @param value - The date or date&time value to format.
+   * @param type - The format type, can be "date", "time", or "datetime".
+   * @returns The formatted date or date&time string.
+   */
+  public formatDate(value: Date, type: TDateFormat): string {
     let result: string = value.toLocaleString();
 
-    if (this._formatDate !== "") {
+    if (this._formatLocale !== "") {
       try {
         let options: Intl.DateTimeFormatOptions = {};
 
@@ -58,7 +67,7 @@ export class L10n {
           };
         }
 
-        const dateTimeFormat = new Intl.DateTimeFormat(this._formatDate, options);
+        const dateTimeFormat = new Intl.DateTimeFormat(this._formatLocale, options);
 
         result = dateTimeFormat.format(value);
       } catch (error) {
@@ -69,6 +78,85 @@ export class L10n {
     return result;
   }
 
+  /**
+   * Formats a number value using the specified format type and the configured locale.
+   *
+   * @param value - The number value to format.
+   * @param type - The format type, can be "int", "float", "hex", or "HEX".
+   * @param decimalsOrHexDigits - The number of decimal places or hex digits to use for the formatted number.
+   * @returns The formatted number string.
+   */
+  public formatNumber(value: number, type: TNumberFormat, decimalsOrHexDigits: number = 8): string {
+    let result: string = value.toLocaleString();
+
+    if (this._formatLocale !== "") {
+      try {
+        if ((type === "hex") || (type === "HEX")) {
+          result = "0".repeat(decimalsOrHexDigits) + value.toString(16);
+          result = result.substring(result.length - decimalsOrHexDigits);
+          if (type === "HEX") {
+            result = result.toUpperCase();
+          }
+        } else {
+          let options: Intl.NumberFormatOptions = {
+            useGrouping: true,
+            minimumIntegerDigits: 1
+          }
+
+          if (type === "int") {
+            options = {
+              ...options,
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+              // minimumSignificantDigits: 0,
+              // maximumSignificantDigits: 0
+            };
+          } else if (type === "float") {
+            options = {
+              ...options,
+              minimumFractionDigits: decimalsOrHexDigits,
+              maximumFractionDigits: decimalsOrHexDigits,
+              // minimumSignificantDigits: decimalsOrHexDigits,
+              // maximumSignificantDigits: decimalsOrHexDigits
+            };
+          }
+          const valueFormat = new Intl.NumberFormat(this._formatLocale, options);
+          result = valueFormat.format(value);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Formats a number or date value based on the specified format type.
+   *
+   * @param value - The string, number or date value to format.
+   * @param type - The format type, can be a `TDateFormat` or `TNumberFormat`.
+   * @returns The formatted string.
+   * 
+   * @remarks Type `string` is not formatted. Always return original value.
+   */
+  public format(value: string | number | Date, type: "string" | TDateFormat | TNumberFormat): string {
+    if (typeof value === "number") {
+      return this.formatNumber(value, type as TNumberFormat);
+    } else if (value instanceof Date) {
+      return this.formatDate(value, type as TDateFormat);
+    }
+
+    return value
+  }
+
+  /**
+   * Translates a message string with optional arguments.
+   *
+   * @param message - The message string to translate.
+   * @param args - Optional arguments to insert into the translated message. Use `{index}` for arguments. 
+   * @returns The translated message string with any arguments inserted.
+   */
   public t(
     message: string,
     ...args: (string | number | boolean | undefined | null)[]

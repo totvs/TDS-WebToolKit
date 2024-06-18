@@ -18,10 +18,11 @@ import "./form.css";
 import React from "react";
 import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
 import { FieldValues, FormProvider, RegisterOptions, UseFormReturn, UseFormSetError, UseFormSetValue, useForm } from "react-hook-form";
-import { VSCodeButton, VSCodeLink, VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react";
+import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react";
 import { sendClose, sendReset } from "../../utilities/common-command-webview";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsProgressRing } from "../decorator/progress-ring";
+import { mdToHtml } from "../mdToHtml";
 
 /**
  * Returns the default set of actions for the form.
@@ -77,6 +78,18 @@ export function getDefaultActionsForm(): IFormAction[] {
 *   através dos métodos ``getValues()``, ``setValues()``.
 **/
 
+/**
+ * Defines the props shape for the TDSForm component.
+ * 
+ * @template M - The data model type for the form.
+ * @property {string} [id] - An optional unique identifier for the form.
+ * @property {UseFormReturn<M>} methods - The form methods returned by the `useForm` hook.
+ * @property {(data: any) => void} onSubmit - The function to call when the form is submitted.
+ * @property {IFormAction[]} [actions] - An optional array of form action buttons.
+ * @property {React.ReactNode} children - The child components of the form.
+ * @property {boolean} [isProcessRing] - An optional flag to show a processing indicator.
+ * @property {string} [description] - An optional description for the form. You can use Markdown format.
+ */
 type TDSFormProps<M extends FieldValues> = {
 	id?: string;
 	methods: UseFormReturn<M>;
@@ -221,7 +234,7 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 				onReset={() => sendReset(methods.getValues())}
 				autoComplete="off"
 			>
-				{props.description && <h3>{props.description}</h3>}
+				{props.description && <h3>{mdToHtml(props.description)}</h3>}
 				<section className={"tds-form-content"}>
 					{...children}
 				</section>
