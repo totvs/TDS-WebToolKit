@@ -23,7 +23,7 @@ import { ErrorBoundary } from "../error-boundary";
 
 export interface IPageView {
 	title: string;
-	linkToDoc: string
+	linkToDoc?: string
 	children: any;
 }
 

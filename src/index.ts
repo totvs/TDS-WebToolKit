@@ -19,6 +19,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+export { mdToHtml } from './components/mdToHtml'
+
 export { IFormAction, setErrorModel } from './components/form/form'
 export { setDataModel, getDefaultActionsForm } from './components/form/form'
 export { sendSave, sendReady, sendClose, sendReset, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel, TCommonCommand } from './utilities/common-command-webview'
