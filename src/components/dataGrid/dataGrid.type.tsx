@@ -41,10 +41,11 @@ export type TTdsDataGridColumnDef = {
 	//align?: "left" | "center" | "right";
 	sortable?: boolean;
 	sortDirection?: "asc" | "desc" | "";
-	grouping?: boolean,
-	visible?: boolean,
-	readOnly?: boolean,
+	grouping?: boolean;
+	visible?: boolean;
+	readOnly?: boolean;
 	//onSort?: (key: string) => void;
+	onChange?: any;
 }
 
 /**

@@ -107,6 +107,7 @@ function FieldFilter(props: TFieldFilterProps) {
 }
 
 function fieldData(props: TFieldDataProps) {
+	const methods = useFormContext();
 	const column = props.fieldDef;
 	const row = props.row;
 
@@ -133,7 +134,8 @@ function fieldData(props: TFieldDataProps) {
 				onChange={(e) => {
 					e.preventDefault();
 					const target = e.target as HTMLInputElement;
-					//setValue(fieldName, target.checked ? true : false);
+					methods.setValue(props.fieldName, target.checked ? true : false);
+					column.onChange!(e, props.fieldName, row);
 
 					return target.checked;
 				}}
