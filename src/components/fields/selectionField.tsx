@@ -48,12 +48,18 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 				{props.rules?.required && <span className="tds-required" />}
 			</label>
 			<VSCodeDropdown
-				key={props.name}
+				key={`dropdown_${props.name}`}
+
 				{...register(`${props.name}` as const, props.rules)}
 			>
 				{options.map(({ value, text }, index) => {
 					return (
-						<VSCodeOption key={index} value={value} checked={currentValue === value}>{text}</VSCodeOption>
+						<VSCodeOption
+							key={`dropdown_${props.name}_${index}`}
+							value={value}
+							checked={currentValue === value}>
+							{text}
+						</VSCodeOption>
 					)
 				})}
 				<PopupMessage field={props} fieldState={fieldState} />

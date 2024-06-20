@@ -43,7 +43,8 @@ export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement
 			</label>
 			<VSCodeTextField
 				readOnly={props.readOnly || false}
-				key={props.name}
+				key={`text_field_${props.name}`}
+
 				{...register(`${props.name}` as const, props.rules)}
 			>
 				<PopupMessage field={props} fieldState={fieldState} />

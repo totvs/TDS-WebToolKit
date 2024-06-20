@@ -59,7 +59,7 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 				onClick={() => {
 					sendSelectResource(props.name, getValues(), options);
 				}}
-				key={props.name}
+				key={`selection_resource_button_${props.name}`}
 				{...register(`${props.name}` as const, props.rules)}
 			>
 				{props.openLabel}
@@ -96,6 +96,7 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
  */
 export function TdsSelectionFolderField(props: Partial<TdsSelectionFolderFieldProps>): React.ReactElement {
 	return (<TdsSelectionResourceField
+		key={`selection_folder_${props.name}`}
 		name={props.name || "btnSelectionFolder"}
 		title={props.title || "Select Folder"}
 		canSelectFolders={true}
@@ -138,6 +139,7 @@ export function TdsSelectionFileField(props: Partial<TdsSelectionFileFieldProps>
 	const filters = props.filters ? props.filters : {};
 
 	return (<TdsSelectionResourceField
+		key={`selection_file_${props.name}`}
 		name={props.name || "btnSelectionFile"}
 		title={props.title || "Select File"}
 		canSelectFolders={false}

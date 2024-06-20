@@ -47,7 +47,7 @@ export function TdsSimpleCheckBoxField(props: TdsSimpleCheckBoxFieldProps): Reac
 				checked={value === "true" || value === "on"}
 				indeterminate={value !== "true" && value !== "false" && value !== "on" && value !== "off"}
 				readOnly={props.readOnly || false}
-				key={props.name}
+				key={`check_box_${props.name}`}
 				{...register(`${props.name}` as const, props.rules)}
 			>
 				{props.textLabel}

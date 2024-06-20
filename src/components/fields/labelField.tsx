@@ -42,7 +42,7 @@ export function TdsLabelField(props: TdsLabelFieldProps): React.ReactElement {
 			className={`tds-field-container tds-label-field ${props.className ? props.className : ''}`}
 		>
 			<label
-				key={props.name}
+				key={`label_${props.name}`}
 				{...register(`${props.name}` as const, props.rules)}
 			>
 				{props.label}

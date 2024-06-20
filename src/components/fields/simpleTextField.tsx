@@ -25,7 +25,7 @@ export function TdsSimpleTextField(props: TdsSimpleTextFieldProps): React.ReactE
 			className={`tds-field-container tds-simple-text-field ${props.className ? props.className : ''}`}
 		>
 			<VSCodeTextField
-				key={props.name}
+				key={`text_field_${props.name}`}
 				readOnly={props.readOnly || false}
 				{...register(`${props.name}` as const, props.rules)}
 			>
