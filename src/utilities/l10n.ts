@@ -37,7 +37,7 @@ export class L10n {
    * @param type - The format type, can be "date", "time", or "datetime".
    * @returns The formatted date or date&time string.
    */
-  public formatDate(value: Date, type: TDateFormat): string {
+  public formatDate(value: Date, type: TDateFormat = "datetime"): string {
     let result: string = value.toLocaleString();
 
     if (this._formatLocale !== "") {
