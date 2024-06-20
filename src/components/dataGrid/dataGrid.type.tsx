@@ -87,7 +87,7 @@ export type TTdsDataGridProps = {
 	id: string;
 	columnDef: TTdsDataGridColumnDef[]
 	dataSource: any[] //Record<string, string | number | Date | boolean>[]
-	options?: {
+	options: {
 		bottomActions?: TTdsDataGridAction[];
 		topActions?: TTdsDataGridAction[];
 		sortable?: boolean;

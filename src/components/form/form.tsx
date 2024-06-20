@@ -25,6 +25,19 @@ import { TdsProgressRing } from "../decorator/progress-ring";
 import { mdToHtml } from "../mdToHtml";
 
 /**
+ * Enum representing the default actions available in a form.
+ * 
+ * - `Save`: Represents the action to save the form data and close the page.
+ * - `Close`: Represents the action to close the page without saving.
+ * - `Clear`: Represents the action to reset the form fields.
+ */
+export enum TdsFormActionsEnum {
+	Save = -1,
+	Close = -2,
+	Clear = -3
+}
+
+/**
  * Returns the default set of actions for the form.
  * 
  * The default actions include:
@@ -35,7 +48,7 @@ import { mdToHtml } from "../mdToHtml";
 export function getDefaultActionsForm(): IFormAction[] {
 	return [
 		{
-			id: -1,
+			id: TdsFormActionsEnum.Save,
 			caption: "Save",
 			hint: "Salva as informações e fecha a página",
 			appearance: "primary", //enter acione o botão
@@ -46,7 +59,7 @@ export function getDefaultActionsForm(): IFormAction[] {
 			},
 		},
 		{
-			id: -2,
+			id: TdsFormActionsEnum.Close,
 			caption: "Close",
 			hint: "Fecha a página, sem salvar as informações",
 			appearance: "secondary",
@@ -55,7 +68,7 @@ export function getDefaultActionsForm(): IFormAction[] {
 			},
 		},
 		{
-			id: -3,
+			id: TdsFormActionsEnum.Clear,
 			caption: "Clear",
 			hint: "Reinicia os campos do formulário",
 			appearance: "secondary",

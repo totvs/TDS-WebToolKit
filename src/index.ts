@@ -26,7 +26,7 @@ export { setDataModel, getDefaultActionsForm } from './components/form/form'
 export { sendSave, sendReady, sendClose, sendReset, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel, TCommonCommand } from './utilities/common-command-webview'
 
 export { TdsCheckBoxField } from './components/fields/checkBoxField'
-export { TdsForm } from './components/form/form'
+export { TdsForm, TdsFormActionsEnum } from './components/form/form'
 export { TdsNumericField } from './components/fields/numericField'
 export { TdsPage } from './components/page/page'
 export { TdsSelectionField } from './components/fields/selectionField'

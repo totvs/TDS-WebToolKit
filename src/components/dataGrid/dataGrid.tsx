@@ -158,7 +158,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 	const methods = useFormContext();
 	const [itemOffset, setItemOffset] = React.useState(0);
 	const [currentPage, setCurrentPage] = React.useState(1);
-	const [pageSize, setPageSize] = React.useState(props.options.pageSize);
+	const [pageSize, setPageSize] = React.useState(50);
 	const [totalItems, setTotalItems] = React.useState(props.dataSource ? props.dataSource.length : 0);
 	const [showFilter, setShowFilter] = React.useState(false);
 	const [_, setSortedInfo] = React.useState(props.columnDef[0]);
