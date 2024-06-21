@@ -517,20 +517,22 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 			</div>
 
 			<div className="tds-data-grid-footer">
-				<TdsSelectionField
-					key={"pagesize"}
-					name={"pageSize"}
-					label={tdsVscode.l10n.t("Elements/page")}
-					options={(props.options.pageSizeOptions || [])
-						.map((value: number) => { return { value: value.toString(), text: value.toString() } })
-					}
-					onInput={(e: any) => {
-						e.preventDefault();
-						setPageSize(parseInt(e.target.value));
-						setCurrentPage(0);
-						setItemOffset(0);
-					}}
-				/>
+				{props.options.pageSizeOptions.length &&
+					<TdsSelectionField
+						key={"pagesize"}
+						name={"pageSize"}
+						label={tdsVscode.l10n.t("Elements/page")}
+						options={(props.options.pageSizeOptions || [])
+							.map((value: number) => { return { value: value.toString(), text: value.toString() } })
+						}
+						onInput={(e: any) => {
+							e.preventDefault();
+							setPageSize(parseInt(e.target.value));
+							setCurrentPage(0);
+							setItemOffset(0);
+						}}
+					/>
+				}
 				<TdsPaginator
 					key={"paginator"}
 					onPageChange={handlePageClick}

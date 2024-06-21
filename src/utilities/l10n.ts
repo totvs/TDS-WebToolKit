@@ -26,6 +26,10 @@ export class L10n {
     this._formatLocale = value.formatLocale || "";
   }
 
+  public get formatLocale(): string {
+    return this._formatLocale;
+  }
+
   public get translations(): any {
     return this._translations;
   }
@@ -68,6 +72,7 @@ export class L10n {
         }
 
         const dateTimeFormat = new Intl.DateTimeFormat(this._formatLocale, options);
+        //const dateFileApplicationMonth: string = rpoInfo.dateFileApplication.toLocaleString("pt-BR", { month: "numeric", year: "numeric" });
 
         result = dateTimeFormat.format(value);
       } catch (error) {
