@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 :root {
-    --tds-progress-ring-small: 30px;
-    --tds-progress-ring-medium: calc(var(--tds-progress-ring-small) * 1.25);
-    --tds-progress-ring-larger: calc(var(--tds-progress-ring-medium) * 1.50);
+    --tds-progress-ring-small: calc(var(--design-unit) * 7px);
+    --tds-progress-ring-medium: calc(var(--tds-progress-ring-small) * 1.50);
+    --tds-progress-ring-larger: calc(var(--tds-progress-ring-small) * 2);
+    --tds-progress-ring-full: calc(var(--tds-progress-ring-small) * 3);
 }
 
 .tds-progress-ring {
@@ -34,4 +35,18 @@ limitations under the License.
 
 .tds-progress-ring-larger {
     height: var(--tds-progress-ring-larger);
+}
+
+section .tds-progress-ring-full {
+    z-index: 10000;
+    height: 30vh;
+    width: 100%;
+    opacity: .5;
+    display: flex;
+    align-items: center;
+}
+
+.tds-progress-ring-full .tds-progress-ring-full {
+    height: var(--tds-progress-ring-full);
+    flex-grow: 1;
 }

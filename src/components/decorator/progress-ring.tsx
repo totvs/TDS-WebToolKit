@@ -18,8 +18,13 @@ import "./progress-ring.css";
 import { VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react";
 import React from "react";
 
+/**
+ * Defines the size options for the `TdsProgressRing` component.
+ * @property {string} [size] - The size of the progress ring, can be one of "small", "medium", "larger", or "full".
+ *                             The size "full" will occupy the entire available area of ​​the father element.
+ */
 type TTdsProcessRing = {
-    size?: "small" | "medium" | "larger";
+    size?: "small" | "medium" | "larger" | "full";
 }
 
 export function TdsProgressRing(props: TTdsProcessRing): React.ReactElement {
@@ -27,7 +32,13 @@ export function TdsProgressRing(props: TTdsProcessRing): React.ReactElement {
         ? ` tds-process-ring-${props.size}`
         : ""
 
-    return (
-        <VSCodeProgressRing className={`tds-progress-ring${classSize}`} />
-    );
+    return props.size == "full" ?
+        (
+            <section className={`tds-progress-ring-full`}>
+                <VSCodeProgressRing className={`tds-progress-ring-full`} />
+            </section>
+        )
+        : (
+            <VSCodeProgressRing className={`tds-progress-ring${classSize}`} />
+        )
 }
