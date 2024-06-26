@@ -17,6 +17,7 @@ limitations under the License.
 import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
+import { mdToHtml } from './../mdToHtml';
 
 export type TdsLabelFieldProps = TdsFieldProps & {
 	//
@@ -45,7 +46,7 @@ export function TdsLabelField(props: TdsLabelFieldProps): React.ReactElement {
 				key={`label_${props.name}`}
 				{...register(`${props.name}` as const, props.rules)}
 			>
-				{props.label}
+				{mdToHtml(props.label)}
 				<PopupMessage field={props} fieldState={fieldState} />
 			</label>
 		</section>

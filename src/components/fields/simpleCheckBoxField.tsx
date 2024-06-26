@@ -2,6 +2,7 @@ import { VSCodeCheckbox } from "@vscode/webview-ui-toolkit/react";
 import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
+import { mdToHtml } from "../mdToHtml";
 
 type TdsSimpleCheckBoxFieldProps = TdsFieldProps & {
 	textLabel: string;
@@ -50,7 +51,7 @@ export function TdsSimpleCheckBoxField(props: TdsSimpleCheckBoxFieldProps): Reac
 				key={`check_box_${props.name}`}
 				{...register(`${props.name}` as const, props.rules)}
 			>
-				{props.textLabel}
+				{mdToHtml(props.textLabel)}
 				{props.info && <PopupMessage field={props} fieldState={fieldState} />}
 			</VSCodeCheckbox>
 		</section>

@@ -18,6 +18,7 @@ import { VSCodeTextArea, VSCodeTextField } from "@vscode/webview-ui-toolkit/reac
 import { ControllerFieldState, UseFormReturn, useController, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
+import { mdToHtml } from "../mdToHtml";
 
 type TdsTextFieldProps = TdsFieldProps & {
     textArea?: boolean
@@ -50,7 +51,7 @@ export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
             <label
                 htmlFor={props.name}
             >
-                {props.label}
+                {mdToHtml(props.label)}
                 {props.rules?.required && <span className="tds-required" />}
             </label>
             {props.textArea ?? false ? (
