@@ -44,7 +44,7 @@ export function TdsLabelField(props: TdsLabelFieldProps): React.ReactElement {
 		>
 			<label
 				key={`label_${props.name}`}
-				{...register(`${props.name}` as const, props.rules)}
+				{...register(props.name, props.rules)}
 			>
 				{mdToHtml(props.label)}
 				<PopupMessage field={props} fieldState={fieldState} />

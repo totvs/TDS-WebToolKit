@@ -26,7 +26,7 @@ export enum CommonCommandEnum {
   SaveAndClose = "SAVE_AND_CLOSE",
   Close = "CLOSE",
   Ready = "READY",
-  Reset = "RESET",
+  _Reset = "RESET",
   Validate = "VALIDATE",
   UpdateModel = "UPDATE_MODEL",
   LinkMouseOver = "LINK_MOUSE_OVER",
@@ -86,21 +86,6 @@ export function sendReady() {
     command: CommonCommandEnum.Ready,
     data: {
       model: undefined
-    }
-  }
-
-  tdsVscode.postMessage(message);
-}
-
-/**
- * Sends a reset message to the webview panel 
- * with the provided model to reset the state.
- */
-export function sendReset(model: TdsAbstractModel) {
-  const message: SendMessage<CommonCommandEnum, TdsAbstractModel> = {
-    command: CommonCommandEnum.Reset,
-    data: {
-      model: model
     }
   }
 

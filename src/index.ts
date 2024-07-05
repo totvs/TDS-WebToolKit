@@ -23,7 +23,7 @@ export { mdToHtml } from './components/mdToHtml'
 
 export { IFormAction, setErrorModel } from './components/form/form'
 export { setDataModel, getDefaultActionsForm } from './components/form/form'
-export { sendSave, sendReady, sendClose, sendReset, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel, TCommonCommand } from './utilities/common-command-webview'
+export { sendSave, sendReady, sendClose, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel, TCommonCommand } from './utilities/common-command-webview'
 
 export { TdsCheckBoxField } from './components/fields/checkBoxField'
 export { TdsForm, TdsFormActionsEnum } from './components/form/form'

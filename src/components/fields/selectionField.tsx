@@ -50,7 +50,7 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 			<VSCodeDropdown
 				key={`dropdown_${props.name}`}
 
-				{...register(`${props.name}` as const, props.rules)}
+				{...register(props.name, props.rules)}
 			>
 				{options.map(({ value, text }, index) => {
 					return (

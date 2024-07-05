@@ -19,7 +19,7 @@ import React from "react";
 import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
 import { FieldValues, FormProvider, RegisterOptions, UseFormReturn, UseFormSetError, UseFormSetValue, useForm } from "react-hook-form";
 import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react";
-import { sendClose, sendReset } from "../../utilities/common-command-webview";
+import { sendClose } from "../../utilities/common-command-webview";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsProgressRing } from "../decorator/progress-ring";
 import { mdToHtml } from "../mdToHtml";
@@ -50,7 +50,7 @@ export function getDefaultActionsForm(): IFormAction[] {
 		{
 			id: TdsFormActionsEnum.Save,
 			caption: "Save",
-			hint: "Salva as informações e fecha a página",
+			hint: tdsVscode.l10n.t("Save the information and close the page"),
 			appearance: "primary", //enter acione o botão
 			type: "submit",
 			isProcessRing: true,
@@ -61,8 +61,7 @@ export function getDefaultActionsForm(): IFormAction[] {
 		{
 			id: TdsFormActionsEnum.Close,
 			caption: "Close",
-			hint: "Fecha a página, sem salvar as informações",
-			appearance: "secondary",
+			hint: tdsVscode.l10n.t("Closes the page without saving the information"),
 			onClick: () => {
 				sendClose();
 			},
@@ -70,10 +69,12 @@ export function getDefaultActionsForm(): IFormAction[] {
 		{
 			id: TdsFormActionsEnum.Clear,
 			caption: "Clear",
-			hint: "Reinicia os campos do formulário",
-			appearance: "secondary",
+			hint: tdsVscode.l10n.t("Reset the fields"),
 			type: "reset",
-			visible: false
+			visible: false,
+			enabled: (isDirty: boolean, _isValid: boolean) => { // _ evita aviso de não utilizado
+				return isDirty;
+			},
 		}
 	];
 }
@@ -100,7 +101,7 @@ export function getDefaultActionsForm(): IFormAction[] {
  * @property {(data: any) => void} onSubmit - The function to call when the form is submitted.
  * @property {IFormAction[]} [actions] - An optional array of form action buttons.
  * @property {React.ReactNode} children - The child components of the form.
- * @property {boolean} [isProcessRing] - An optional flag to show a processing indicator.
+ * @property {boolean} [isProcessRing] - An optional flag to show a processing indicator when necessary.
  * @property {string} [description] - An optional description for the form. You can use Markdown format.
  */
 type TDSFormProps<M extends FieldValues> = {
@@ -220,10 +221,9 @@ let isProcessRing: boolean = false;
 export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.ReactElement {
 	const methods = props.methods;
 	const isSubmitting: boolean = methods.formState.isSubmitting;
-	let isDirty: boolean = methods.formState.isDirty;
-	let isValid: boolean = methods.formState.isValid;// &&
-	//(Object.keys(errors).filter((key: string) => key !== "root").length === 0);
-
+	const isDirty: boolean = methods.formState.isDirty;
+	const isValid: boolean = /*methods.formState.isValid &&*/ // vem false, mesmo sem erros
+		(methods.formState.errors === undefined || Object.keys(methods.formState.errors).length === 0);
 	let actions: IFormAction[] = props.actions ? props.actions : getDefaultActionsForm();
 
 	if (isSubmitting && (actions.length > 0)) {
@@ -244,7 +244,7 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 			<form className="tds-form"
 				id={id}
 				onSubmit={methods.handleSubmit(props.onSubmit)}
-				onReset={() => sendReset(methods.getValues())}
+				onReset={() => methods.reset()}
 				autoComplete="off"
 			>
 				{props.description && <h3>{mdToHtml(props.description)}</h3>}
@@ -253,8 +253,8 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 				</section>
 				<section className="tds-form-footer">
 					<div className="tds-message">
-						{!isValid && false && <span className={"tds-error"}>{tdsVscode.l10n.t("There is invalid information. See the error by hovering the mouse over the field marking.")}</span>}
-						{isProcessRing && <><TdsProgressRing /><span>Wait please. Processing...</span></>}
+						{!isValid && <span className={"tds-error"}>{tdsVscode.l10n.t("There is invalid information. See the error by hovering the mouse over the field marking.")}</span>}
+						{isProcessRing && isSubmitting && <><TdsProgressRing /><span>Wait please. Processing...</span></>}
 					</div>
 					<div className="tds-actions">
 						{actions.map((action: IFormAction) => {
@@ -275,10 +275,8 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 								} else {
 									propsField["disabled"] = !action.enabled;
 								}
-							}
-
-							if (action.appearance) {
-								propsField["appearance"] = action.appearance;
+							} else {
+								propsField["disabled"] = false;
 							}
 
 							if (action.onClick) {
@@ -301,11 +299,14 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 								<VSCodeLink
 									key={action.id}
 									href={action.href}>{action.caption}
+									title={action.hint}
 								</VSCodeLink>
 								: <VSCodeButton
 									key={action.id}
 									className={`tds-button-button ${visible}`}
-									{...propsField} >
+									title={action.hint}
+									appearance={action.appearance || "secondary"}
+									{...propsField}>
 									{action.caption}
 								</VSCodeButton>)
 						})}

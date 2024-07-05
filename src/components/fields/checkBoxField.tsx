@@ -39,7 +39,7 @@ export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactEleme
 				indeterminate={value !== "true" && value !== "false" && value !== "on" && value !== "off"}
 				readOnly={props.readOnly || false}
 				key={props.name}
-				{...register(`${props.name}` as const, props.rules)}
+				{...register(props.name, props.rules)}
 			>
 				{props.textLabel}
 				{props.info && <PopupMessage field={props} fieldState={fieldState} />}

@@ -60,7 +60,7 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 					sendSelectResource(props.name, getValues(), options);
 				}}
 				key={`selection_resource_button_${props.name}`}
-				{...register(`${props.name}` as const, props.rules)}
+				{...register(props.name, props.rules)}
 			>
 				{props.openLabel}
 				<PopupMessage field={{ ...props, label: props.openLabel }} fieldState={fieldState} />

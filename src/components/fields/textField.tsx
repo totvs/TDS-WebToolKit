@@ -64,7 +64,7 @@ export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
                     onInput={props.onInput}
                     key={`text_area_${props.name}`}
                     value={props.format ? props.format(getValues(props.name) as string) : getValues(props.name)}
-                    {...register(`${props.name}` as const, props.rules)}
+                    {...register(props.name, props.rules)}
                 >
                     <PopupMessage field={props} fieldState={fieldState} />
                 </VSCodeTextArea>
@@ -76,7 +76,7 @@ export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
                     onInput={props.onInput}
                     key={`text_field_${props.name}`}
                     value={props.format ? props.format(getValues(props.name) as string) : getValues(props.name)}
-                    {...register(`${props.name}` as const, props.rules)}
+                    {...register(props.name, props.rules)}
                 >
                     <PopupMessage field={props} fieldState={fieldState} />
                 </VSCodeTextField>

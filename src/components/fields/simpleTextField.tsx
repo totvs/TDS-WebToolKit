@@ -27,7 +27,7 @@ export function TdsSimpleTextField(props: TdsSimpleTextFieldProps): React.ReactE
 			<VSCodeTextField
 				key={`text_field_${props.name}`}
 				readOnly={props.readOnly || false}
-				{...register(`${props.name}` as const, props.rules)}
+				{...register(props.name, props.rules)}
 			>
 				<PopupMessage field={{ ...props, label: "" }} fieldState={fieldState} />
 			</VSCodeTextField>
