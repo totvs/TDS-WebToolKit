@@ -1,0 +1,46 @@
+/*
+Copyright 2024 TOTVS S.A
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http: //www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.tds-tree-view {
+    width: 100%;
+}
+
+.tds-tree-view fast-tree-item {
+    background: var(--input-background);
+}
+
+.tds-tree-view fast-tree-item::part(positioning-region) {
+    background-color: transparent;
+    border: none;
+    height: calc(((8 + var(--density)) * var(--design-unit) + 1) * 1px);
+}
+
+.tds-tree-view fast-tree-item::part(content-region) {
+    margin-top: calc(var(--design-unit) * -1px);
+    color: var(--vscode-editor-foreground);
+}
+
+.tds-tree-view fast-tree-item::part(expand-collapse-button) {
+    background: initial;
+}
+
+.tds-tree-view fast-tree-item::part(expand-collapse-button):hover {
+    color: var(--vscode-editor-background);
+}
+
+.tds-tree-view fast-tree-item::part(content-region) fast-tree-item::part(content-region) {
+    background-color: red;
+}

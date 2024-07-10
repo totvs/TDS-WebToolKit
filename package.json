@@ -29,6 +29,7 @@
     "---MISC---": ""
   },
   "dependencies": {
+    "@microsoft/fast-components": "^2.30.6",
     "@vscode/codicons": "^0.0.35",
     "@vscode/webview-ui-toolkit": "^1.4.0",
     "react-hook-form": "^7.51.4",
