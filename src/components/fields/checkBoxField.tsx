@@ -2,10 +2,11 @@ import { VSCodeCheckbox } from "@vscode/webview-ui-toolkit/react";
 import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
+import { mdToHtml } from "../mdToHtml";
+import { Checkbox } from "@vscode/webview-ui-toolkit";
 
 type TdsCheckBoxFieldProps = TdsFieldProps & {
 	textLabel: string;
-	//onChange?: (event: ChangeEvent<HTMLInputElement>) => any;
 }
 
 /**
@@ -22,27 +23,24 @@ type TdsCheckBoxFieldProps = TdsFieldProps & {
 export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactElement {
 	const { register, control, getValues, getFieldState } = useFormContext();
 	const fieldState: ControllerFieldState = getFieldState(props.name);
-	const value: string = getValues(props.name) ? getValues(props.name).toString() : "false";
+
+	const {
+		field: { onChange, value },
+	} = useController({
+		name: props.name,
+		control,
+		rules: props.rules,
+	});
 
 	return (
 		<section
-			className={`tds-field-container tds-checkbox-field ${props.className ? props.className : ''}`}
+			className={`tds-field-container tds-simple-checkbox-field ${props.className ? props.className : ''}`}
 		>
-			<label
-				htmlFor={props.name}
-			>
-				{props.label}
-				{props.rules?.required && <span className="tds-required" />}
-			</label>
 			<VSCodeCheckbox
-				checked={value === "true" || value === "on"}
-				indeterminate={value !== "true" && value !== "false" && value !== "on" && value !== "off"}
-				readOnly={props.readOnly || false}
-				key={props.name}
-				{...register(props.name, props.rules)}
-			>
-				{props.textLabel}
-				{props.info && <PopupMessage field={props} fieldState={fieldState} />}
+				checked={value}
+				onChange={e => onChange((e.target as Checkbox).checked)}>
+				{mdToHtml(props.textLabel)}
+				{props.info && <PopupMessage field={{ ...props, label: "" }} fieldState={fieldState} />}
 			</VSCodeCheckbox>
 		</section>
 	)

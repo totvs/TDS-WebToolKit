@@ -611,7 +611,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 				>
 					{buildRowHeader(props.columnDef)}
 
-					{showFilter && buildRowFilter(props.columnDef}
+					{showFilter && buildRowFilter(props.columnDef)}
 
 					{dataSource.slice(itemOffset, itemOffset + pageSize).map((row: any, index: number) => buildRow(row, index, itemOffset))}
 				</VSCodeDataGrid>
