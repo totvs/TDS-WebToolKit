@@ -1,9 +1,7 @@
 import { TdsFieldProps } from "../form/form";
 import { TdsCheckBoxField } from "./checkBoxField";
 
-type TdsSimpleCheckBoxFieldProps = TdsFieldProps & {
-	textLabel: string;
-}
+type TdsSimpleCheckBoxFieldProps = TdsFieldProps;
 
 /**
  *
@@ -19,27 +17,3 @@ type TdsSimpleCheckBoxFieldProps = TdsFieldProps & {
 export function TdsSimpleCheckBoxField(props: TdsSimpleCheckBoxFieldProps): React.ReactElement {
 	return <TdsCheckBoxField {...props} />
 }
-// 	const { register, control, getValues, getFieldState } = useFormContext();
-// 	const fieldState: ControllerFieldState = getFieldState(props.name);
-
-// 	const {
-// 		field: { onChange, value },
-// 	} = useController({
-// 		name: props.name,
-// 		control,
-// 		rules: props.rules,
-// 	});
-
-// 	return (
-// 		<section
-// 			className={`tds-field-container tds-simple-checkbox-field ${props.className ? props.className : ''}`}
-// 		>
-// 			<VSCodeCheckbox
-// 				checked={value}
-// 				onChange={e => onChange((e.target as Checkbox).checked)}>
-// 				{mdToHtml(props.textLabel)}
-// 				{props.info && <PopupMessage field={{ ...props, label: "" }} fieldState={fieldState} />}
-// 			</VSCodeCheckbox>
-// 		</section>
-// 	)
-// }

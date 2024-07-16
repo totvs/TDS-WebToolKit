@@ -5,9 +5,7 @@ import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from "../mdToHtml";
 import { Checkbox } from "@vscode/webview-ui-toolkit";
 
-type TdsCheckBoxFieldProps = TdsFieldProps & {
-	textLabel: string;
-}
+type TdsCheckBoxFieldProps = TdsFieldProps;
 
 /**
  *
@@ -39,7 +37,7 @@ export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactEleme
 			<VSCodeCheckbox
 				checked={value}
 				onChange={e => onChange((e.target as Checkbox).checked)}>
-				{mdToHtml(props.textLabel)}
+				{mdToHtml(props.label)}
 				{props.info && <PopupMessage field={{ ...props, label: "" }} fieldState={fieldState} />}
 			</VSCodeCheckbox>
 		</section>
