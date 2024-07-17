@@ -91,7 +91,7 @@ export class L10n {
    * @param decimalsOrHexDigits - The number of decimal places or hex digits to use for the formatted number.
    * @returns The formatted number string.
    */
-  public formatNumber(value: number, type: TNumberFormat, decimalsOrHexDigits: number = 8): string {
+  public formatNumber(value: number, type: TNumberFormat = "int", decimalsOrHexDigits: number = 8): string {
     let result: string = value.toLocaleString();
 
     if (this._formatLocale !== "") {
