@@ -86,14 +86,26 @@ limitations under the License.
 	flex-shrink: 0;
 }
 
-/* .tds-data-grid-pagination vscode-button {
-	align-items: flex-end;
-} */
-
 .tds-data-grid-pagination div.tds-data-grid-pagination-label {
 	align-items: flex-end;
 	display: flex;
 	margin-bottom: 3px;
+}
+
+.tds-data-grid-pagination vscode-button svg+svg {
+	margin-left: -9px;
+}
+
+div.tds-data-grid-pagination-label vscode-text-field {
+	margin-left: var(--tds-hor-spacing);
+	margin-right: var(--tds-hor-spacing);
+}
+
+div.tds-data-grid-pagination-label vscode-text-field,
+div.tds-data-grid-pagination-label vscode-text-field::part(root),
+div.tds-data-grid-pagination-label vscode-text-field::part(control) {
+	width: 5rem;
+	min-width: 5rem;
 }
 
 .tds-data-grid-footer .tds-data-grid-actions {

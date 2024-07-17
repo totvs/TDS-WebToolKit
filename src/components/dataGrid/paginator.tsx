@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
-import { VSCodeButton } from "@vscode/webview-ui-toolkit/react";
+import { VSCodeButton, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
 import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
+import { tdsVscode } from './../../utilities/vscodeWrapper';
 
 
 const FirstPage = () => {
@@ -114,14 +115,31 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 
 	return (
 		<div className="tds-data-grid-pagination">
-			<VSCodeButton appearance="icon" aria-label="First page"
+			<VSCodeButton appearance="icon"
+				aria-label="First page"
+				title="First page"
 				onClick={() => {
 					changePageCallback(0);
 				}}
 			>
 				<FirstPage />
 			</VSCodeButton>
-			<VSCodeButton appearance="icon" aria-label="Previous page"
+
+			<VSCodeButton appearance="icon"
+				aria-label="Previous 10 pages"
+				title="Previous 10 pages"
+				onClick={() => {
+					changePageCallback(currentPage - 10);
+				}}
+				disabled={(totalPages - currentPage) < 10}
+			>
+				<LeftPage />
+				<LeftPage />
+			</VSCodeButton>
+
+			<VSCodeButton appearance="icon"
+				aria-label="Previous page"
+				title="Previous page"
 				onClick={() => {
 					changePageCallback(currentPage - 1);
 				}}
@@ -130,16 +148,48 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 			</VSCodeButton>
 
 			<div className="tds-data-grid-pagination-label">
-				{currentItem + 1}-{lastItem} of {totalItems} (Page: {currentPage + 1} of {totalPages})
+				{tdsVscode.l10n.formatNumber(currentItem + 1)}-{tdsVscode.l10n.formatNumber(lastItem)} of {tdsVscode.l10n.formatNumber(totalItems)} (Page:
+				<VSCodeTextField
+					key="current-page"
+					value={`${currentPage + 1}`}
+					onChange={(e: any) => {
+						let page = parseInt(e.target.value);
+
+						if (page < 1) {
+							page = 1;
+						} else if (page > totalPages) {
+							page = totalPages;
+						}
+
+						changePageCallback(page - 1);
+					}
+					}
+				/>
+				of {tdsVscode.l10n.formatNumber(totalPages)})
 			</div>
 
-			<VSCodeButton appearance="icon" aria-label="Next page"
+			<VSCodeButton appearance="icon"
+				aria-label="Next page"
+				title="Next page"
 				onClick={() => {
 					changePageCallback(currentPage + 1);
 				}}
 			>
 				<RightPage />
 			</VSCodeButton>
+
+			<VSCodeButton appearance="icon"
+				aria-label="Next 10 page"
+				title="Next 10 page"
+				onClick={() => {
+					changePageCallback(currentPage + 10);
+				}}
+				disabled={totalPages < 10}
+			>
+				<RightPage />
+				<RightPage />
+			</VSCodeButton>
+
 			<VSCodeButton appearance="icon" aria-label="Last page"
 				onClick={() => {
 					changePageCallback(totalPages + 1);
