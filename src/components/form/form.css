@@ -55,7 +55,7 @@ limitations under the License.
 }
 
 .tds-form-footer {
-	margin-top: var(--tds-hor-spacing);
+	margin-top: var(--tds-ver-spacing);
 }
 
 .tds-form-footer .tds-message {
@@ -64,11 +64,11 @@ limitations under the License.
 }
 
 .tds-form-footer .tds-button-button+.tds-button-button {
-	margin-right: 1rem;
+	margin-right: var(--tds-hor-spacing);
 }
 
 .tds-form-footer .tds-button-button {
-	width: 80px;
+	width: fit-content;
 }
 
 .tds-form-footer .tds-actions {
