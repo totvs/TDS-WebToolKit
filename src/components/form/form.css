@@ -82,24 +82,15 @@ limitations under the License.
 	box-sizing: border-box;
 	display: flex;
 	flex-flow: column nowrap;
-	/* justify-content: flex-start; */
-	/* align-self: flex-end; */
-	/* width: 100%; */
 }
 
 .tds-field-container vscode-text-field {
 	width: 100%;
 }
 
-/*
-revisar
-:host([readonly]) {
-	input.control {
-		text-overflow: ellipsis;
-		background-color: blue;
-	}
+vscode-text-field::part(control) {
+	text-overflow: ellipsis;
 }
-*/
 
 .tds-field-container vscode-button {
 	width: 120px;
