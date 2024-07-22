@@ -18,7 +18,7 @@ import "./form.css";
 import React from "react";
 import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
 import { FieldValues, FormProvider, RegisterOptions, UseFormReturn, UseFormSetError, UseFormSetValue, useForm } from "react-hook-form";
-import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react";
+import { VSCodeButton, VSCodeCheckbox, VSCodeLink } from "@vscode/webview-ui-toolkit/react";
 import { sendClose } from "../../utilities/common-command-webview";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsProgressRing } from "../decorator/progress-ring";
@@ -80,6 +80,15 @@ export function getDefaultActionsForm(): IFormAction[] {
 }
 
 /**
+ * Returns the close  actions for the form.
+ * 
+ */
+export function getCloseActionForm(): IFormAction {
+	return getDefaultActionsForm()
+		.filter(action => action.id === TdsFormActionsEnum.Close)[0];
+}
+
+/**
 * Notas:
 * - Usar _hook_ ``FormProvider`` antes de iniciar ``TDSForm``.
 *   Esse _hook_ proverá informações para os elementos filhos e
@@ -126,7 +135,7 @@ export interface IFormAction {
 	enabled?: boolean | ((isDirty: boolean, isValid: boolean) => boolean);
 	visible?: boolean | ((isDirty: boolean, isValid: boolean) => boolean);
 	isProcessRing?: boolean
-	type?: "submit" | "reset" | "button" | "link";
+	type?: "submit" | "reset" | "button" | "link" | "checkbox";
 	appearance?: ButtonAppearance;
 	href?: string;
 }
@@ -226,6 +235,10 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 		(methods.formState.errors === undefined || Object.keys(methods.formState.errors).length === 0);
 	let actions: IFormAction[] = props.actions ? props.actions : getDefaultActionsForm();
 
+	if (actions.length == 1) {
+		actions[0].appearance = "primary"
+	}
+
 	if (isSubmitting && (actions.length > 0)) {
 		isProcessRing = props.isProcessRing !== undefined ? props.isProcessRing : true;
 	} else if (!isValid) {
@@ -295,13 +308,21 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 								visible = isVisible ? "" : "tds-hidden";
 							}
 
-							return (action.type == "link" ?
-								<VSCodeLink
+							if (action.type == "link") {
+								return (<VSCodeLink
 									key={action.id}
 									href={action.href}>{action.caption}
 									title={action.hint}
-								</VSCodeLink>
-								: <VSCodeButton
+								</VSCodeLink>)
+							} else if (action.type == "checkbox") {
+								return (<VSCodeCheckbox
+									key={action.id}
+									className={`tds-button-button ${visible}`}
+									{...propsField} >
+									{action.caption}
+								</VSCodeCheckbox>)
+							} else {
+								return (<VSCodeButton
 									key={action.id}
 									className={`tds-button-button ${visible}`}
 									title={action.hint}
@@ -309,6 +330,7 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 									{...propsField}>
 									{action.caption}
 								</VSCodeButton>)
+							}
 						})}
 					</div>
 				</section>

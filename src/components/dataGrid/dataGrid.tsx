@@ -114,12 +114,14 @@ function fieldData(props: TFieldDataProps) {
 
 	//Campo DATE, TIME e DATETIME
 	if ((column.type == "date") || (column.type == "time") || (column.type == "datetime")) {
+		const text: string = tdsVscode.l10n.format(row[column.name], (column.displayType || column.type) as "date" | "time" | "datetime");
 		return (
 			<VSCodeTextField
 				data-type={column.type}
 				key={props.fieldName}
 				readOnly={column.readOnly == undefined ? true : column.readOnly}
-				value={tdsVscode.l10n.format(row[column.name], (column.displayType || column.type) as "date" | "time" | "datetime")}
+				value={text}
+				title={text}
 			></VSCodeTextField>
 		)
 	}
@@ -682,17 +684,26 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 							visible = isVisible ? "" : "tds-hidden";
 						}
 
-						return (action.type == "link" ?
-							<VSCodeLink
+						if (action.type == "link") {
+							return (<VSCodeLink
 								key={action.id}
 								href={action.href}>{action.caption}
-							</VSCodeLink>
-							: <VSCodeButton
+							</VSCodeLink>)
+						} else if (action.type == "checkbox") {
+							return (<VSCodeCheckbox
+								key={action.id}
+								className={`tds-button-button ${visible}`}
+								{...propsField} >
+								{action.caption}
+							</VSCodeCheckbox>)
+						} else {
+							return (<VSCodeButton
 								key={action.id}
 								className={`tds-button-button ${visible}`}
 								{...propsField} >
 								{action.caption}
 							</VSCodeButton>)
+						}
 					})}
 				</div>
 				}

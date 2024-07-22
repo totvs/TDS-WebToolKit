@@ -71,7 +71,7 @@ export type TTdsDataGridAction = {
 	enabled?: boolean | ((isDirty: boolean, isValid: boolean) => boolean);
 	visible?: boolean | ((isDirty: boolean, isValid: boolean) => boolean);
 	isProcessRing?: boolean;
-	type?: "button" | "link";
+	type?: "button" | "link" | "checkbox";
 	appearance?: ButtonAppearance;
 	href?: string;
 };
@@ -97,7 +97,7 @@ export type TTdsDataGridProps = {
 		pageSize?: number,
 		pageSizeOptions?: number[],
 		moveRow?: boolean,
-		rowSeparator?: boolean 
+		rowSeparator?: boolean
 	}
 	//onFilterChanged?(fieldName: string, filter: string): void;
 }

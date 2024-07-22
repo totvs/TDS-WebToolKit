@@ -72,8 +72,6 @@ export class L10n {
         }
 
         const dateTimeFormat = new Intl.DateTimeFormat(this._formatLocale, options);
-        //const dateFileApplicationMonth: string = rpoInfo.dateFileApplication.toLocaleString("pt-BR", { month: "numeric", year: "numeric" });
-
         result = dateTimeFormat.format(value);
       } catch (error) {
         result = value.toLocaleString()

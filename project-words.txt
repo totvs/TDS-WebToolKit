@@ -1,5 +1,6 @@
 codicon
 codicons
+datetime
 tlpp
 totvs
 TOTVS

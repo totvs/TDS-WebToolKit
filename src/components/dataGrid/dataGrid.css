@@ -23,7 +23,7 @@ limitations under the License.
 }
 
 .tds-data-grid .tds-row-container {
-	column-gap: 10px;
+	column-gap: var(--tds-ver-spacing);
 }
 
 .tds-data-grid .tds-data-grid-header {
@@ -32,7 +32,7 @@ limitations under the License.
 	flex-shrink: 1;
 	order: 0;
 	flex-direction: column;
-	margin-bottom: var(--tds-hor-spacing);
+	margin-bottom: var(--tds-ver-spacing);
 }
 
 .tds-data-grid .tds-data-grid-content {

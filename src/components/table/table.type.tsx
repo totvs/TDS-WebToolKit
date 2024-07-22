@@ -14,25 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import "./header.css";
+import { LegacyRef } from "react";
 
-export interface IHeader {
-	title: string;
-}
 
-/**
- * Header component that renders the TOTVS logo, page title, and help link.
- * 
- * @param props - Header component props
- * @param props.title - Page title to display
- */
-export default function TdsHeader(props: IHeader): React.ReactElement {
-	return (
-		<section className="tds-header">
-			<div className="tds-logo">
-				<img src="..\..\icons\totvs-32x32.png" alt="TOTVS S.A." />
-			</div>
-			<h1>{props.title}</h1>
-		</section>
-	);
+export type TTdsTableProps = {
+	id: string;
+	headerColumns: string[],
+	dataColumns?: string[],
+	widthColumns: (string | number)[],
+	dataSource: any[] //Record<string, string | number | Date | boolean>[]
+	highlighRows: number[];
+	onClick?: (
+		target: HTMLElement,
+		rowIndex: number,
+		modifiers: {
+			altKey: boolean,
+			ctrlKey: boolean,
+			shiftKey: boolean,
+			metaKey: boolean
+		}
+	) => void,
+	ref?: LegacyRef<any> | undefined;
 }

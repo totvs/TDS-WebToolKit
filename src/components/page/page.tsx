@@ -22,8 +22,7 @@ import TdsContent from "./content";
 import { ErrorBoundary } from "../error-boundary";
 
 export interface IPageView {
-	title: string;
-	linkToDoc?: string
+	title?: string;
 	children: any;
 }
 
@@ -31,20 +30,20 @@ export interface IPageView {
  * Renders a page layout with header, content and footer sections.
  * 
  * @param props - Page properties
- * @param props.title - Page title 
- * @param props.linkToDoc - Link to documentation
+ * @param [props.title] - Page title 
  * @param props.children - Content to render in main section
- * @param props.footerContent - Content to render in footer
  */
 export function TdsPage(props: IPageView): React.ReactElement {
 
 	return (
-		<ErrorBoundary>
+		<ErrorBoundary fallback={<p>Something unexpected occurred. See navigator console log for details.</p>}>
 			<section className="tds-page">
-				<TdsHeader title={props.title} linkToDoc={props.linkToDoc} />
+				{props.title && <TdsHeader title={props.title} />}
+
 				<TdsContent>
 					{props.children}
 				</TdsContent>
+
 				<TdsFooter />
 			</section>
 		</ErrorBoundary>

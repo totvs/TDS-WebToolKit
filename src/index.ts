@@ -22,7 +22,7 @@ limitations under the License.
 export { mdToHtml } from './components/mdToHtml'
 
 export { IFormAction, setErrorModel } from './components/form/form'
-export { setDataModel, getDefaultActionsForm } from './components/form/form'
+export { setDataModel, getDefaultActionsForm, getCloseActionForm } from './components/form/form'
 export { sendSave, sendReady, sendClose, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel, TCommonCommand } from './utilities/common-command-webview'
 
 export { TdsCheckBoxField } from './components/fields/checkBoxField'
@@ -47,6 +47,10 @@ export { TdsDataGrid } from './components/dataGrid';
 export type { TTdsDataGridColumnDef, TTdsDataGridAction } from './components/dataGrid/dataGrid.type'
 
 export type { IPopupMessage } from './components/popup-message/popup-message'
+
+export { TdsTable } from './components/table';
+
+export { TdsPaginator } from './components/paginator';
 
 
 export { TdsLabelField } from './components/fields/labelField'

@@ -20,8 +20,6 @@ import React from "react";
 import { VSCodeLink } from '@vscode/webview-ui-toolkit/react';
 
 export interface IFooter {
-	//linkToDoc?: string
-	//children: any
 }
 
 /**

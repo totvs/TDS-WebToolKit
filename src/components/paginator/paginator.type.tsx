@@ -14,25 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import "./header.css";
-
-export interface IHeader {
-	title: string;
-}
 
 /**
- * Header component that renders the TOTVS logo, page title, and help link.
- * 
- * @param props - Header component props
- * @param props.title - Page title to display
+ * Defines the props for the TDS Paginator component.
+ * @param currentPage - The current page number.
+ * @param currentItem - The current item number.
+ * @param totalItems - The total number of items.
+ * @param pageSize - The number of items to display per page.
+ * @param onPageChange - A callback function that is called when the page is changed, with the selected page number as a parameter.
  */
-export default function TdsHeader(props: IHeader): React.ReactElement {
-	return (
-		<section className="tds-header">
-			<div className="tds-logo">
-				<img src="..\..\icons\totvs-32x32.png" alt="TOTVS S.A." />
-			</div>
-			<h1>{props.title}</h1>
-		</section>
-	);
+export type TTdsPaginatorProps = {
+	currentPage: number;
+	firstPageItem: number;
+	totalItems: number;
+	pageSize: number;
+	onPageChange(selectedPage: number): void;
 }
