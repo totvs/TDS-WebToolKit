@@ -226,7 +226,6 @@ let isProcessRing: boolean = false;
  * Renders form content, messages, and action buttons.
  * Handles submit and reset events.
  */
-
 export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.ReactElement {
 	const methods = props.methods;
 	const isSubmitting: boolean = methods.formState.isSubmitting;

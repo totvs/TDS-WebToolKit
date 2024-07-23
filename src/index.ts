@@ -52,6 +52,7 @@ export { TdsTable } from './components/table';
 
 export { TdsPaginator } from './components/paginator';
 
+export { TdsDialog } from './components/dialog';
 
 export { TdsLabelField } from './components/fields/labelField'
 export type { TdsLabelFieldProps } from './components/fields/labelField'

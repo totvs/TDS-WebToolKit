@@ -18,6 +18,7 @@ limitations under the License.
 	--tds-ver-spacing: 0.8rem; */
 	--tds-hor-spacing: calc(var(--design-unit)*3px);
 	--tds-ver-spacing: calc(var(--design-unit)*3px);
+	--tds-padding: calc(var(--design-unit)*3px);
 }
 
 .tds-page {
