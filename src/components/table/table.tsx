@@ -33,7 +33,23 @@ import { VSCodeDataGrid, VSCodeDataGridCell, VSCodeDataGridRow } from "@vscode/w
 export function TdsTable(props: TTdsTableProps): React.ReactElement {
 	const buildRow = (row: any[] | any, rowIndex: number): React.ReactElement => {
 		let reactElements: React.ReactElement[] = [];
-		const rowClassName: string = props.highlighRows.includes(rowIndex) ? "tds-table-row-highlight" : "";
+		let rowClassName: string = "";
+
+		console.log(props.highlightGroup);
+
+		if (props.highlightRows) {
+			if (props.highlightRows.includes(rowIndex)) {
+				rowClassName = "tds-table-row-highlight";
+			}
+		}
+		if (props.highlightGroup) {
+			Object.keys(props.highlightGroup).forEach((className: string) => {
+				if (props.highlightGroup[className].includes(rowIndex)) {
+					rowClassName = `${rowClassName} ${className}`;
+				}
+			})
+		}
+		rowClassName = rowClassName.trim();
 
 		if (props.dataColumns) {
 			props.dataColumns.forEach((element: string, index: number) => {
@@ -86,7 +102,7 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 				{props.dataSource && props.dataSource.length == 0 && <div className="tds-table-empty-message">Nenhum registro encontrado</div>}
 				{props.dataSource && props.dataSource.length != 0 &&
 					<VSCodeDataGrid
-						ref={props.ref}
+						ref={props._ref}
 						id={`${props.id}_table`}
 						key={`${props.id}_table`}
 						generate-header="sticky"

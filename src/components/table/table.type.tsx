@@ -23,7 +23,8 @@ export type TTdsTableProps = {
 	dataColumns?: string[],
 	widthColumns: (string | number)[],
 	dataSource: any[] //Record<string, string | number | Date | boolean>[]
-	highlighRows: number[];
+	highlightRows?: number[];
+	highlightGroup?: { [key: string]: (number | undefined)[] };
 	onClick?: (
 		target: HTMLElement,
 		rowIndex: number,
@@ -34,5 +35,5 @@ export type TTdsTableProps = {
 			metaKey?: boolean
 		}
 	) => void,
-	ref?: LegacyRef<any> | undefined;
+	_ref?: LegacyRef<any> | undefined;
 }
