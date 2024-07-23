@@ -77,17 +77,7 @@ const RightPage = () => {
 }
 
 export function TdsPaginator(props: TTdsPaginatorProps): React.ReactElement {
-	// const [currentPage, setCurrentPage] = useState(0);
-	// const [currentItem, setCurrentItem] = useState(0);
-	console.log("Paginator: " + props.currentPage + " " + props.firstPageItem + " " + props.totalItems + " " + props.pageSize);
-
 	const totalPages: number = Math.ceil(props.totalItems / props.pageSize);
-
-	// const [totalPages, setTotalPages] = useState(0);
-	// const [currentItem, setCurrentItem] = useState(0);
-	// const [totalItems, setTotalItems] = useState(props.totalItems);
-	// const lastItem: number = currentItem + props.pageSize > totalItems ? totalItems : currentItem + props.pageSize;
-
 	const changePageCallback = (selectedPage: number) => {
 		if (props.currentPage != selectedPage) {
 			if (selectedPage < 0) {
@@ -97,9 +87,6 @@ export function TdsPaginator(props: TTdsPaginatorProps): React.ReactElement {
 			}
 
 			props.onPageChange(selectedPage);
-
-			// setCurrentPage(selectedPage);
-			// setCurrentItem((selectedPage * props.pageSize));
 		}
 	}
 

@@ -31,8 +31,6 @@ import { VSCodeDataGrid, VSCodeDataGridCell, VSCodeDataGridRow } from "@vscode/w
  * @returns The rendered table component.
  */
 export function TdsTable(props: TTdsTableProps): React.ReactElement {
-	console.log("tdsTable.start");
-
 	const buildRow = (row: any[] | any, rowIndex: number): React.ReactElement => {
 		let reactElements: React.ReactElement[] = [];
 		const rowClassName: string = props.highlighRows.includes(rowIndex) ? "tds-table-row-highlight" : "";
@@ -58,8 +56,10 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 				);
 			});
 		}
+
 		return (
 			<VSCodeDataGridRow
+				id={row["id"] ? `${props.id}_id_${row["id"]}` : `${props.id}_row_${rowIndex}`}
 				row-type="default"
 				key={`${props.id}_row_${rowIndex}`}
 				className={rowClassName}

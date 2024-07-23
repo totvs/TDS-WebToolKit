@@ -27,11 +27,11 @@ export type TTdsTableProps = {
 	onClick?: (
 		target: HTMLElement,
 		rowIndex: number,
-		modifiers: {
-			altKey: boolean,
-			ctrlKey: boolean,
-			shiftKey: boolean,
-			metaKey: boolean
+		modifiers?: {
+			altKey?: boolean,
+			ctrlKey?: boolean,
+			shiftKey?: boolean,
+			metaKey?: boolean
 		}
 	) => void,
 	ref?: LegacyRef<any> | undefined;

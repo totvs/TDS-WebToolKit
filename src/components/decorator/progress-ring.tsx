@@ -24,18 +24,51 @@ import React from "react";
  *                             The size "full" will occupy the entire available area of ​​the father element.
  */
 type TTdsProcessRing = {
+    message?: string;
+    value?: number;
     size?: "small" | "medium" | "larger" | "full";
 }
 
 export function TdsProgressRing(props: TTdsProcessRing): React.ReactElement {
+    // const [increment, setIncrement] = React.useState(props.increment);
+    // const [message, setMessage] = React.useState(props.message);
+
+    // React.useEffect(() => {
+    //     console.log("TdsProgressRing start");
+
+    //     let listener = (event: any) => {
+    //         //const command: ReceiveCommand = event.data as ReceiveCommand;
+    //         //let model: TReplayTimelineModel;
+    //         console.log("TdsProgressRing ", event)
+
+    //         switch (event.data.command) {
+    //             case "update_progress_ring":
+    //                 setIncrement(event.data.increment);
+    //                 setMessage(event.data.message);
+
+    //                 break;
+    //             default:
+    //                 break;
+    //         }
+    //     };
+
+    //     window.addEventListener('message', listener);
+
+    //     return () => {
+    //         window.removeEventListener('message', listener);
+    //     }
+    // }, []);
+
     const classSize = props.size
         ? ` tds-process-ring-${props.size}`
         : ""
 
+    // {props.value && <>{props.value}<br /></>}
     return props.size == "full" ?
         (
             <section className={`tds-progress-ring-full`}>
                 <VSCodeProgressRing className={`tds-progress-ring-full`} />
+                {props.message && <div className="message">{props.message}</div>}
             </section>
         )
         : (

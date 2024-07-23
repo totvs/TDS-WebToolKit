@@ -37,13 +37,17 @@ limitations under the License.
     height: var(--tds-progress-ring-larger);
 }
 
-section .tds-progress-ring-full {
+.tds-progress-ring-full {
     z-index: 10000;
     height: 30vh;
     width: 100%;
-    opacity: .5;
-    display: flex;
     align-items: center;
+}
+
+.tds-progress-ring-full div {
+    width: max-content;
+    align-content: center;
+    margin: auto;
 }
 
 .tds-progress-ring-full .tds-progress-ring-full {
