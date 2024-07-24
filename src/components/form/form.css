@@ -25,9 +25,15 @@ limitations under the License.
 .tds-form h3 {
 	font-weight: normal;
 	margin: 0px;
+	margin-bottom: var(--tds-hor-spacing);
 }
 
-.tds-form .tds-form-content {
+.tds-form p {
+	margin: 0;
+	/* margin-bottom: var(--tds-hor-spacing); */
+}
+
+.tds-form-content {
 	flex-grow: 1;
 	flex-shrink: 1;
 	flex-basis: auto;
@@ -37,7 +43,7 @@ limitations under the License.
 	overflow: hidden scroll;
 }
 
-.tds-form .tds-form-footer {
+.tds-form-footer {
 	display: flex;
 	flex-grow: 0;
 	flex-shrink: 1;
@@ -46,15 +52,6 @@ limitations under the License.
 	order: 0;
 	flex-direction: row;
 	align-items: flex-end;
-	/* margin-top: var(--tds-hor-spacing); */
-}
-
-.tds-form p {
-	margin: 0;
-	/* margin-bottom: var(--tds-hor-spacing); */
-}
-
-.tds-form-footer {
 	margin-top: var(--tds-ver-spacing);
 }
 
@@ -92,8 +89,15 @@ vscode-text-field::part(control) {
 	text-overflow: ellipsis;
 }
 
+vscode-text-field[readonly]::part(control),
+vscode-text-field[disabled]::part(control) {
+	filter: brightness(80%);
+	cursor: default;
+}
+
 .tds-field-container vscode-button {
 	width: 120px;
+	text-wrap: "nowrap";
 }
 
 .tds-column-container {

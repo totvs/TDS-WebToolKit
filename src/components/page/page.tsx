@@ -44,7 +44,9 @@ export function TdsPage(props: IPageView): React.ReactElement {
 					{props.children}
 				</TdsContent>
 
-				<TdsFooter />
+				{
+					//<TdsFooter />
+				}
 			</section>
 		</ErrorBoundary>
 	);

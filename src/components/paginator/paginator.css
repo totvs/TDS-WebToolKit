@@ -20,6 +20,7 @@ limitations under the License.
 	align-items: flex-end;
 	flex-grow: 1;
 	flex-shrink: 0;
+	margin-top: calc(--tds-hor-spacing * 1px);
 }
 
 .tds-paginator div.tds-paginator-label {

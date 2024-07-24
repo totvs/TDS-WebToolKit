@@ -74,8 +74,7 @@ limitations under the License.
 	flex-shrink: 1;
 	order: 0;
 	flex-direction: row;
-	/* align-items: flex-end; */
-	/* margin-top: var(--tds-hor-spacing); */
+	margin-top: var(--tds-hor-spacing);
 }
 
 .tds-data-grid-footer .tds-data-grid-pagination {

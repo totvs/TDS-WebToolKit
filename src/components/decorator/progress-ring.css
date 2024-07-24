@@ -39,7 +39,7 @@ limitations under the License.
 
 .tds-progress-ring-full {
     z-index: 10000;
-    height: 30vh;
+    height: 100vh;
     width: 100%;
     align-items: center;
 }
