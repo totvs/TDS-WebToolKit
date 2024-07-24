@@ -35,13 +35,12 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 		let reactElements: React.ReactElement[] = [];
 		let rowClassName: string = "";
 
-		console.log(props.highlightGroup);
-
 		if (props.highlightRows) {
 			if (props.highlightRows.includes(rowIndex)) {
 				rowClassName = "tds-table-row-highlight";
 			}
 		}
+
 		if (props.highlightGroup) {
 			Object.keys(props.highlightGroup).forEach((className: string) => {
 				if (props.highlightGroup[className].includes(rowIndex)) {

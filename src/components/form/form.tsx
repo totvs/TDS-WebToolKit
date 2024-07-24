@@ -18,7 +18,7 @@ import "./form.css";
 import React from "react";
 import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
 import { FieldValues, FormProvider, RegisterOptions, UseFormReturn, UseFormSetError, UseFormSetValue, useForm } from "react-hook-form";
-import { VSCodeButton, VSCodeCheckbox, VSCodeLink } from "@vscode/webview-ui-toolkit/react";
+import { VSCodeButton, VSCodeCheckbox, VSCodeDivider, VSCodeLink } from "@vscode/webview-ui-toolkit/react";
 import { sendClose } from "../../utilities/common-command-webview";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsProgressRing } from "../decorator/progress-ring";
@@ -26,7 +26,7 @@ import { mdToHtml } from "../mdToHtml";
 
 /**
  * Enum representing the default actions available in a form.
- * 
+ *
  * - `Save`: Represents the action to save the form data and close the page.
  * - `Close`: Represents the action to close the page without saving.
  * - `Clear`: Represents the action to reset the form fields.
@@ -39,10 +39,10 @@ export enum TdsFormActionsEnum {
 
 /**
  * Returns the default set of actions for the form.
- * 
+ *
  * The default actions include:
  * - Save: Submits the form and closes the page. Enabled when form is dirty and valid.
- * - Close: Closes the page without saving. 
+ * - Close: Closes the page without saving.
  * - Clear: Resets the form fields. Initially hidden.
  */
 export function getDefaultActionsForm(): IFormAction[] {
@@ -81,11 +81,16 @@ export function getDefaultActionsForm(): IFormAction[] {
 
 /**
  * Returns the close  actions for the form.
- * 
+ *
  */
 export function getCloseActionForm(): IFormAction {
 	return getDefaultActionsForm()
-		.filter(action => action.id === TdsFormActionsEnum.Close)[0];
+		.filter(action => action.id === TdsFormActionsEnum.Close)
+		.map((action) => {
+			action.appearance = "primary";
+
+			return action;
+		})[0];
 }
 
 /**
@@ -103,7 +108,7 @@ export function getCloseActionForm(): IFormAction {
 
 /**
  * Defines the props shape for the TDSForm component.
- * 
+ *
  * @template M - The data model type for the form.
  * @property {string} [id] - An optional unique identifier for the form.
  * @property {UseFormReturn<M>} methods - The form methods returned by the `useForm` hook.
@@ -124,7 +129,7 @@ type TDSFormProps<M extends FieldValues> = {
 };
 
 /**
- * Interface for form action buttons. 
+ * Interface for form action buttons.
  * Defines the shape of action button configs used in TDS forms.
 */
 export interface IFormAction {
@@ -220,7 +225,7 @@ let isProcessRing: boolean = false;
 
 /**
  * Renders a form component with state management and actions.
- * 
+ *
  * Accepts a generic DataModel for the form values and errors.
  * Provides form state values and common form handling methods.
  * Renders form content, messages, and action buttons.
@@ -263,6 +268,9 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 				<section className={"tds-form-content"}>
 					{...children}
 				</section>
+
+				<VSCodeDivider role="presentation" />
+
 				<section className="tds-form-footer">
 					<div className="tds-message">
 						{!isValid && <span className={"tds-error"}>{tdsVscode.l10n.t("There is invalid information. See the error by hovering the mouse over the field marking.")}</span>}
