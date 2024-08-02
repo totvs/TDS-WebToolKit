@@ -2,7 +2,7 @@
   "name": "@totvs/tds-webtoolkit",
   "displayName": "TDS-WebToolkit",
   "description": "Standard UI for TDS products",
-  "version": "0.0.6",
+  "version": "0.0.10",
   "license": "Apache-2.0",
   "publisher": "TOTVS",
   "author": {
@@ -15,39 +15,44 @@
     "dist"
   ],
   "scripts": {
+    "clean": "npx -y rimraf -v dist",
     "--COMPILE--": "",
-    "compile": "tsc",
+    "compile": "webpack --mode=development",
     "watch": "tsc -watch",
     "copy-files": "npx copyfiles -u 1 src/**/*.css dist/",
+    "start:vite": "vite",
     "-- BUILD --": "",
-    "build": "webpack --mode=production",
+    "build": "npm run clean && webpack --mode=production",
     "---RELEASE---": "",
     "release": "npx standard-version",
     "tag": "git push --follow-tags",
     "to_publish": "npm publish",
-    "-prepublishOnly": "npm run clean && npm run build",
+    "prerelease": "npm run build",
     "---MISC---": ""
   },
   "dependencies": {
     "@microsoft/fast-components": "^2.30.6",
-    "@vscode/codicons": "^0.0.35",
+    "@vscode/codicons": "^0.0.36",
     "@vscode/webview-ui-toolkit": "^1.4.0",
-    "react-hook-form": "^7.51.4",
-    "typescript-plugin-css-modules": "^5.1.0"
+    "react-hook-form": "^7.52.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/react": "^18.3.1",
+    "typescript-plugin-css-modules": "^5.1.0",
+    "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@types/vscode": "^1.89.0",
+    "@types/vscode": "^1.91.0",
     "@types/vscode-webview": "^1.57.5",
-    "css-loader": "^7.1.1",
+    "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.0",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.10",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.4.5",
-    "webpack": "^5.91.0",
+    "typescript": "^5.5.4",
+    "webpack": "^5.93.0",
     "webpack-cli": "^5.1.4",
-    "webpack-stream": "^7.0.0"
+    "webpack-stream": "^7.0.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.3.5"
   }
 }
