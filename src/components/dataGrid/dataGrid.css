@@ -51,9 +51,10 @@ limitations under the License.
 	flex-direction: row;
 	gap: 5px;
 	background-color: var(--vscode-editor-selectionBackground);
-	align-items: center;
 	width: 100%;
 	padding-left: 1em;
+	flex-wrap: wrap;
+	align-items: center;
 }
 
 .tds-data-grid-grouping span.label {
@@ -62,6 +63,10 @@ limitations under the License.
 
 .tds-data-grid-grouping span.field_name {
 	font-weight: bold;
+}
+
+.tds-data-grid-grouping vscode-button vscode-badge {
+	margin-left: calc(var(--tds-hor-spacing) * 1);
 }
 
 .tds-data-grid-content vscode-text-field {

@@ -46,7 +46,7 @@ export type TTdsDataGridColumnDef = {
 	readOnly?: boolean;
 	//onSort?: (key: string) => void;
 	onChange?: any;
-	row?: number
+	row?: number;
 }
 
 /**
@@ -96,7 +96,8 @@ export type TTdsDataGridProps = {
 		grouping?: boolean;
 		pageSize?: number,
 		pageSizeOptions?: number[],
-		moveRow?: boolean,
+		//TODO: implementar
+		//moveRow?: boolean, 
 		rowSeparator?: boolean
 	}
 	//onFilterChanged?(fieldName: string, filter: string): void;
