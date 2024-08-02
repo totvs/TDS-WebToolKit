@@ -23,6 +23,7 @@ import { ErrorBoundary } from "../error-boundary";
 
 export interface IPageView {
 	title?: string;
+	showFooter?: boolean;
 	children: any;
 }
 
@@ -32,9 +33,10 @@ export interface IPageView {
  * @param props - Page properties
  * @param [props.title] - Page title 
  * @param props.children - Content to render in main section
+ * @param [props.showFooter] - Show footer page
+
  */
 export function TdsPage(props: IPageView): React.ReactElement {
-
 	return (
 		<ErrorBoundary fallback={<p>Something unexpected occurred. See navigator console log for details.</p>}>
 			<section className="tds-page">
@@ -44,9 +46,7 @@ export function TdsPage(props: IPageView): React.ReactElement {
 					{props.children}
 				</TdsContent>
 
-				{
-					//<TdsFooter />
-				}
+				{props.showFooter && <TdsFooter />}
 			</section>
 		</ErrorBoundary>
 	);

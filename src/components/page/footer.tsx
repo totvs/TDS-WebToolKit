@@ -29,6 +29,7 @@ export interface IFooter {
  * @param props.children - The content to render within the footer.
  */
 export default function TdsFooter(props: IFooter): React.ReactElement {
+
 	return (
 		<section className="tds-footer">
 			<VSCodeDivider role="presentation" />
