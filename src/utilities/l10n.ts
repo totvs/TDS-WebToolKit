@@ -182,5 +182,3 @@ export class L10n {
     return result;
   }
 }
-
-export const l10n: L10n = new L10n();
