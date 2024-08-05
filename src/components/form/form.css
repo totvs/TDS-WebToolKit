@@ -95,6 +95,18 @@ vscode-text-field[disabled]::part(control) {
 	cursor: default;
 }
 
+vscode-text-field.tds-text-left::part(control) {
+	text-align: left;
+}
+
+vscode-text-field.tds-text-right::part(control) {
+	text-align: right;
+}
+
+vscode-text-field.tds-text-center::part(control) {
+	text-align: center;
+}
+
 .tds-field-container vscode-button {
 	width: 120px;
 	text-wrap: "nowrap";

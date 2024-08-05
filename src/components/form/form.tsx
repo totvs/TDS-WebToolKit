@@ -120,7 +120,7 @@ export function getCloseActionForm(): IFormAction {
  */
 type TDSFormProps<M extends FieldValues> = {
 	id?: string;
-	methods: UseFormReturn<M>;
+	methods: UseFormReturn<M, any, undefined>;
 	onSubmit: (data: any) => void;
 	actions?: IFormAction[];
 	children: any

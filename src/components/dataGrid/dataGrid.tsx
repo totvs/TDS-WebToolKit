@@ -28,7 +28,6 @@ import { UseFormReturn, useFormContext } from "react-hook-form";
 import { TTdsDataGridAction, TTdsDataGridColumnDef, TTdsDataGridProps } from "./dataGrid.type";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsTextField } from "../fields/textField";
-import { TdsSelectionField } from "../fields/selectionField";
 import TdsPaginator from "./paginator";
 
 /**
@@ -208,12 +207,15 @@ function fieldData(props: TFieldDataProps) {
 	const methods = useFormContext();
 	const column = props.fieldDef;
 	const row = props.row;
+	let alignClass: string | undefined = column.align ? `tds-text-${column.align}` : undefined;
 
 	//Campo DATE, TIME e DATETIME
 	if ((column.type == "date") || (column.type == "time") || (column.type == "datetime")) {
 		const text: string = tdsVscode.l10n.format(row[column.name], (column.displayType || column.type) as "date" | "time" | "datetime");
+		alignClass = alignClass || "tds-text-right";
 		return (
 			<VSCodeTextField
+				className={alignClass}
 				data-type={column.type}
 				key={props.fieldName}
 				readOnly={column.readOnly == undefined ? true : column.readOnly}
@@ -225,8 +227,11 @@ function fieldData(props: TFieldDataProps) {
 
 	//Campo BOOLEAN
 	if (column.type == "boolean") {
+		alignClass = alignClass || "tds-text-center";
+
 		return (
 			<VSCodeCheckbox
+				className={alignClass}
 				key={props.fieldName}
 				readOnly={column.readOnly == undefined ? true : column.readOnly}
 				checked={column.lookup && column.lookup[row[column.name]]
@@ -247,8 +252,13 @@ function fieldData(props: TFieldDataProps) {
 		? column.lookup[row[column.name]]
 		: tdsVscode.l10n.format(row[column.name], (column.displayType || column.type));
 
+	if ((column.type == "number")) {
+		alignClass = alignClass || "tds-text-right";
+	}
+
 	return (
 		<VSCodeTextField
+			className={alignClass}
 			title={text}
 			data-type={column.type}
 			key={props.fieldName}
@@ -351,7 +361,13 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 		setCurrentPage(newPage);
 	};
 
-	const changeSortCallback = (columnDef: TTdsDataGridColumnDef) => {
+	const handlePageSizeClick = (newSize: number) => {
+		setPageSize(newSize);
+		setItemOffset(0);
+		setCurrentPage(1);
+	};
+
+	const handleSortClick = (columnDef: TTdsDataGridColumnDef) => {
 		const newColumnDef: TTdsDataGridColumnDef = {
 			...columnDef,
 			sortDirection: columnDef.sortDirection === "asc" ? "desc" : columnDef.sortDirection === "desc" ? "" : "asc"
@@ -367,7 +383,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 		setSortedInfo(props.columnDef[indexColumn])
 	}
 
-	const changeGrouping = (columnDef: TTdsDataGridColumnDef | undefined) => {
+	const handleGroupingClick = (columnDef: TTdsDataGridColumnDef | undefined) => {
 		// props.columnDef.forEach((columnDef: TTdsDataGridColumnDef) => {
 		// 	columnDef.visible = true;
 		// })
@@ -625,7 +641,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 										<VSCodeButton
 											appearance="icon"
 											onClick={() => {
-												changeSortCallback(column);
+												handleSortClick(column);
 											}}
 										>
 											{column.sortDirection == "asc" && <span className="codicon codicon-arrow-small-down"></span>}
@@ -634,9 +650,11 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 										</VSCodeButton>
 									}
 									{((props.options.grouping && column.grouping) || false) &&
-										<VSCodeButton appearance="icon" aria-label="Grouping"
+										<VSCodeButton
+											appearance="icon"
+											aria-label={`Grouping by ${column.label || column.name}`}
 											onClick={() => {
-												changeGrouping(column);
+												handleGroupingClick(column);
 											}}
 										>
 											<span className="codicon codicon-group-by-ref-type"></span>
@@ -683,7 +701,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 					grid-template-columns={
 						props.columnDef
 							.filter(column => column.visible)
-							.filter((column) => (column.row || 0) == 0)
+							.filter(column => (column.row || 0) == 0)
 							.map(column => column.width || "1fr").join(" ")
 					}
 				>
@@ -706,29 +724,15 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 			</div>
 
 			<div className="tds-data-grid-footer">
-				{props.options.pageSizeOptions.length &&
-					<TdsSelectionField
-						key={"pagesize"}
-						name={"pageSize"}
-						label={tdsVscode.l10n.t("Elements/page")}
-						options={(props.options.pageSizeOptions || [])
-							.map((value: number) => { return { value: value.toString(), text: value.toString() } })
-						}
-						onInput={(e: any) => {
-							e.preventDefault();
-							setPageSize(parseInt(e.target.value));
-							setCurrentPage(0);
-							setItemOffset(0);
-						}}
-					/>
-				}
 				<TdsPaginator
 					key={"paginator"}
-					onPageChange={handlePageClick}
 					pageSize={pageSize}
 					currentPage={currentPage}
 					currentItem={itemOffset}
 					totalItems={totalItems}
+					pageSizeOptions={props.options.pageSizeOptions}
+					onPageChange={handlePageClick}
+					onPageSizeChange={handlePageSizeClick}
 				/>
 				{props.options.bottomActions && <div className="tds-data-grid-actions">
 					{props.options.bottomActions.map((action: TTdsDataGridAction) => {

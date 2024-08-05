@@ -1,6 +1,5 @@
 codicon
 codicons
-copyfiles
 datetime
 tlpp
 totvs

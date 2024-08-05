@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
-import { VSCodeButton, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
+import { VSCodeButton, VSCodeDropdown, VSCodeOption, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
 import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
 import { tdsVscode } from './../../utilities/vscodeWrapper';
 
@@ -81,17 +81,20 @@ export interface ITdsPaginatorProps {
 	currentItem: number;
 	totalItems: number;
 	pageSize: number;
-	onPageChange?(selectedPage: number): void;
+	pageSizeOptions: number[];
+
+	onPageChange(selectedPage: number): void;
+	onPageSizeChange(size: number): void;
 }
 
 export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElement {
-	const [currentPage, setCurrentPage] = useState(0);
+	const [currentPage, setCurrentPage] = useState(props.currentPage);
 	const [totalPages, setTotalPages] = useState(0);
-	const [currentItem, setCurrentItem] = useState(0);
+	const [currentItem, setCurrentItem] = useState(props.currentItem);
 	const [totalItems, setTotalItems] = useState(props.totalItems);
 	const lastItem: number = currentItem + props.pageSize > totalItems ? totalItems : currentItem + props.pageSize;
 
-	const changePageCallback = (selectedPage: number) => {
+	const changePage = (selectedPage: number) => {
 		if (currentPage != selectedPage) {
 			if (selectedPage < 0) {
 				selectedPage = 0;
@@ -115,11 +118,36 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 
 	return (
 		<div className="tds-data-grid-pagination">
+			{props.pageSizeOptions.length &&
+				<>
+					<span>{tdsVscode.l10n.t("Elements/page")}</span>
+					<VSCodeDropdown
+						key={`dropdown_elements_page`}
+						value={`${props.pageSize}`}
+						onChange={(event: any) => {
+							if (props.onPageSizeChange) {
+								props.onPageSizeChange(parseInt(event.target.value));
+							}
+						}}
+					>
+						{props.pageSizeOptions.map((size: number, index: number) => (
+							<VSCodeOption
+								key={`dropdown_elements_page_${index}`}
+								value={`${size}`}
+								checked={props.pageSize === size}
+							>
+								{size}
+							</VSCodeOption>
+						))}
+					</VSCodeDropdown>
+				</>
+			}
+
 			<VSCodeButton appearance="icon"
 				aria-label="First page"
 				title="First page"
 				onClick={() => {
-					changePageCallback(0);
+					changePage(0);
 				}}
 			>
 				<FirstPage />
@@ -129,7 +157,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 				aria-label="Previous 10 pages"
 				title="Previous 10 pages"
 				onClick={() => {
-					changePageCallback(currentPage - 10);
+					changePage(currentPage - 10);
 				}}
 				disabled={(totalPages - currentPage) < 10}
 			>
@@ -141,7 +169,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 				aria-label="Previous page"
 				title="Previous page"
 				onClick={() => {
-					changePageCallback(currentPage - 1);
+					changePage(currentPage - 1);
 				}}
 			>
 				<LeftPage />
@@ -161,7 +189,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 							page = totalPages;
 						}
 
-						changePageCallback(page - 1);
+						changePage(page - 1);
 					}
 					}
 				/>
@@ -172,7 +200,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 				aria-label="Next page"
 				title="Next page"
 				onClick={() => {
-					changePageCallback(currentPage + 1);
+					changePage(currentPage + 1);
 				}}
 			>
 				<RightPage />
@@ -182,7 +210,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 				aria-label="Next 10 page"
 				title="Next 10 page"
 				onClick={() => {
-					changePageCallback(currentPage + 10);
+					changePage(currentPage + 10);
 				}}
 				disabled={totalPages < 10}
 			>
@@ -192,7 +220,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 
 			<VSCodeButton appearance="icon" aria-label="Last page"
 				onClick={() => {
-					changePageCallback(totalPages + 1);
+					changePage(totalPages + 1);
 				}}
 			>
 				<LastPage />

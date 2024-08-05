@@ -100,6 +100,10 @@ limitations under the License.
 	margin-left: -9px;
 }
 
+.tds-data-grid-pagination span {
+	margin-right: calc(var(--tds-hor-spacing) * 0.8);
+}
+
 div.tds-data-grid-pagination-label vscode-text-field {
 	margin-left: var(--tds-hor-spacing);
 	margin-right: var(--tds-hor-spacing);
@@ -122,8 +126,4 @@ div.tds-data-grid-pagination-label vscode-text-field::part(control) {
 	gap: 10px;
 	flex-grow: 0;
 	flex-shrink: 0;
-}
-
-.tds-data-grid-content vscode-text-field {
-	text-align: right !important;
 }

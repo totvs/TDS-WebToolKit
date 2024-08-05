@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import type { WebviewApi } from 'vscode-webview'
-import { L10n } from './l10n'
+import { L10n, l10n } from './l10n'
 
 /**
  * A utility wrapper around the acquireVsCodeApi() function, which enables
@@ -28,7 +28,6 @@ import { L10n } from './l10n'
  */
 class VSCodeAPIWrapper {
   private readonly vsCodeApi: WebviewApi<unknown> | undefined
-  private _l10n: any
 
   constructor() {
     // Check if the acquireVsCodeApi function exists in the current development
@@ -92,12 +91,9 @@ class VSCodeAPIWrapper {
   }
 
   get l10n(): L10n {
-    if (this._l10n === undefined) {
-      this._l10n = new L10n();
-    }
-    return this._l10n;
+    return l10n;
   }
 }
 
 // Exports class singleton to prevent multiple invocations of acquireVsCodeApi.
-export const tdsVscode: VSCodeAPIWrapper = new VSCodeAPIWrapper();
+export const tdsVscode = new VSCodeAPIWrapper()

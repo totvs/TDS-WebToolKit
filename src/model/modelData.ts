@@ -21,6 +21,6 @@ import { FieldValues } from "react-hook-form";
 * This type can be used to define the structure of a model object that contains arbitrary properties.
 */
 export interface TdsAbstractModel extends FieldValues {
-  //[key: string]: any
+  [key: string]: any
   //errors?: any
 }

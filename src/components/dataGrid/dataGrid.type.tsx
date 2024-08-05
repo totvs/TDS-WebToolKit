@@ -38,7 +38,7 @@ export type TTdsDataGridColumnDef = {
 	displayType?: "date" | "time" | "datetime" | "int" | "float" | "hex" | "HEX";
 	width?: string;
 	lookup?: Record<string, string>;
-	//align?: "left" | "center" | "right";
+	align?: "left" | "center" | "right";
 	sortable?: boolean;
 	sortDirection?: "asc" | "desc" | "";
 	grouping?: boolean;
