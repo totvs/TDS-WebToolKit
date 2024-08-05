@@ -26,6 +26,7 @@ type TdsTextFieldProps = TdsFieldProps & {
     size?: number;
     cols?: number;
     rows?: number;
+    value?: string;
     format?: (value: string) => string;
 };
 
@@ -43,6 +44,9 @@ type TdsTextFieldProps = TdsFieldProps & {
 export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
     const { register, control, getValues, getFieldState } = useFormContext();
     const fieldState: ControllerFieldState = getFieldState(props.name);
+
+    const textValue: string = props.value !== undefined ? props.value :
+        props.format ? props.format(getValues(props.name) as string) : getValues(props.name)
 
     return (
         <section
@@ -63,7 +67,7 @@ export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
                     rows={props.rows ?? 15}
                     onInput={props.onInput}
                     key={`text_area_${props.name}`}
-                    value={props.format ? props.format(getValues(props.name) as string) : getValues(props.name)}
+                    value={textValue}
                     {...register(props.name, props.rules)}
                 >
                     <PopupMessage field={props} fieldState={fieldState} />
@@ -75,7 +79,7 @@ export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
                     size={props.size ?? 30}
                     onInput={props.onInput}
                     key={`text_field_${props.name}`}
-                    value={props.format ? props.format(getValues(props.name) as string) : getValues(props.name)}
+                    value={textValue}
                     {...register(props.name, props.rules)}
                 >
                     <PopupMessage field={props} fieldState={fieldState} />

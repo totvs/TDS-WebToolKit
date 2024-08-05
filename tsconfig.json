@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2018",
     "outDir": "./dist",
     "sourceMap": true,
     "declarationDir": "./dist",
     "declarationMap": true,
     "noImplicitAny": true,
-    "module": "commonjs",
-    "target": "ES2018",
     "jsx": "react-jsx",
     "allowJs": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "declaration": true
+    "declaration": true,
+    "resolveJsonModule": true,
   },
   "include": [
     "src"

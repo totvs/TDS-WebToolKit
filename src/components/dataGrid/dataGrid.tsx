@@ -57,6 +57,7 @@ type TBuildRowsProps = {
 	rowSeparator: boolean;
 	sortedColumn: TTdsDataGridColumnDef;
 	groupingInfo: TGroupingInfo;
+	allFieldsFilter: string;
 }
 
 function BuildRows(props: TBuildRowsProps) {
@@ -115,14 +116,22 @@ function BuildRows(props: TBuildRowsProps) {
 	}
 
 	let rows: any[] = [...props._rows];
-
-	if (props.sortedColumn.sortDirection == "asc") {
-		rows = rows.sort((r1: any, r2: any) => r1[props.sortedColumn.name] > r2[props.sortedColumn.name] ? 1 : -1);
-	} else if (props.sortedColumn.sortDirection == "desc") {
-		rows = rows.sort((r1: any, r2: any) => r1[props.sortedColumn.name] > r2[props.sortedColumn.name] ? -1 : 1);
-	}
-
 	let filters: Record<string, RegExp[]> = {}
+
+	if (props.allFieldsFilter) {
+		const filter: RegExp = new RegExp(`${props.allFieldsFilter}`, "gi");
+
+		rows = rows.filter((row: any, index: number) => {
+			let found: boolean = false;
+
+			props.columnsDef.forEach((columnDef: TTdsDataGridColumnDef) => {
+				found = found || filter.test(row[columnDef.name]);
+			});
+
+			return found ? row : null;
+		})
+
+	}
 
 	if (props.groupingInfo && props.groupingInfo.groupingFilter) {
 		props.groupingInfo.groupingFilter.forEach((filter: string) => {
@@ -145,6 +154,12 @@ function BuildRows(props: TBuildRowsProps) {
 
 			return found ? row : null;
 		})
+	}
+
+	if (props.sortedColumn.sortDirection == "asc") {
+		rows = rows.sort((r1: any, r2: any) => r1[props.sortedColumn.name] > r2[props.sortedColumn.name] ? 1 : -1);
+	} else if (props.sortedColumn.sortDirection == "desc") {
+		rows = rows.sort((r1: any, r2: any) => r1[props.sortedColumn.name] > r2[props.sortedColumn.name] ? -1 : 1);
 	}
 
 	return rows
@@ -273,6 +288,12 @@ type TGroupingBlockProps = {
 	onFilterValues: (Filter: string[] | undefined) => void;
 }
 
+type TGroupingInfo = {
+	groupingCol: TTdsDataGridColumnDef;
+	groupingValues?: Record<string, number>;
+	groupingFilter?: string[];
+}
+
 function GroupingBlock(props: TGroupingBlockProps) {
 	const groupingCol: TTdsDataGridColumnDef = props.groupingInfo.groupingCol;
 	const groupingFilter = props.groupingInfo.groupingFilter;
@@ -321,10 +342,103 @@ function GroupingBlock(props: TGroupingBlockProps) {
 	)
 }
 
-type TGroupingInfo = {
-	groupingCol: TTdsDataGridColumnDef;
-	groupingValues?: Record<string, number>;
-	groupingFilter?: string[];
+
+type TFilterBlockProps = {
+	filter: string;
+	showFilter: boolean;
+	actions: TTdsDataGridAction[];
+	onFilterChanged: (filter: string | undefined) => void;
+}
+
+function FilterBlock(props: TFilterBlockProps) {
+	const [filterValue, setFilterValue] = React.useState(props.filter || "");
+
+	return (
+		<section className="tds-row-container">
+			<TdsTextField
+				name="filter"
+				key={`all_filter`}
+				label={tdsVscode.l10n.t("Filter")}
+				info={tdsVscode.l10n.t("FilterInfo")}
+				value={filterValue}
+				onInput={(e: any) => {
+					e.preventDefault();
+					const filter: string = e.target.value.trim();
+
+					setFilterValue(filter);
+
+					if (filter.length > 0) {
+						props.onFilterChanged(filter);
+					} else {
+						props.onFilterChanged(undefined);
+					}
+				}}
+			/>
+
+			<VSCodeButton appearance="icon" aria-label="Filter"
+				onClick={() => {
+					//setShowFilter(!showFilter);
+				}}
+			>
+				<span className="codicon codicon-list-filter"></span>
+			</VSCodeButton>
+
+			{props.actions &&
+				<div className="tds-data-grid-actions">
+					{props.actions.map((action: TTdsDataGridAction) => {
+						let propsField: any = {};
+						let visible: string = "";
+
+						if (typeof action.id === "string") {
+							propsField["id"] = action.id;
+						}
+
+						propsField["type"] = action.type || "button";
+
+						if (action.enabled !== undefined) {
+							if (typeof action.enabled === "function") {
+								propsField["disabled"] = !(action.enabled as Function)(false, true);
+							} else {
+								propsField["disabled"] = !action.enabled;
+							}
+						}
+
+						if (action.appearance) {
+							propsField["appearance"] = action.appearance;
+						}
+
+						if (action.onClick) {
+							propsField["onClick"] = action.onClick;
+						}
+
+						if (action.visible !== undefined) {
+							let isVisible: boolean = false;
+
+							if (action.visible = typeof action.visible === "function") {
+								isVisible = (Function)(action.visible)(false, true)
+							} else {
+								isVisible = action.visible;
+							}
+
+							visible = isVisible ? "" : "tds-hidden";
+						}
+
+						return (action.type == "link" ?
+							<VSCodeLink
+								key={action.id}
+								href={action.href}>{action.caption}
+							</VSCodeLink>
+							: <VSCodeButton
+								key={action.id}
+								className={`tds-button-button ${visible}`}
+								{...propsField} >
+								{action.caption}
+							</VSCodeButton>)
+					})}
+				</div>
+			}
+		</section>
+	)
 }
 
 /**
@@ -346,6 +460,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 	const [showFilter, setShowFilter] = React.useState(false);
 	const [sortedInfo, setSortedInfo] = React.useState(props.columnDef[0]);
 	const [groupingInfo, setGroupingInfo] = React.useState<TGroupingInfo>();
+	const [allFieldsFilter, setAllFieldsFilter] = React.useState<string | undefined>(undefined);
 	const [dataSource, setDataSource] = React.useState((props.dataSource || []).slice(0));
 
 	React.useEffect(() => {
@@ -399,11 +514,6 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 				return acc;
 			}, []);
 
-			// const newColumnDef: TTdsDataGridColumnDef = {
-			// 	...columnDef,
-			// 	//visible: false
-			// }
-
 			const indexColumn = props.columnDef.indexOf(columnDef);
 			//			props.columnDef[indexColumn] = newColumnDef;
 			setGroupingInfo({
@@ -454,96 +564,6 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 	}
 	if (props.options.pageSizeOptions == undefined) {
 		props.options.pageSizeOptions = [50, 100, 250, 500, 1000];
-	}
-
-	const filterBlock = () => {
-		return (
-			<section className="tds-row-container">
-				<TdsTextField
-					name="filter"
-					key={`${props.id}_filter`}
-					label={tdsVscode.l10n.t("Filter")}
-					info={tdsVscode.l10n.t("FilterInfo")}
-					onInput={(e: any) => {
-						e.preventDefault();
-
-						let filters: any = {};
-						if (e.target.value.trim() !== "") {
-							props.columnDef.forEach((columnDef: TTdsDataGridColumnDef) => {
-								filters[columnDef.name] = e.target.value;
-							});
-						}
-
-						//setDataSource(applyFilter(filters, props.dataSource));
-					}}
-				/>
-
-				<VSCodeButton appearance="icon" aria-label="Filter"
-					onClick={() => {
-						setShowFilter(!showFilter);
-					}}
-				>
-					<span className="codicon codicon-list-filter"></span>
-				</VSCodeButton>
-
-				{props.options.topActions &&
-					<div className="tds-data-grid-actions">
-						{props.options.topActions.map((action: TTdsDataGridAction) => {
-							let propsField: any = {};
-							let visible: string = "";
-
-							if (typeof action.id === "string") {
-								propsField["id"] = action.id;
-							}
-
-							propsField["key"] = action.id;
-							propsField["type"] = action.type || "button";
-
-							if (action.enabled !== undefined) {
-								if (typeof action.enabled === "function") {
-									propsField["disabled"] = !(action.enabled as Function)(false, true);
-								} else {
-									propsField["disabled"] = !action.enabled;
-								}
-							}
-
-							if (action.appearance) {
-								propsField["appearance"] = action.appearance;
-							}
-
-							if (action.onClick) {
-								propsField["onClick"] = action.onClick;
-							}
-
-							if (action.visible !== undefined) {
-								let isVisible: boolean = false;
-
-								if (action.visible = typeof action.visible === "function") {
-									isVisible = (Function)(action.visible)(false, true)
-								} else {
-									isVisible = action.visible;
-								}
-
-								visible = isVisible ? "" : "tds-hidden";
-							}
-
-							return (action.type == "link" ?
-								<VSCodeLink
-									key={action.id}
-									href={action.href}>{action.caption}
-								</VSCodeLink>
-								: <VSCodeButton
-									key={action.id}
-									className={`tds-button-button ${visible}`}
-									{...propsField} >
-									{action.caption}
-								</VSCodeButton>)
-						})}
-					</div>
-				}
-
-			</section>
-		)
 	}
 
 	props.columnDef.forEach((columnDef: TTdsDataGridColumnDef, index: number) => {
@@ -679,7 +699,14 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 	return (
 		<section className="tds-data-grid" id={`${props.id}`}>
 			<div className="tds-data-grid-header">
-				{(props.options.filter) && filterBlock()}
+				{(props.options.filter) && <FilterBlock
+					filter={allFieldsFilter}
+					showFilter={true}
+					actions={props.options.topActions}
+					onFilterChanged={(value: string) => {
+						setAllFieldsFilter(value);
+					}}
+				/>}
 				{groupingInfo &&
 					<GroupingBlock
 						groupingInfo={groupingInfo}
@@ -719,6 +746,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 						pageSize={pageSize}
 						sortedColumn={sortedInfo}
 						groupingInfo={groupingInfo}
+						allFieldsFilter={allFieldsFilter}
 					/>
 				</VSCodeDataGrid>
 			</div>

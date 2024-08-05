@@ -1,9 +1,4 @@
 /*
-import { TdsDataGrid } from './components/dataGrid/dataGrid copy';
-import { TdsProcessRing } from './components/decorator/process-ring';
-export { vscode } from './utilities/vscodeWrapper';
-export { sendClose } from './utilities/common-command-webview';
-export { sendReset } from './utilities/common-command-webview';
 Copyright 2024 TOTVS S.A
 
 Licensed under the Apache License, Version 2.0 (the "License");
