@@ -21,6 +21,7 @@ import { VSCodeButton } from "@vscode/webview-ui-toolkit/react";
 import { DemoPage } from "./demoPage";
 import DemoForm from "./demoForm";
 import DemoDatagrid from "./demoDatagrid";
+import DemoTable from "./demoTable";
 
 export function Demo() {
   const [demo, setDemo] = React.useState<number>(0);
@@ -34,6 +35,7 @@ export function Demo() {
           <VSCodeButton onClick={() => setDemo(3)}>TdsDataGrid</VSCodeButton>
           <VSCodeButton onClick={() => setDemo(4)}>TdsDataGrid (MultiRow)</VSCodeButton>
           <VSCodeButton onClick={() => setDemo(5)}>TdsDataGrid (pt-BR)</VSCodeButton>
+          <VSCodeButton onClick={() => setDemo(6)}>TdsTable</VSCodeButton>
         </div>
         <div className="demo-right-side" id="root">
           {demo == 0 && <>
@@ -48,6 +50,7 @@ export function Demo() {
           {demo == 3 && <DemoDatagrid multiRow={false} />}
           {demo == 4 && <DemoDatagrid multiRow={true} />}
           {demo == 5 && <DemoDatagrid multiRow={false} locale="pt-BR" />}
+          {demo == 6 && <DemoTable />}
         </div>
       </TdsPage>
       {/* <div className="demo-console" id="demo-console">

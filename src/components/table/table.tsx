@@ -16,8 +16,122 @@ limitations under the License.
 
 import "./table.css";
 import React from "react";
-import { TTdsTableProps } from "./table.type";
-import { VSCodeDataGrid, VSCodeDataGridCell, VSCodeDataGridRow } from "@vscode/webview-ui-toolkit/react";
+import { TTdsHeaderColumn, TTdsOnClick, TTdsTableProps } from "./table.type";
+import { VSCodeCheckbox, VSCodeDataGrid, VSCodeDataGridCell, VSCodeDataGridRow, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
+import { tdsVscode } from "../../utilities/vscodeWrapper";
+
+type TBuildRowsProps = {
+	id: string;  //ID tabela 
+	row: any[];
+	rowIndex: number;
+	highlightRow: boolean;
+	headerColumn: TTdsHeaderColumn[];
+	onClick?: TTdsOnClick;
+}
+
+function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsHeaderColumn, value: any) {
+	const column: TTdsHeaderColumn =
+		typeof (headerColumn) !== "string"
+			? headerColumn
+			: {
+				label: headerColumn,
+				type: "string"
+			}
+	let alignClass: string | undefined = column.align ? `tds-text-${column.align}` : undefined;
+
+	//Campo BOOLEAN
+	if (column.type == "boolean") {
+		alignClass = alignClass || "tds-text-center";
+
+		return (
+			<VSCodeCheckbox
+				className={alignClass}
+				key={`${rowKey}_${colIndex}`}
+				readOnly={true}
+				checked={value || value.toString() == "true"}
+			></VSCodeCheckbox>
+		)
+	}
+
+	//Campo DATE, TIME e DATETIME
+	if ((column.type == "date") || (column.type == "time") || (column.type == "datetime")) {
+		alignClass = alignClass || "tds-text-right";
+	}
+
+	//Campo Number
+	if ((column.type == "number")) {
+		alignClass = alignClass || "tds-text-right";
+	}
+
+	const text: string = tdsVscode.l10n.format(value, (column.displayType || column.type));
+
+
+	return (
+		<VSCodeTextField
+			className={alignClass}
+			title={text}
+			data-type={column.type}
+			key={`${rowKey}_${colIndex}`}
+			readOnly={true}
+			value={text}
+		></VSCodeTextField>
+	)
+}
+
+function BuildRow(props: TBuildRowsProps) {
+	let reactElements: React.ReactElement[] = [];
+	let rowClassName: string = "";
+
+	if (props.highlightRow) {
+		rowClassName = "tds-table-row-highlight";
+	}
+
+	let dataList: string[];
+
+	if (!Array.isArray(props.row)) {
+		dataList = Object.keys(props.row).map((key: any) => {
+			return props.row[key].toString();
+		})
+	} else {
+		dataList = props.row;
+	}
+
+	dataList.forEach((value: any, index: number) => {
+		reactElements.push(
+			<VSCodeDataGridCell
+				key={`${props.id}_cell_${props.rowIndex}_${index}`}
+				grid-column={index + 1}>
+				{fieldData(
+					"${props.id}_cell_${props.rowIndex}_${index}",
+					index,
+					props.headerColumn[index],
+					value
+				)}
+			</VSCodeDataGridCell>
+		);
+	});
+
+	return (
+		<VSCodeDataGridRow
+			row-type="default"
+			className={rowClassName}
+			key={`${props.id}_row_${props.rowIndex}`}
+			onClick={(event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+				props.onClick && props.onClick(
+					event.target as HTMLElement,
+					props.rowIndex,
+					{
+						altKey: event.altKey,
+						ctrlKey: event.ctrlKey,
+						shiftKey: event.shiftKey,
+						metaKey: event.metaKey
+					})
+			}}
+		>
+			{...reactElements}
+		</VSCodeDataGridRow>
+	);
+}
 
 /**
  * Renders a table component with the provided data source and configuration.
@@ -31,98 +145,56 @@ import { VSCodeDataGrid, VSCodeDataGridCell, VSCodeDataGridRow } from "@vscode/w
  * @returns The rendered table component.
  */
 export function TdsTable(props: TTdsTableProps): React.ReactElement {
-	const buildRow = (row: any[] | any, rowIndex: number): React.ReactElement => {
-		let reactElements: React.ReactElement[] = [];
-		let rowClassName: string = "";
-
-		if (props.highlightRows) {
-			if (props.highlightRows.includes(rowIndex)) {
-				rowClassName = "tds-table-row-highlight";
-			}
-		}
-
-		if (props.highlightGroup) {
-			Object.keys(props.highlightGroup).forEach((className: string) => {
-				if (props.highlightGroup[className].includes(rowIndex)) {
-					rowClassName = `${rowClassName} ${className}`;
-				}
-			})
-		}
-		rowClassName = rowClassName.trim();
-
-		if (props.dataColumns) {
-			props.dataColumns.forEach((element: string, index: number) => {
-				reactElements.push(
-					<VSCodeDataGridCell
-						key={`${props.id}_cell_${rowIndex}_${index}`}
-						grid-column={index + 1}>
-						{row[element]}
-					</VSCodeDataGridCell>
-				);
-			});
-		} else {
-			row.forEach((element: any, index: number) => {
-				reactElements.push(
-					<VSCodeDataGridCell
-						key={`${props.id}_cell_${rowIndex}_${index}`}
-						grid-column={index + 1}>
-						{element}
-					</VSCodeDataGridCell>
-				);
-			});
-		}
-
-		return (
-			<VSCodeDataGridRow
-				id={row["id"] ? `${props.id}_id_${row["id"]}` : `${props.id}_row_${rowIndex}`}
-				row-type="default"
-				key={`${props.id}_row_${rowIndex}`}
-				className={rowClassName}
-				onClick={(event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-					props.onClick && props.onClick(
-						event.target as HTMLElement,
-						rowIndex,
-						{
-							altKey: event.altKey,
-							ctrlKey: event.ctrlKey,
-							shiftKey: event.shiftKey,
-							metaKey: event.metaKey
-						})
-				}}
-			>
-				{...reactElements}
-			</VSCodeDataGridRow >
+	const widthColumns: string[] = props.headerColumns
+		.map((headerColumn: TTdsHeaderColumn) =>
+			typeof (headerColumn) == "string"
+				? "1fr"
+				: typeof (headerColumn.width) == "string" ? `${headerColumn.width}` : `1fr` //TODO: revisar
 		);
-	}
+	const headerColumns: string[] = props.headerColumns
+		.map((headerColumn: TTdsHeaderColumn) =>
+			typeof (headerColumn) == "string"
+				? headerColumn
+				: `${headerColumn.label}`
+		);
 
+
+	//	ref={props._ref}
 	return (
 		<section className="tds-table" id={`${props.id}`}>
 			<div className="tds-table-content">
 				{props.dataSource && props.dataSource.length == 0 && <div className="tds-table-empty-message">Nenhum registro encontrado</div>}
 				{props.dataSource && props.dataSource.length != 0 &&
 					<VSCodeDataGrid
-						ref={props._ref}
 						id={`${props.id}_table`}
 						key={`${props.id}_table`}
 						generate-header="sticky"
-						grid-template-columns={
-							props.widthColumns
-								.map((width: string | number) => typeof (width) == "string" ? width : `${width}fr`).join(" ")
-						}
+						grid-template-columns={widthColumns}
 					>
-						<VSCodeDataGridRow
-							key={`${props.id}_header`}
-						>
-							{props.headerColumns.map((header: string, index: number) =>
-								<VSCodeDataGridCell
-									key={`${props.id}_header_${index}`}
-									grid-column={index + 1}
-								>
-									{header}
-								</VSCodeDataGridCell>)}
-						</VSCodeDataGridRow>
+						{widthColumns.length > 0 &&
+							<VSCodeDataGridRow
+								key={`${props.id}_header`}
+							>
+								{headerColumns.map((header: string, index: number) =>
+									<VSCodeDataGridCell
+										key={`${props.id}_header_${index}`}
+										grid-column={index + 1}
+									>
+										{header}
+									</VSCodeDataGridCell>)}
+							</VSCodeDataGridRow>
+						}
 
-						{props.dataSource.map((row: any, index: number) => buildRow(row, index))}
+						{props.dataSource.map((row: any, index: number) =>
+							<BuildRow
+								id={`${props.id}_table`}
+								row={row}
+								rowIndex={index}
+								highlightRow={(props.highlightRows || []).includes(row)}
+								onClick={props.onClick}
+								headerColumn={props.headerColumns}
+							/>
+						)}
 					</VSCodeDataGrid>
 				}
 			</div>

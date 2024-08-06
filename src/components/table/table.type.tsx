@@ -14,26 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { LegacyRef } from "react";
+export type TTdsHeaderColumn = (
+	string |
+	{
+		label: string;
+		type: "string" | "number" | "boolean" | "date" | "time" | "datetime";
+		displayType?: "date" | "time" | "datetime" | "int" | "float" | "hex" | "HEX";
+		width?: string | number;
+		align?: "left" | "center" | "right";
+	});
 
+export type TTdsOnClick = (target: HTMLElement,
+	rowIndex: number,
+	modifiers?: {
+		altKey?: boolean,
+		ctrlKey?: boolean,
+		shiftKey?: boolean,
+		metaKey?: boolean
+	}
+) => void;
 
 export type TTdsTableProps = {
-	id: string;
-	headerColumns: string[],
-	dataColumns?: string[],
-	widthColumns: (string | number)[],
 	dataSource: any[] //Record<string, string | number | Date | boolean>[]
+	id?: string;
+	headerColumns?: TTdsHeaderColumn[],
 	highlightRows?: number[];
-	highlightGroup?: { [key: string]: (number | undefined)[] };
-	onClick?: (
-		target: HTMLElement,
-		rowIndex: number,
-		modifiers?: {
-			altKey?: boolean,
-			ctrlKey?: boolean,
-			shiftKey?: boolean,
-			metaKey?: boolean
-		}
-	) => void,
-	_ref?: LegacyRef<any> | undefined;
+	onClick?: TTdsOnClick;
 }

@@ -125,7 +125,9 @@ function BuildRows(props: TBuildRowsProps) {
 			let found: boolean = false;
 
 			props.columnsDef.forEach((columnDef: TTdsDataGridColumnDef) => {
-				found = found || filter.test(row[columnDef.name]);
+				if (filter.test(row[columnDef.name])) {
+					found = true;
+				}
 			});
 
 			return found ? row : null;

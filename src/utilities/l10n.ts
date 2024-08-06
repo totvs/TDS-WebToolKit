@@ -143,14 +143,24 @@ export class L10n {
    * 
    * @remarks Type `string` is not formatted. Always return original value.
    */
-  public format(value: string | number | Date, type: "string" | TDateFormat | TNumberFormat): string {
-    if (typeof value === "number") {
-      return this.formatNumber(value, type as TNumberFormat);
-    } else if (value instanceof Date) {
-      return this.formatDate(value, type as TDateFormat);
+  public format(value: string | number | Date, type: string | TDateFormat | TNumberFormat): string {
+    if ((typeof value === "number") ||
+      (type == "int") ||
+      (type == "float") ||
+      (type == "hex") ||
+      (type == "HEX") ||
+      (type == "number")
+    ) {
+      return this.formatNumber(value as number, type as TNumberFormat);
+    } else if ((value instanceof Date) ||
+      (type == "date") ||
+      (type == "time") ||
+      (type == "datetime")
+    ) {
+      return this.formatDate(value as Date, type as TDateFormat);
     }
 
-    return value
+    return value;
   }
 
   /**
