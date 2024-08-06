@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export type TTdsHeaderColumn = (
+export type TTdsTableColumn = (
 	string |
 	{
 		label: string;
@@ -24,7 +24,7 @@ export type TTdsHeaderColumn = (
 		align?: "left" | "center" | "right";
 	});
 
-export type TTdsOnClick = (target: HTMLElement,
+export type TTdsOnClickTableCell = (target: HTMLElement,
 	rowIndex: number,
 	modifiers?: {
 		altKey?: boolean,
@@ -37,7 +37,8 @@ export type TTdsOnClick = (target: HTMLElement,
 export type TTdsTableProps = {
 	dataSource: any[] //Record<string, string | number | Date | boolean>[]
 	id?: string;
-	headerColumns?: TTdsHeaderColumn[],
+	headerColumns?: TTdsTableColumn[],
 	highlightRows?: number[];
-	onClick?: TTdsOnClick;
+	highlightGroups?: Record<string, number[]>;
+	onClick?: TTdsOnClickTableCell;
 }

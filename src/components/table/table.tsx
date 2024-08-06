@@ -16,7 +16,7 @@ limitations under the License.
 
 import "./table.css";
 import React from "react";
-import { TTdsHeaderColumn, TTdsOnClick, TTdsTableProps } from "./table.type";
+import { TTdsTableColumn, TTdsOnClickTableCell, TTdsTableProps } from "./table.type";
 import { VSCodeCheckbox, VSCodeDataGrid, VSCodeDataGridCell, VSCodeDataGridRow, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 
@@ -25,12 +25,13 @@ type TBuildRowsProps = {
 	row: any[];
 	rowIndex: number;
 	highlightRow: boolean;
-	headerColumn: TTdsHeaderColumn[];
-	onClick?: TTdsOnClick;
+	extraClassName: string[];
+	headerColumn: TTdsTableColumn[];
+	onClick?: TTdsOnClickTableCell;
 }
 
-function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsHeaderColumn, value: any) {
-	const column: TTdsHeaderColumn =
+function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColumn, value: any) {
+	const column: TTdsTableColumn =
 		typeof (headerColumn) !== "string"
 			? headerColumn
 			: {
@@ -84,6 +85,8 @@ function BuildRow(props: TBuildRowsProps) {
 
 	if (props.highlightRow) {
 		rowClassName = "tds-table-row-highlight";
+	} else if (props.extraClassName) {
+		rowClassName = props.extraClassName.join(" ");
 	}
 
 	let dataList: string[];
@@ -102,7 +105,7 @@ function BuildRow(props: TBuildRowsProps) {
 				key={`${props.id}_cell_${props.rowIndex}_${index}`}
 				grid-column={index + 1}>
 				{fieldData(
-					"${props.id}_cell_${props.rowIndex}_${index}",
+					`${props.id}_cell_${props.rowIndex}_${index}`,
 					index,
 					props.headerColumn[index],
 					value
@@ -146,13 +149,13 @@ function BuildRow(props: TBuildRowsProps) {
  */
 export function TdsTable(props: TTdsTableProps): React.ReactElement {
 	const widthColumns: string[] = props.headerColumns
-		.map((headerColumn: TTdsHeaderColumn) =>
+		.map((headerColumn: TTdsTableColumn) =>
 			typeof (headerColumn) == "string"
 				? "1fr"
 				: typeof (headerColumn.width) == "string" ? `${headerColumn.width}` : `1fr` //TODO: revisar
 		);
 	const headerColumns: string[] = props.headerColumns
-		.map((headerColumn: TTdsHeaderColumn) =>
+		.map((headerColumn: TTdsTableColumn) =>
 			typeof (headerColumn) == "string"
 				? headerColumn
 				: `${headerColumn.label}`
@@ -190,9 +193,17 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 								id={`${props.id}_table`}
 								row={row}
 								rowIndex={index}
-								highlightRow={(props.highlightRows || []).includes(row)}
+								highlightRow={(props.highlightRows || []).includes(index)}
 								onClick={props.onClick}
 								headerColumn={props.headerColumns}
+								extraClassName={Object.keys(props.highlightGroups || []).map((key: string) => {
+									if (props.highlightGroups[key].includes(index)) {
+
+										return key;
+									}
+
+									return ""
+								})}
 							/>
 						)}
 					</VSCodeDataGrid>

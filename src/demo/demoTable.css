@@ -4,3 +4,19 @@
     max-height: 500px;
     margin: auto;
 }
+
+.demo-table-g1 {
+    background-color: bisque;
+}
+
+.demo-table-g1 ::part(root) {
+    opacity: 70%;
+}
+
+.demo-table-g2 {
+    background-color: aquamarine;
+}
+
+.demo-table-g2 ::part(root) {
+    opacity: 70%;
+}

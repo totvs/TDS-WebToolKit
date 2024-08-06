@@ -36,6 +36,8 @@ export function Demo() {
           <VSCodeButton onClick={() => setDemo(4)}>TdsDataGrid (MultiRow)</VSCodeButton>
           <VSCodeButton onClick={() => setDemo(5)}>TdsDataGrid (pt-BR)</VSCodeButton>
           <VSCodeButton onClick={() => setDemo(6)}>TdsTable</VSCodeButton>
+          <VSCodeButton onClick={() => setDemo(7)}>TdsTable (highlightRows)</VSCodeButton>
+          <VSCodeButton onClick={() => setDemo(8)}>TdsTable (extraClass)</VSCodeButton>
         </div>
         <div className="demo-right-side" id="root">
           {demo == 0 && <>
@@ -51,6 +53,11 @@ export function Demo() {
           {demo == 4 && <DemoDatagrid multiRow={true} />}
           {demo == 5 && <DemoDatagrid multiRow={false} locale="pt-BR" />}
           {demo == 6 && <DemoTable />}
+          {demo == 7 && <DemoTable highlightRows={[2, 5, 8, 11, 14]} />}
+          {demo == 8 && <DemoTable highlightGroups={{
+            "demo-table-g1": [0, 1, 2],
+            "demo-table-g2": [6, 7, 8],
+          }} />}
         </div>
       </TdsPage>
       {/* <div className="demo-console" id="demo-console">

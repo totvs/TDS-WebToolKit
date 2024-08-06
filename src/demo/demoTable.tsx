@@ -23,7 +23,7 @@ import { TdsPage } from "../components/page/page";
 import { tdsVscode } from "../utilities/vscodeWrapper";
 import countries from './countries.json'; // This import style requires "esModuleInterop", see "side notes"
 import { TdsTable } from "../components/table";
-import { TTdsHeaderColumn } from "../components/table/table.type";
+import { TTdsTableColumn } from "../components/table/table.type";
 
 enum ReceiveCommandEnum {
 }
@@ -40,7 +40,12 @@ type TDemoModel = {
     datasource: TCountry[];
 }
 
-export default function DemoDatagrid() {
+type TDemoTableProps = {
+    highlightRows?: number[];
+    highlightGroups?: Record<string, number[]>;
+}
+
+export default function DemoTable(props: TDemoTableProps) {
     const methods = useForm<TDemoModel>({
         defaultValues: {
             datasource: countries.map((country: any) => {
@@ -83,7 +88,7 @@ export default function DemoDatagrid() {
         }
     }, []);
 
-    function columnsDef(): TTdsHeaderColumn[] {
+    function columnsDef(): TTdsTableColumn[] {
         return [
             {
                 type: "string",
@@ -114,6 +119,8 @@ export default function DemoDatagrid() {
                 <TdsTable id={"result_table"}
                     headerColumns={columnsDef()}
                     dataSource={model.datasource}
+                    highlightRows={props.highlightRows}
+                    highlightGroups={props.highlightGroups}
                 />
             </TdsForm>
         </TdsPage>
