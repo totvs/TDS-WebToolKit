@@ -28,6 +28,7 @@ type TBuildRowsProps = {
 	extraClassName: string[];
 	headerColumn: TTdsTableColumn[];
 	onClick?: TTdsOnClickTableCell;
+	//onKeyCapture?: TTdsOnCaptureKey;
 }
 
 function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColumn, value: any) {
@@ -38,7 +39,7 @@ function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColu
 				label: headerColumn,
 				type: "string"
 			}
-	let alignClass: string | undefined = column.align ? `tds-text-${column.align}` : undefined;
+	let alignClass: string | undefined = column.align !== undefined ? `tds-text-${column.align}` : undefined;
 
 	//Campo BOOLEAN
 	if (column.type == "boolean") {
@@ -66,14 +67,13 @@ function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColu
 
 	const text: string = tdsVscode.l10n.format(value, (column.displayType || column.type));
 
-
 	return (
 		<VSCodeTextField
 			className={alignClass}
 			title={text}
 			data-type={column.type}
 			key={`${rowKey}_${colIndex}`}
-			readOnly={true}
+			readOnly={false}
 			value={text}
 		></VSCodeTextField>
 	)
@@ -119,17 +119,6 @@ function BuildRow(props: TBuildRowsProps) {
 			row-type="default"
 			className={rowClassName}
 			key={`${props.id}_row_${props.rowIndex}`}
-			onClick={(event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-				props.onClick && props.onClick(
-					event.target as HTMLElement,
-					props.rowIndex,
-					{
-						altKey: event.altKey,
-						ctrlKey: event.ctrlKey,
-						shiftKey: event.shiftKey,
-						metaKey: event.metaKey
-					})
-			}}
 		>
 			{...reactElements}
 		</VSCodeDataGridRow>
@@ -148,13 +137,13 @@ function BuildRow(props: TBuildRowsProps) {
  * @returns The rendered table component.
  */
 export function TdsTable(props: TTdsTableProps): React.ReactElement {
-	const widthColumns: string[] = props.headerColumns
+	const widthColumns: string[] = props.columns
 		.map((headerColumn: TTdsTableColumn) =>
 			typeof (headerColumn) == "string"
 				? "1fr"
 				: typeof (headerColumn.width) == "string" ? `${headerColumn.width}` : `1fr` //TODO: revisar
 		);
-	const headerColumns: string[] = props.headerColumns
+	const headerColumns: string[] = props.columns
 		.map((headerColumn: TTdsTableColumn) =>
 			typeof (headerColumn) == "string"
 				? headerColumn
@@ -165,8 +154,11 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 	//	ref={props._ref}
 	return (
 		<section className="tds-table" id={`${props.id}`}>
-			<div className="tds-table-content">
-				{props.dataSource && props.dataSource.length == 0 && <div className="tds-table-empty-message">Nenhum registro encontrado</div>}
+			<div className="tds-table-content"
+				onKeyDown={(event) => console.log("TdsTable keyDown", event)}
+				onKeyUp={(event) => console.log("TdsTable keyUp", event)}
+				onKeyUpCapture={(event) => console.log("TdsTable onKeyUpCapture", event)}
+			>
 				{props.dataSource && props.dataSource.length != 0 &&
 					<VSCodeDataGrid
 						id={`${props.id}_table`}
@@ -176,6 +168,7 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 					>
 						{widthColumns.length > 0 &&
 							<VSCodeDataGridRow
+								id={`${props.id}_header`}
 								key={`${props.id}_header`}
 							>
 								{headerColumns.map((header: string, index: number) =>
@@ -195,7 +188,7 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 								rowIndex={index}
 								highlightRow={(props.highlightRows || []).includes(index)}
 								onClick={props.onClick}
-								headerColumn={props.headerColumns}
+								headerColumn={props.columns}
 								extraClassName={Object.keys(props.highlightGroups || []).map((key: string) => {
 									if (props.highlightGroups[key].includes(index)) {
 

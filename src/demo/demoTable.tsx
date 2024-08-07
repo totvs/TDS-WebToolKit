@@ -117,7 +117,7 @@ export default function DemoTable(props: TDemoTableProps) {
                 onSubmit={onSubmit}>
 
                 <TdsTable id={"result_table"}
-                    headerColumns={columnsDef()}
+                    columns={columnsDef()}
                     dataSource={model.datasource}
                     highlightRows={props.highlightRows}
                     highlightGroups={props.highlightGroups}

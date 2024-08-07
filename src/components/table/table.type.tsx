@@ -34,11 +34,22 @@ export type TTdsOnClickTableCell = (target: HTMLElement,
 	}
 ) => void;
 
+// export type TTdsOnCaptureKey = (target: HTMLElement,
+// 	rowIndex: number,
+// 	modifiers?: {
+// 		altKey?: boolean,
+// 		ctrlKey?: boolean,
+// 		shiftKey?: boolean,
+// 		metaKey?: boolean
+// 	}
+// ) => void;
+
 export type TTdsTableProps = {
 	dataSource: any[] //Record<string, string | number | Date | boolean>[]
 	id?: string;
-	headerColumns?: TTdsTableColumn[],
+	columns?: TTdsTableColumn[],
 	highlightRows?: number[];
 	highlightGroups?: Record<string, number[]>;
 	onClick?: TTdsOnClickTableCell;
+	//onKeyCapture?: TTdsOnCaptureKey;
 }

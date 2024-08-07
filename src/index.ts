@@ -45,6 +45,7 @@ export type { IPopupMessage } from './components/popup-message/popup-message'
 
 export { TdsTable } from './components/table';
 export type { TTdsTableColumn, TTdsOnClickTableCell } from "./components/table"
+//export type { TTdsOnCaptureKey } from "./components/table"
 
 export { TdsPaginator } from './components/paginator';
 

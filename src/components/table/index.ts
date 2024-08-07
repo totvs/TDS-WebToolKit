@@ -15,4 +15,5 @@ limitations under the License.
 */
 
 export { TdsTable, } from "./table";
-export type { TTdsTableColumn, TTdsOnClickTableCell } from "./table.type"
+export type { TTdsTableColumn, TTdsOnClickTableCell } from "./table.type";
+//export type {  TTdsOnCaptureKey } from "./table.type"
