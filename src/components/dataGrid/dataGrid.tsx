@@ -61,94 +61,6 @@ type TBuildRowsProps = {
 	fieldsFilter: Record<string, string>;
 }
 
-function prepareDataSource(props: TBuildRowsProps): any[] {
-	const initFilters = (value?: RegExp): Record<string, RegExp[]> => {
-		const filters: Record<string, RegExp[]> = {};
-
-		props.columnsDef.forEach((columnDef: TTdsDataGridColumnDef) => {
-			filters[columnDef.name] = value !== undefined ? [value] : [];
-		});
-
-		return filters;
-	};
-
-	const applyOrFilter = (rows: any[], filters: Record<string, RegExp[]>): any[] => {
-		if (Object.keys(filters).length > 0) {
-			rows = rows.filter((row: any, index: number) => {
-				let found: boolean = false;
-
-				Object.keys(filters).forEach((key: string) => {
-					filters[key].forEach((filter: RegExp) => {
-						if (filter.test(row[key])) {
-							found = true;
-						}
-					});
-				});
-
-				return found ? row : null;
-			})
-		}
-
-		return rows;
-	}
-
-	const applyAndFilter = (rows: any[], filters: Record<string, RegExp[]>): any[] => {
-		if (Object.keys(filters).length > 0) {
-			rows = rows.filter((row: any, index: number) => {
-				let found: boolean = true;
-
-				Object.keys(filters).forEach((key: string) => {
-					filters[key].forEach((filter: RegExp) => {
-						found &&= filter.test(row[key])
-					});
-				});
-
-				return found ? row : null;
-			})
-		}
-
-		return rows;
-	}
-
-	let rows: any[] = [...props.rows];
-
-	if (props.allFieldsFilter) {
-		const filter: RegExp = new RegExp(`${props.allFieldsFilter}`, "i");
-		const filters: Record<string, RegExp[]> = initFilters(filter);
-
-		rows = applyOrFilter(rows, filters);
-	}
-
-	if ((props.fieldsFilter) && (Object.keys(props.fieldsFilter).length > 0)) {
-		const filters: Record<string, RegExp[]> = initFilters();
-
-		Object.keys(props.fieldsFilter).forEach((key: string) => {
-			filters[key].push(new RegExp(`${props.fieldsFilter[key]}`, "i"));
-		});
-
-		rows = applyAndFilter(rows, filters);
-	};
-
-	if (props.groupingInfo && props.groupingInfo.groupingFilter) {
-		const filters: Record<string, RegExp[]> = initFilters();
-
-		props.groupingInfo.groupingFilter.forEach((filter: string) => {
-			filters[props.groupingInfo.groupingCol.name].push(new RegExp(`${filter}`, "i"));
-		});
-
-		rows = applyOrFilter(rows, filters);
-	}
-
-	if (props.sortedColumn.sortDirection == "asc") {
-		rows = rows.sort((r1: any, r2: any) => r1[props.sortedColumn.name] > r2[props.sortedColumn.name] ? 1 : -1);
-	} else if (props.sortedColumn.sortDirection == "desc") {
-		rows = rows.sort((r1: any, r2: any) => r1[props.sortedColumn.name] > r2[props.sortedColumn.name] ? -1 : 1);
-	}
-
-	return rows
-		.slice(props.itemOffset, props.itemOffset + props.pageSize);
-}
-
 function BuildRows(props: TBuildRowsProps) {
 	const buildRow = (row: any, index: number, itemOffset: number): React.ReactElement[] => {
 		let reactElements: React.ReactElement[] = [];
@@ -217,14 +129,21 @@ function BuildRows(props: TBuildRowsProps) {
 		if (Object.keys(filters).length > 0) {
 			rows = rows.filter((row: any, index: number) => {
 				let found: boolean = false;
-
-				Object.keys(filters).forEach((key: string) => {
-					filters[key].forEach((filter: RegExp) => {
-						if (filter.test(row[key])) {
-							found = true;
-						}
-					});
+				const filtersKey: string[] = Object.keys(filters).filter((key: string) => {
+					return filters[key].length > 0 ? key : undefined;
 				});
+
+				if (filtersKey.length > 0) {
+					filtersKey.forEach((key: string) => {
+						filters[key].forEach((filter: RegExp) => {
+							if (filter.test(row[key])) {
+								found = true;
+							}
+						});
+					});
+				} else {
+					found = true;
+				}
 
 				return found ? row : null;
 			})
