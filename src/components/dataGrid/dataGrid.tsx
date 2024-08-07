@@ -57,8 +57,8 @@ type TBuildRowsProps = {
 	rowSeparator: boolean;
 	sortedColumn: TTdsDataGridColumnDef;
 	groupingInfo: TGroupingInfo;
-	allFieldsFilter: string;
-	fieldsFilter: Record<string, string>;
+	_allFieldsFilter: string;
+	_fieldsFilter: Record<string, string>;
 }
 
 function BuildRows(props: TBuildRowsProps) {
@@ -157,11 +157,19 @@ function BuildRows(props: TBuildRowsProps) {
 			rows = rows.filter((row: any, index: number) => {
 				let found: boolean = true;
 
-				Object.keys(filters).forEach((key: string) => {
-					filters[key].forEach((filter: RegExp) => {
-						found &&= filter.test(row[key])
-					});
+				const filtersKey: string[] = Object.keys(filters).filter((key: string) => {
+					return filters[key].length > 0 ? key : undefined;
 				});
+
+				if (filtersKey.length > 0) {
+					filtersKey.forEach((key: string) => {
+						filters[key].forEach((filter: RegExp) => {
+							found &&= filter.test(row[key])
+						});
+					});
+				} else {
+					found = true;
+				}
 
 				return found ? row : null;
 			})
@@ -172,18 +180,18 @@ function BuildRows(props: TBuildRowsProps) {
 
 	let rows: any[] = [...props.rows];
 
-	if (props.allFieldsFilter) {
-		const filter: RegExp = new RegExp(`${props.allFieldsFilter}`, "i");
+	if (props._allFieldsFilter) {
+		const filter: RegExp = new RegExp(`${props._allFieldsFilter}`, "i");
 		const filters: Record<string, RegExp[]> = initFilters(filter);
 
 		rows = applyOrFilter(rows, filters);
 	}
 
-	if ((props.fieldsFilter) && (Object.keys(props.fieldsFilter).length > 0)) {
+	if ((props._fieldsFilter) && (Object.keys(props._fieldsFilter).length > 0)) {
 		const filters: Record<string, RegExp[]> = initFilters();
 
-		Object.keys(props.fieldsFilter).forEach((key: string) => {
-			filters[key].push(new RegExp(`${props.fieldsFilter[key]}`, "i"));
+		Object.keys(props._fieldsFilter).forEach((key: string) => {
+			filters[key].push(new RegExp(`${props._fieldsFilter[key]}`, "i"));
 		});
 
 		rows = applyAndFilter(rows, filters);
@@ -403,8 +411,8 @@ function FilterBlock(props: TFilterBlockProps) {
 			<TdsTextField
 				name="filter"
 				key={`all_filter`}
-				label={tdsVscode.l10n.t("Filter (accept Regular Expression)")}
-				info={tdsVscode.l10n.t("FilterInfo")}
+				label={tdsVscode.l10n.t("Filter")}
+				info={tdsVscode.l10n.t("Filters on all columns and can accept regular expressions")}
 				value={filterValue}
 				onInput={(e: any) => {
 					e.preventDefault();
@@ -496,6 +504,7 @@ type BuildRowFilterProps = {
 }
 
 function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[] {
+	const [filterValue, setFilterValue] = React.useState(props.fieldsFilter || {});
 	let reactElements: React.ReactElement[] = [];
 	let rowNumber: number = 0;
 
@@ -524,6 +533,11 @@ function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[] {
 											delete filters[fieldName];
 										}
 
+										if (Object.keys(filters).length == 0) {
+											filters = undefined;;
+										}
+
+										setFilterValue(filters);
 										props.onFilterFieldChanged(filters);
 									}
 								}
@@ -579,8 +593,8 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 	const [showFieldsFilter, setShowFieldsFilter] = React.useState(false);
 	const [sortedInfo, setSortedInfo] = React.useState(props.columnDef[0]);
 	const [groupingInfo, setGroupingInfo] = React.useState<TGroupingInfo>();
-	const [allFieldsFilter, setAllFieldsFilter] = React.useState<string | undefined>(undefined);
-	const [fieldsFilter, setFieldsFilter] = React.useState<Record<string, string> | undefined>(undefined);
+	const [_allFieldsFilter, _setAllFieldsFilter] = React.useState<string | undefined>(undefined);
+	const [_fieldsFilter, _setFieldsFilter] = React.useState<Record<string, string> | undefined>(undefined);
 	const [dataSource, setDataSource] = React.useState((props.dataSource || []).slice(0));
 
 	React.useEffect(() => {
@@ -737,14 +751,15 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 		<section className="tds-data-grid" id={`${props.id}`}>
 			<div className="tds-data-grid-header">
 				{(props.options.filter) && <FilterBlock
-					filter={allFieldsFilter}
+					filter={_allFieldsFilter}
 					showFilter={true}
 					actions={props.options.topActions}
 					onFilterChanged={(value: string) => {
-						setAllFieldsFilter(value);
+						_setAllFieldsFilter(value);
 					}}
 					onShowFieldsFilter={(value: boolean) => {
 						setShowFieldsFilter(value);
+						_setFieldsFilter(undefined);
 					}}
 				/>}
 				{groupingInfo &&
@@ -778,9 +793,9 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 						id={`${props.id}_grid`}
 						columnDefs={props.columnDef}
 						methods={methods}
-						fieldsFilter={fieldsFilter}
+						fieldsFilter={_fieldsFilter}
 						onFilterFieldChanged={(filter: Record<string, string>) => {
-							setFieldsFilter(filter);
+							_setFieldsFilter(filter);
 						}}
 						datasource={dataSource}
 					/>}
@@ -795,8 +810,8 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 						pageSize={pageSize}
 						sortedColumn={sortedInfo}
 						groupingInfo={groupingInfo}
-						allFieldsFilter={allFieldsFilter}
-						fieldsFilter={fieldsFilter}
+						_allFieldsFilter={_allFieldsFilter}
+						_fieldsFilter={_fieldsFilter}
 					/>
 				</VSCodeDataGrid>
 			</div>
