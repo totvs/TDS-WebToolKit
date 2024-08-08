@@ -1,3 +1,14 @@
+:root {
+    --font-family: "Segoe WPC", "Segoe UI", sans-serif;
+    --font-size: 13px;
+    --font-weight: normal;
+}
+
+body * {
+    /* Padrão Dark do VSCode */
+    font-family: var(--font-family);
+}
+
 #main .tds-page {
     width: 95%;
     height: 80vh;
