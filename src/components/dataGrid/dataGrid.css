@@ -50,7 +50,7 @@ limitations under the License.
 	order: 0;
 	flex-direction: row;
 	gap: 5px;
-	background-color: var(--vscode-editor-selectionBackground);
+	/* background-color: var(--vscode-editor-selectionBackground); */
 	width: 100%;
 	padding-left: 1em;
 	flex-wrap: wrap;
@@ -61,9 +61,9 @@ limitations under the License.
 	margin-right: calc(var(--tds-hor-spacing) / 4);
 }
 
-.tds-data-grid-grouping span.field_name {
+/* .tds-data-grid-grouping span.field_name {
 	font-weight: bold;
-}
+} */
 
 .tds-data-grid-grouping vscode-button vscode-badge {
 	margin-left: calc(var(--tds-hor-spacing) * 1);

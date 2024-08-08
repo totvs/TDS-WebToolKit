@@ -16,7 +16,6 @@ limitations under the License.
 
 import React, { useState } from "react";
 import { VSCodeButton, VSCodeDropdown, VSCodeOption, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
-import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
 import { tdsVscode } from './../../utilities/vscodeWrapper';
 
 
@@ -179,6 +178,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 				{tdsVscode.l10n.formatNumber(currentItem + 1)}-{tdsVscode.l10n.formatNumber(lastItem)} of {tdsVscode.l10n.formatNumber(totalItems)} (Page:
 				<VSCodeTextField
 					key="current-page"
+					readOnly={totalPages == 1}
 					value={`${currentPage + 1}`}
 					onChange={(e: any) => {
 						let page = parseInt(e.target.value);

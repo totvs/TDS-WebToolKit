@@ -44,9 +44,8 @@ export type TTdsDataGridColumnDef = {
 	grouping?: boolean;
 	visible?: boolean;
 	readOnly?: boolean;
-	//onSort?: (key: string) => void;
 	onChange?: any;
-	row?: number;
+	rowGroup?: number;
 }
 
 /**
@@ -86,7 +85,7 @@ export type TTdsDataGridAction = {
  */
 export type TTdsDataGridProps = {
 	id: string;
-	columnDef: TTdsDataGridColumnDef[]
+	columnsDef: TTdsDataGridColumnDef[]
 	dataSource: any[] //Record<string, string | number | Date | boolean>[]
 	options: {
 		bottomActions?: TTdsDataGridAction[];
@@ -101,4 +100,10 @@ export type TTdsDataGridProps = {
 		rowSeparator?: boolean
 	}
 	//onFilterChanged?(fieldName: string, filter: string): void;
+}
+
+export type TGroupingInfo = {
+	groupingCol: TTdsDataGridColumnDef;
+	groupingValues?: Record<string, number>;
+	groupingFilter?: string[];
 }
