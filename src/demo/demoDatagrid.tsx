@@ -99,56 +99,45 @@ export default function DemoDatagrid(props: TDemoDataGridProps) {
                 name: "name",
                 label: tdsVscode.l10n.t("Country"),
                 width: "8fr",
-                sortable: true,
                 sortDirection: "asc",
-                row: props.multiRow ? 0 : undefined,
+                rowGroup: props.multiRow ? 0 : undefined,
             },
             {
                 type: "string",
                 name: "capital",
                 label: tdsVscode.l10n.t("Capital"),
                 width: "10fr",
-                sortable: true,
-                sortDirection: "",
-                row: props.multiRow ? 0 : undefined,
+                rowGroup: props.multiRow ? 0 : undefined,
             },
             {
                 type: "number",
                 name: "population",
                 label: tdsVscode.l10n.t("Population"),
                 width: "5fr",
-                sortable: true,
-                sortDirection: "",
-                row: props.multiRow ? 1 : undefined,
+                rowGroup: props.multiRow ? 1 : undefined,
             },
             {
                 type: "number",
                 name: "area",
                 label: tdsVscode.l10n.t("Area"),
                 width: "4fr",
-                sortable: true,
-                sortDirection: "",
-                row: props.multiRow ? 1 : undefined,
+                rowGroup: props.multiRow ? 1 : undefined,
             },
             {
                 type: "string",
                 name: "continent",
                 label: tdsVscode.l10n.t("Continent"),
                 width: "10fr",
-                sortable: true,
-                sortDirection: "",
                 grouping: true,
-                row: props.multiRow ? 0 : undefined,
+                rowGroup: props.multiRow ? 0 : undefined,
             },
             {
                 type: "datetime",
                 name: "independenceDate",
                 label: tdsVscode.l10n.t("Independence"),
                 width: "10fr",
-                sortable: true,
                 displayType: "datetime",
-                sortDirection: "",
-                row: props.multiRow ? 1 : undefined,
+                rowGroup: props.multiRow ? 1 : undefined,
             }
         ];
     }
@@ -158,14 +147,14 @@ export default function DemoDatagrid(props: TDemoDataGridProps) {
 
     //    actions={formActions}
     return (
-        <TdsPage title="Demo: TdsDatagrid" >
+        <TdsPage title="Demo: TdsDataGrid" >
             <TdsForm<TDemoModel>
                 methods={methods}
                 actions={[]}
                 onSubmit={onSubmit}>
 
                 <TdsDataGrid id={"result_dataGrid"}
-                    columnDef={columnsDef()}
+                    columnsDef={columnsDef()}
                     dataSource={model.datasource}
                     options={{
                         grouping: true,
