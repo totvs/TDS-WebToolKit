@@ -188,7 +188,7 @@ function fieldData(props: TFieldDataProps) {
 				key={props.fieldName}
 				readOnly={column.readOnly == undefined ? true : column.readOnly}
 				value={text}
-				title={text}
+				title={text.startsWith("Invalid") ? row[column.name] : text}
 			></VSCodeTextField>
 		)
 	}
@@ -231,7 +231,7 @@ function fieldData(props: TFieldDataProps) {
 			data-type={column.type}
 			key={props.fieldName}
 			readOnly={column.readOnly == undefined ? true : column.readOnly}
-			value={text}
+			value={text.startsWith("Invalid") ? row[column.name] : text}
 		></VSCodeTextField>
 	)
 }
@@ -398,7 +398,7 @@ type BuildRowFilterProps = {
 	methods: any;
 	fieldsFilter: any;
 	onFilterFieldChanged: (filter: Record<string, string> | undefined) => void;
-	datasource: any[];
+	dataSource: any[];
 }
 
 function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[] {
@@ -439,7 +439,7 @@ function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[] {
 										props.onFilterFieldChanged(filters);
 									}
 								}
-								dataSource={props.datasource}
+								dataSource={props.dataSource}
 							/>
 						</VSCodeDataGridCell>
 					))}
@@ -511,7 +511,12 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 		groupingInfo: undefined,
 	});
 
-	//console.log(">>>> Render", state);
+	console.log(">>>> Render", state);
+	console.log(">>>> Props", props);
+
+	if (props.dataSource.length !== state.dataSource.length) {
+		dispatch({ type: "set_data_source", dataSource: props.dataSource });
+	}
 
 	const handlePageClick = (newPage: number) => {
 		const newOffset = (newPage * (props.options.pageSize)) % state.dataSource.length;
@@ -714,7 +719,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 						onFilterFieldChanged={(filter: Record<string, string>) => {
 							dispatch({ type: "set_fields_filter", filter: filter });
 						}}
-						datasource={state.dataSource}
+						dataSource={state.dataSource}
 					/>}
 
 					{state.dataSource == undefined ?

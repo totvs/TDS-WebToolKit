@@ -49,12 +49,12 @@ type TAction =
 	;
 
 export function dataGridState(state: TState, action: TAction) {
-	let update: boolean = false;
+	//let update: boolean = false;
 
 	switch (action.type) {
 		case "is_ready":
 			state.isReady = action.value == undefined ? true : action.value;
-			update = state.isReady;
+			//update = state.isReady;
 			break;
 
 		case "set_item_offset":
@@ -63,66 +63,65 @@ export function dataGridState(state: TState, action: TAction) {
 
 		case "set_current_page":
 			state.currentPage = action.value;
-			update = true;
+			//update = true;
 			break;
 
 		case "set_page_size":
 			state.pageSize = action.value;
-			update = true;
+			//update = true;
 			break;
 
 		case "set_show_fields_filter":
 			state.fieldsFilter = undefined;
 			state.showFieldsFilter = action.value;
-			update = !action.value;
+			//update = true;
 			break;
 
 		case "set_grouping_info":
 			state.groupingInfo = action.grouping;
-			update = true;
+			//update = true;
 			break;
 
 		case "set_sorted_column":
 			state.columnsDef[action.columnIndex].sortDirection = action.direction as any;
 			state.sortedColumn = state.columnsDef[action.columnIndex];
-			update = true;
+			//update = true;
 			break;
 
 		case "set_columns_def":
 			state.columnsDef = [...action.columnsDef];
-			update = true;
+			//update = true;
 			break;
 
 		case "set_data_source":
+			console.log("set_data_source", action.dataSource);
 			state.dataSourceOriginal = [...action.dataSource];
-			update = true;
+			//update = true;
 			break;
 
 		case "set_all_fields_filter":
 			state.allFieldsFilter = action.filter;
-			update = true;
+			//update = true;
 			break;
 
 		case "set_fields_filter":
 			state.fieldsFilter = action.filter;
-			update = true;
+			//update = true;
 			break;
 
 		default:
 			console.error("Set 'state' unknown. Type: %s", (action as any).type);
 
-			break;
+			return state;
 	}
 
-	if (update) {
-		state = {
-			...state, dataSource: prepareDataSource(state.columnsDef, state.dataSourceOriginal,
-				state.allFieldsFilter, state.fieldsFilter, state.groupingInfo,
-				state.sortedColumn).slice(state.itemOffset, state.itemOffset + state.pageSize)
-		}
-
-		state.totalItems = state.dataSource.length;
+	state = {
+		...state, dataSource: prepareDataSource(state.columnsDef, state.dataSourceOriginal,
+			state.allFieldsFilter, state.fieldsFilter, state.groupingInfo,
+			state.sortedColumn).slice(state.itemOffset, state.itemOffset + state.pageSize)
 	}
+
+	state.totalItems = state.dataSource.length;
 
 	return state;
 }
