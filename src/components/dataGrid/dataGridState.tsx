@@ -24,8 +24,8 @@ type TState = {
 	currentPage: number;
 	pageSize: number;
 	totalItems: number;
-	dataSource: any[] | undefined;
-	dataSourceOriginal: any[];
+	//dataSource: any[] | undefined;
+	//dataSourceOriginal: any[];
 	columnsDef: TTdsDataGridColumnDef[]
 	allFieldsFilter: string;
 	fieldsFilter: Record<string, string> | undefined;
@@ -95,7 +95,7 @@ export function dataGridState(state: TState, action: TAction) {
 
 		case "set_data_source":
 			console.log("set_data_source", action.dataSource);
-			state.dataSourceOriginal = [...action.dataSource];
+			//state.dataSourceOriginal = [...action.dataSource];
 			//update = true;
 			break;
 
@@ -115,19 +115,21 @@ export function dataGridState(state: TState, action: TAction) {
 			return state;
 	}
 
-	state = {
-		...state, dataSource: prepareDataSource(state.columnsDef, state.dataSourceOriginal,
-			state.allFieldsFilter, state.fieldsFilter, state.groupingInfo,
-			state.sortedColumn).slice(state.itemOffset, state.itemOffset + state.pageSize)
-	}
+	//state = {
+		//...state,
+		//timeStamp: new Date(),
+		// dataSource: prepareDataSource(state.columnsDef, state.dataSourceOriginal,
+		// 	state.allFieldsFilter, state.fieldsFilter, state.groupingInfo,
+		// 	state.sortedColumn).slice(state.itemOffset, state.itemOffset + state.pageSize)
+	//}
 
-	state.totalItems = state.dataSource.length;
+	//state.totalItems = state.dataSource.length;
 
 	return state;
 }
 
 
-function prepareDataSource(columnsDef: TTdsDataGridColumnDef[], dataSource: any[],
+export function prepareDataSource(columnsDef: TTdsDataGridColumnDef[], dataSource: any[],
 	allFieldsFilter: string, fieldsFilter: Record<string, string>,
 	groupingInfo: TGroupingInfo, sortedColumn: TTdsDataGridColumnDef): any[] {
 

@@ -29,7 +29,7 @@ import { TGroupingInfo, TTdsDataGridAction, TTdsDataGridColumnDef, TTdsDataGridP
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsTextField } from "../fields/textField";
 import TdsPaginator from "./paginator";
-import { dataGridState, TDataGridState } from './dataGridState';
+import { dataGridState, prepareDataSource, TDataGridState } from './dataGridState';
 
 /**
  * Renders the data grid component.
@@ -490,8 +490,8 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 		currentPage: 0,
 		pageSize: props.options.pageSize || 50,
 		totalItems: 0,
-		dataSource: props.dataSource,
-		dataSourceOriginal: props.dataSource,
+		//dataSource: props.dataSource,
+		//dataSourceOriginal: props.dataSource,
 		columnsDef: props.columnsDef.map((columnDef: TTdsDataGridColumnDef) => {
 			columnDef.sortable = columnDef.sortable == undefined ? true : columnDef.sortable;
 			columnDef.sortDirection = columnDef.sortDirection == undefined ? "" : columnDef.sortDirection;
@@ -514,12 +514,12 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 	console.log(">>>> Render", state);
 	console.log(">>>> Props", props);
 
-	if (props.dataSource.length !== state.dataSource.length) {
-		dispatch({ type: "set_data_source", dataSource: props.dataSource });
-	}
+	// if (props.dataSource.length !== state.dataSource.length) {
+	// 	dispatch({ type: "set_data_source", dataSource: props.dataSource });
+	// }
 
 	const handlePageClick = (newPage: number) => {
-		const newOffset = (newPage * (props.options.pageSize)) % state.dataSource.length;
+		const newOffset = (newPage * (props.options.pageSize)) % dataSource.length;
 
 		dispatch({ type: "set_item_offset", value: newOffset });
 		dispatch({ type: "set_current_page", value: newPage });
@@ -662,6 +662,14 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 		dispatch({ type: "is_ready" });
 	}
 
+	// if (props.dataSource.length !== state.dataSource.length) {
+	// 	dispatch({ type: "set_data_source", dataSource: props.dataSource });
+	// }
+
+	const dataSource: any = prepareDataSource(state.columnsDef, [...props.dataSource],
+		state.allFieldsFilter, state.fieldsFilter, state.groupingInfo,
+		state.sortedColumn).slice(state.itemOffset, state.itemOffset + state.pageSize)
+
 	return (
 		<section className="tds-data-grid" id={`${props.id}`}>
 			<div className="tds-data-grid-header">
@@ -719,16 +727,16 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 						onFilterFieldChanged={(filter: Record<string, string>) => {
 							dispatch({ type: "set_fields_filter", filter: filter });
 						}}
-						dataSource={state.dataSource}
+						dataSource={dataSource}
 					/>}
 
-					{state.dataSource == undefined ?
+					{dataSource == undefined ?
 						<>No data</>
 						: <BuildRows
 							key={`${props.id}_build_rows`}
 							id={props.id}
 							columnsDef={state.columnsDef}
-							rows={state.dataSource}
+							rows={dataSource}
 							rowSeparator={props.options.rowSeparator || false}
 							itemOffset={state.itemOffset}
 							pageSize={state.pageSize}
@@ -747,7 +755,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 					pageSize={state.pageSize}
 					currentPage={state.currentPage}
 					currentItem={state.itemOffset}
-					totalItems={state.dataSourceOriginal.length}
+					totalItems={dataSource.length}
 					pageSizeOptions={props.options.pageSizeOptions}
 					onPageChange={handlePageClick}
 					onPageSizeChange={handlePageSizeClick}
