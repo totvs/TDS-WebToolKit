@@ -184,19 +184,24 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 						{props.dataSource.map((row: any, index: number) =>
 							<BuildRow
 								id={`${props.id}_table`}
+								key={`${props.id}_row_${index}`}
 								row={row}
 								rowIndex={index}
 								highlightRow={(props.highlightRows || []).includes(index)}
 								onClick={props.onClick}
 								headerColumn={props.columns}
-								extraClassName={Object.keys(props.highlightGroups || []).map((key: string) => {
-									if (props.highlightGroups[key].includes(index)) {
+								extraClassName={
+									Object.keys(props.highlightGroups || []).map((key: string) => {
+										if (typeof props.highlightGroups[key] === "function") {
+											if (props.highlightGroups[key](row, index)) {
+												return key;
+											}
+										} else if (props.highlightGroups[key].includes(index)) {
+											return key;
+										}
 
-										return key;
-									}
-
-									return ""
-								})}
+										return ""
+									})}
 							/>
 						)}
 					</VSCodeDataGrid>

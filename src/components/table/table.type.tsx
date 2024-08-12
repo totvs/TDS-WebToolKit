@@ -49,7 +49,7 @@ export type TTdsTableProps = {
 	id?: string;
 	columns?: TTdsTableColumn[],
 	highlightRows?: number[];
-	highlightGroups?: Record<string, number[]>;
+	highlightGroups?: Record<string, number[]> | Record<string, (row: any[], index: number) => boolean>;
 	onClick?: TTdsOnClickTableCell;
 	//onKeyCapture?: TTdsOnCaptureKey;
 }

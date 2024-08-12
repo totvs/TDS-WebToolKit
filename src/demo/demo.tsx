@@ -38,6 +38,7 @@ export function Demo() {
           <VSCodeButton onClick={() => setDemo(6)}>TdsTable</VSCodeButton>
           <VSCodeButton onClick={() => setDemo(7)}>TdsTable (highlightRows)</VSCodeButton>
           <VSCodeButton onClick={() => setDemo(8)}>TdsTable (extraClass)</VSCodeButton>
+          <VSCodeButton onClick={() => setDemo(9)}>TdsTable (zebra)</VSCodeButton>
         </div>
         <div className="demo-right-side" id="root">
           {demo == 0 && <>
@@ -57,7 +58,12 @@ export function Demo() {
           {demo == 8 && <DemoTable highlightGroups={{
             "demo-table-g1": [0, 1, 2],
             "demo-table-g2": [6, 7, 8],
-          }} />}
+          }}
+          />}
+          {demo == 9 && <DemoTable highlightGroups={{
+            "demo-table-g1": (row, index) => index % 2 == 0,
+          }}
+          />}
         </div>
       </TdsPage>
       {/* <div className="demo-console" id="demo-console">
