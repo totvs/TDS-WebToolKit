@@ -158,6 +158,7 @@ export type TdsFieldProps = {
 	rules?: RegisterOptions<FieldValues, string>;
 	//https://github.com/microsoft/vscode-webview-ui-toolkit/blob/main/src/react/README.md#use-oninput-instead-of-onchange-to-handle-keystrokes
 	onInput?: any;
+	onChange?: any;
 }
 
 /**

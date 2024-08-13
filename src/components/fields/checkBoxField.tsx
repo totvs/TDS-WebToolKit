@@ -36,7 +36,13 @@ export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactEleme
 		>
 			<VSCodeCheckbox
 				checked={value}
-				onChange={e => onChange((e.target as Checkbox).checked)}>
+				onChange={e => {
+					onChange((e.target as Checkbox).checked);
+
+					if (props.onChange) {
+						props.onChange(e);
+					}
+				}}>
 				{mdToHtml(props.label)}
 				{props.info && <PopupMessage field={{ ...props, label: "" }} fieldState={fieldState} />}
 			</VSCodeCheckbox>
