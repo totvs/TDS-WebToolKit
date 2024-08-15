@@ -193,13 +193,16 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 								extraClassName={
 									Object.keys(props.highlightGroups || []).map((key: string) => {
 										if (typeof props.highlightGroups[key] === "function") {
-											if (props.highlightGroups[key](row, index)) {
+											const highlightGroups: Record<NamedCurve, Function> = props.highlightGroups as Record<NamedCurve, Function>
+											if (highlightGroups[key](row, index)) {
 												return key;
 											}
-										} else if (props.highlightGroups[key].includes(index)) {
-											return key;
+										} else {
+											const highlightGroups: Record<NamedCurve, number[]> = props.highlightGroups as Record<NamedCurve, number[]>
+											if (highlightGroups[key].includes(index)) {
+												return key;
+											}
 										}
-
 										return ""
 									})}
 							/>
