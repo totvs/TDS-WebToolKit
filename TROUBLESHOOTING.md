@@ -5,7 +5,7 @@
 > Verifique se o seu problema está na lista de problemas conhecidos e se existe uma solução de contorno para ele. Caso contrário abra uma nova **Ocorrência** e adicione o maior número de informações possíveis (veja abaixo na seção **"Informações importantes"**) para ajudar a identificar a causa do problema.
 > **Ocorrências** abertas sem as **informações importantes** serão analisadas somente após receberem tais informações.
 
-## Obtendo mensagem ``Invalid hook call. Hooks can only be called inside of the body..``
+## ``Invalid hook call. Hooks can only be called inside of the body..``
 
 Essa ocorrência pode ocorrer por vários motivos. No caso dela acontecer ao usar essa extensão/biblioteca, pode tentar corrigir adicionando a propriedades ``alias`` no ``webpack.config.js`` como mostrado abaixo:
 
@@ -22,3 +22,7 @@ Essa ocorrência pode ocorrer por vários motivos. No caso dela acontecer ao usa
 ```
 
 Fonte: [Hooks + multiple instances of React](https://github.com/facebook/react/issues/13991), acessado 06/2024.
+
+## ``Error: An instance of the VS Code API has already been acquired``
+
+A extensão **TDS-WebToolkit** já define um  acesso à API do **VSCode**, use ``tdsVscode`` em vez de acessar a API diretamente.
