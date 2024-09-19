@@ -2,7 +2,7 @@
   "name": "@totvs/tds-webtoolkit",
   "displayName": "TDS-WebToolkit",
   "description": "Standard UI for TDS products",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "license": "Apache-2.0",
   "publisher": "TOTVS",
   "author": {
@@ -27,7 +27,7 @@
     "release": "npx standard-version",
     "tag": "git push --follow-tags",
     "to_publish": "npm publish",
-    "prerelease": "npm run build",
+    "prerelease": "npm run compile",
     "---MISC---": ""
   },
   "dependencies": {
