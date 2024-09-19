@@ -1,14 +1,9 @@
 # TDS-WebToolKit, standard UI for TDS products
 
 <!-- prettier-ignore-start -->
-[![GitHub license](https://img.shields.io/github/license/totvs/tds-gaia?style=plastic)](https://github.com/totvs/tds-gaia/blob/master/LICENSE)
-![Version](https://img.shields.io/visual-studio-marketplace/v/TOTVS.tds-gaia)
-![Installs](https://img.shields.io/visual-studio-marketplace/i/TOTVS.tds-gaia)
-![Downloads](https://img.shields.io/visual-studio-marketplace/d/TOTVS.tds-gaia)
-![Rating](https://img.shields.io/visual-studio-marketplace/stars/TOTVS.tds-gaia)
-[![GitHub issues](https://img.shields.io/github/issues/totvs/tds-gaia?style=plastic)](https://github.com/totvs/tds-gaia/issues)
-[![GitHub forks](https://img.shields.io/github/forks/totvs/tds-gaia?style=plastic)](https://github.com/totvs/tds-gaia/network)
-![Visual Studio Marketplace Last Updated](https://img.shields.io/visual-studio-marketplace/last-updated/TOTVS.tds-gaia)
+[![GitHub license](https://img.shields.io/github/license/totvs/tds-webtoolKit?style=plastic)](https://github.com/totvs/tds-webtoolKit/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/totvs/tds-webtoolKit?style=plastic)](https://github.com/totvs/tds-webtoolKit/issues)
+[![GitHub forks](https://img.shields.io/github/forks/totvs/tds-webtoolKit?style=plastic)](https://github.com/totvs/tds-webtoolKit/network)
 <!-- markdownlint-disable -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg)](#contributors-)
