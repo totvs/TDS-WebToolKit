@@ -50,6 +50,7 @@ export type TTdsTableProps = {
 	columns?: TTdsTableColumn[],
 	highlightRows?: number[];
 	highlightGroups?: Record<string, number[]> | Record<string, (row: any[], index: number) => boolean>;
+	onCustomBody?: (dataSource: any[]) => React.ReactElement;
 	onClick?: TTdsOnClickTableCell;
 	//onKeyCapture?: TTdsOnCaptureKey;
 }

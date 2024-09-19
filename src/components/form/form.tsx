@@ -319,8 +319,9 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 							if (action.type == "link") {
 								return (<VSCodeLink
 									key={action.id}
-									href={action.href}>{action.caption}
+									href={action.href}
 									title={action.hint}
+								>{action.caption}
 								</VSCodeLink>)
 							} else if (action.type == "checkbox") {
 								return (<VSCodeCheckbox

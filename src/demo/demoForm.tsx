@@ -18,7 +18,7 @@ import "./demoForm.css";
 import React from "react";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilities/common-command-webview";
-import { setDataModel, setErrorModel, TdsForm } from "../components/form/form";
+import { getDefaultActionsForm, IFormAction, setDataModel, setErrorModel, TdsForm } from "../components/form/form";
 import { TdsPage } from "../components/page/page";
 import { TdsTextField } from "../components/fields/textField";
 import { tdsVscode } from "../utilities/vscodeWrapper";
@@ -37,7 +37,12 @@ type TDemoModel = {
     age: number;
 
 }
-export default function DemoForm() {
+
+type TDemoFormProps = {
+    customActions?: boolean;
+}
+
+export default function DemoForm(props: TDemoFormProps) {
     const methods = useForm<TDemoModel>({
         defaultValues: {
             name: "",
@@ -45,12 +50,6 @@ export default function DemoForm() {
         },
         mode: "all"
     })
-
-    // const { fields, remove, insert } = useFieldArray(
-    //     {
-    //         control: methods.control,
-    //         name: "includePaths"
-    //     });
 
     const onSubmit: SubmitHandler<TDemoModel> = (data) => {
         sendSaveAndClose(data);
@@ -81,29 +80,32 @@ export default function DemoForm() {
         }
     }, []);
 
-    // function addIncludePath(folder: string, index: number) {
-
-    //     if (methods.getValues().includePaths.findIndex((includePath: TIncludePath) => includePath.path.toLowerCase() == folder.toLowerCase()) == -1) {
-    //         remove(index);
-    //         insert(index, { path: folder });
-    //     };
-    // }
-
-    // function removeIncludePath(index: number) {
-    //     remove(index);
-    //     insert(index + 1, { path: "" });
-    // }
-
-    const model: TDemoModel = methods.getValues();
-    //const indexFirstPathFree: number = model.includePaths.findIndex((row: TIncludePath) => row.path == "");
+    const customActions: IFormAction[] = [{
+        id: 0,
+        caption: tdsVscode.l10n.t("Link"),
+        type: "link",
+        href: "command:tds-gaia.clear",
+    }, {
+        id: 1,
+        caption: tdsVscode.l10n.t("Button"),
+        type: "button",
+        href: "command:tds-gaia.help",
+    },
+        , {
+        id: 1,
+        caption: tdsVscode.l10n.t("Checkbox"),
+        type: "checkbox",
+        href: "command:tds-gaia.help",
+    }];
 
     return (
         <TdsPage title="Demo: TdsForm" showFooter={true}>
             <TdsForm<TDemoModel>
                 methods={methods}
                 onSubmit={onSubmit}
-                description={"Principais componentes de um formulários"}>
-
+                description={props.customActions ? tdsVscode.l10n.t("Customized Food Operations") : tdsVscode.l10n.t("Main components of a form")}
+                actions={props.customActions ? customActions : undefined}
+            >
                 <section className="tds-row-container" >
                     <TdsTextField
                         name="name"
@@ -132,57 +134,59 @@ export default function DemoForm() {
                     />
                 </section>
 
-                <section className="tds-row-container" >
-                    <TdsTextField
-                        name="name"
-                        label={tdsVscode.l10n.t("First Column")}
-                        rules={{ required: true }}
-                        placeholder="First Columns: sempre ocupa o máximo da largura"
-                    />
-                    <TdsTextField
-                        name="name"
-                        label={tdsVscode.l10n.t("Second Column")}
-                        rules={{ required: true }}
-                        placeholder="Second Column"
-                    />
-                </section>
+                {!props.customActions && <>
+                    <section className="tds-row-container" >
+                        <TdsTextField
+                            name="name"
+                            label={tdsVscode.l10n.t("First Column")}
+                            rules={{ required: true }}
+                            placeholder="First Columns: sempre ocupa o máximo da largura"
+                        />
+                        <TdsTextField
+                            name="name"
+                            label={tdsVscode.l10n.t("Second Column")}
+                            rules={{ required: true }}
+                            placeholder="Second Column"
+                        />
+                    </section>
 
-                <section className="tds-row-container" >
-                    <TdsTextField
-                        name="name"
-                        label={tdsVscode.l10n.t("First Column")}
-                        rules={{ required: true }}
-                        placeholder="First Columns: sempre ocupa o máximo da largura"
-                    />
+                    <section className="tds-row-container" >
+                        <TdsTextField
+                            name="name"
+                            label={tdsVscode.l10n.t("First Column")}
+                            rules={{ required: true }}
+                            placeholder="First Columns: sempre ocupa o máximo da largura"
+                        />
 
-                    <TdsTextField
-                        name="name"
-                        label={tdsVscode.l10n.t("Second Column")}
-                        rules={{ required: true }}
-                        placeholder="Second Column"
-                    />
+                        <TdsTextField
+                            name="name"
+                            label={tdsVscode.l10n.t("Second Column")}
+                            rules={{ required: true }}
+                            placeholder="Second Column"
+                        />
 
-                    <TdsCheckBoxField
-                        name="age"
-                        label={tdsVscode.l10n.t("CheckBox")}
-                    />
-                </section>
+                        <TdsCheckBoxField
+                            name="age"
+                            label={tdsVscode.l10n.t("CheckBox")}
+                        />
+                    </section>
 
-                <section className="tds-row-container" >
-                    <TdsSelectionField
-                        name="name"
-                        label={tdsVscode.l10n.t("Selection List")}
-                        options={[
-                            { value: "1", text: "Option 1" },
-                            { value: "2", text: "Option 2" },
-                            { value: "3", text: "Option 3" },
-                            { value: "4", text: "Option 4" },
-                            { value: "5", text: "Option 5" },
-                        ]}
-                    />
+                    <section className="tds-row-container" >
+                        <TdsSelectionField
+                            name="name"
+                            label={tdsVscode.l10n.t("Selection List")}
+                            options={[
+                                { value: "1", text: "Option 1" },
+                                { value: "2", text: "Option 2" },
+                                { value: "3", text: "Option 3" },
+                                { value: "4", text: "Option 4" },
+                                { value: "5", text: "Option 5" },
+                            ]}
+                        />
 
-                    <TdsSelectionFileField />
-                </section>
+                        <TdsSelectionFileField />
+                    </section></>
+                }
             </TdsForm>
         </TdsPage>
     );

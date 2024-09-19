@@ -180,8 +180,8 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 									</VSCodeDataGridCell>)}
 							</VSCodeDataGridRow>
 						}
-
-						{props.dataSource.map((row: any, index: number) =>
+						{props.onCustomBody && props.onCustomBody(props.dataSource)}
+						{!props.onCustomBody && props.dataSource.map((row: any, index: number) =>
 							<BuildRow
 								id={`${props.id}_table`}
 								key={`${props.id}_row_${index}`}

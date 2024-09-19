@@ -2,7 +2,7 @@
   "name": "@totvs/tds-webtoolkit",
   "displayName": "TDS-WebToolkit",
   "description": "Standard UI for TDS products",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "license": "Apache-2.0",
   "publisher": "TOTVS",
   "author": {
@@ -17,10 +17,9 @@
   "scripts": {
     "clean": "npx -y rimraf -v dist",
     "--COMPILE--": "",
-    "--compile": "webpack --mode=development",
     "compile": "tsc",
     "watch": "tsc -watch",
-    "copy-files": "npx copyfiles -u 1 src/**/*.css dist/",
+    "copy-files": "npx -y copyfiles -u 1 src/**/*.css dist/",
     "start:vite": "vite",
     "-- BUILD --": "",
     "build": "npm run clean && webpack --mode=production",
@@ -28,7 +27,7 @@
     "release": "npx standard-version",
     "tag": "git push --follow-tags",
     "to_publish": "npm publish",
-    "prerelease": "npm run compile",
+    "prerelease": "npm run build",
     "---MISC---": ""
   },
   "dependencies": {

@@ -7,6 +7,8 @@ import { Checkbox } from "@vscode/webview-ui-toolkit";
 
 type TdsCheckBoxFieldProps = TdsFieldProps;
 
+//TODO: colocar labelOn, labelOff e label
+
 /**
  *
  * - Uso de _hook_ ``useFieldArray`` e propriedade ``disabled``:

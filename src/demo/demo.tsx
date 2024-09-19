@@ -22,6 +22,7 @@ import { DemoPage } from "./demoPage";
 import DemoForm from "./demoForm";
 import DemoDatagrid from "./demoDatagrid";
 import DemoTable from "./demoTable";
+import DemoTableCustomBody from "./demoTableCustomBody";
 
 export function Demo() {
   const [demo, setDemo] = React.useState<number>(0);
@@ -39,6 +40,8 @@ export function Demo() {
           <VSCodeButton onClick={() => setDemo(7)}>TdsTable (highlightRows)</VSCodeButton>
           <VSCodeButton onClick={() => setDemo(8)}>TdsTable (extraClass)</VSCodeButton>
           <VSCodeButton onClick={() => setDemo(9)}>TdsTable (zebra)</VSCodeButton>
+          <VSCodeButton onClick={() => setDemo(10)}>TdsForm (custom actions)</VSCodeButton>
+          <VSCodeButton onClick={() => setDemo(11)}>TdsTable (custom body)</VSCodeButton>
         </div>
         <div className="demo-right-side" id="root">
           {demo == 0 && <>
@@ -64,6 +67,8 @@ export function Demo() {
             "demo-table-g1": (row, index) => index % 2 == 0,
           }}
           />}
+          {demo == 10 && <DemoForm customActions={true} />}
+          {demo == 11 && <DemoTableCustomBody />}
         </div>
       </TdsPage>
       {/* <div className="demo-console" id="demo-console">
