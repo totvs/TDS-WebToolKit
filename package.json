@@ -2,7 +2,7 @@
   "name": "@totvs/tds-webtoolkit",
   "displayName": "TDS-WebToolkit",
   "description": "Standard UI for TDS products",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "license": "Apache-2.0",
   "publisher": "TOTVS",
   "author": {
