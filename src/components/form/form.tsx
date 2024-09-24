@@ -113,6 +113,7 @@ export function getCloseActionForm(): IFormAction {
  * @property {string} [id] - An optional unique identifier for the form.
  * @property {UseFormReturn<M>} methods - The form methods returned by the `useForm` hook.
  * @property {(data: any) => void} onSubmit - The function to call when the form is submitted.
+ * @property {() => void} onReset - The function to call when the form is reset after reset default executed.
  * @property {IFormAction[]} [actions] - An optional array of form action buttons.
  * @property {React.ReactNode} children - The child components of the form.
  * @property {boolean} [isProcessRing] - An optional flag to show a processing indicator when necessary.
@@ -122,6 +123,7 @@ type TDSFormProps<M extends FieldValues> = {
 	id?: string;
 	methods: UseFormReturn<M, any, undefined>;
 	onSubmit: (data: any) => void;
+	onReset?: () => void;
 	actions?: IFormAction[];
 	children: any
 	isProcessRing?: boolean;
@@ -262,7 +264,12 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 			<form className="tds-form"
 				id={id}
 				onSubmit={methods.handleSubmit(props.onSubmit)}
-				onReset={() => methods.reset()}
+				onReset={(e) => {
+					e.stopPropagation();
+					e.preventDefault();
+					methods.reset();
+					props.onReset!();
+				}}
 				autoComplete="off"
 			>
 				{props.description && <h3>{mdToHtml(props.description)}</h3>}

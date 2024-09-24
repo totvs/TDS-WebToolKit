@@ -19,13 +19,11 @@ import { TGroupingInfo, TTdsDataGridColumnDef } from "./dataGrid.type";
 export type TDataGridState = React.Reducer<TState, TAction>;
 
 type TState = {
+	timeStamp: number;
 	isReady: boolean;
 	itemOffset: number;
 	currentPage: number;
 	pageSize: number;
-	totalItems: number;
-	//dataSource: any[] | undefined;
-	//dataSourceOriginal: any[];
 	columnsDef: TTdsDataGridColumnDef[]
 	allFieldsFilter: string;
 	fieldsFilter: Record<string, string> | undefined;
@@ -40,21 +38,22 @@ type TAction =
 	| { type: "set_current_page", value: number }
 	| { type: "set_page_size", value: number }
 	| { type: "set_columns_def", columnsDef: TTdsDataGridColumnDef[] }
-	| { type: "set_data_source", dataSource: any[] | undefined }
+	//| { type: "set_data_source", dataSource: any[] | undefined }
 	| { type: "set_all_fields_filter", filter: string | undefined }
 	| { type: "set_fields_filter", filter: Record<string, string> | undefined }
 	| { type: "set_sorted_column", columnIndex: number, direction: string }
 	| { type: "set_show_fields_filter", value: boolean }
 	| { type: "set_grouping_info", grouping: TGroupingInfo }
+	| { type: "set_data_source", dataSource: any[] }
 	;
 
 export function dataGridState(state: TState, action: TAction) {
-	//let update: boolean = false;
+	//state.updateDataSource = false;
 
 	switch (action.type) {
 		case "is_ready":
 			state.isReady = action.value == undefined ? true : action.value;
-			//update = state.isReady;
+			state.timeStamp = Date.now();
 			break;
 
 		case "set_item_offset":
@@ -63,50 +62,51 @@ export function dataGridState(state: TState, action: TAction) {
 
 		case "set_current_page":
 			state.currentPage = action.value;
-			//update = true;
+			state.timeStamp = Date.now();
 			break;
 
 		case "set_page_size":
 			state.pageSize = action.value;
-			//update = true;
+			state.timeStamp = Date.now();
 			break;
 
 		case "set_show_fields_filter":
 			state.fieldsFilter = undefined;
 			state.showFieldsFilter = action.value;
-			//update = true;
+			state.timeStamp = Date.now();
 			break;
 
 		case "set_grouping_info":
 			state.groupingInfo = action.grouping;
-			//update = true;
+			state.timeStamp = Date.now();
 			break;
 
 		case "set_sorted_column":
 			state.columnsDef[action.columnIndex].sortDirection = action.direction as any;
 			state.sortedColumn = state.columnsDef[action.columnIndex];
-			//update = true;
+			state.timeStamp = Date.now();
 			break;
 
 		case "set_columns_def":
 			state.columnsDef = [...action.columnsDef];
-			//update = true;
 			break;
 
-		case "set_data_source":
-			console.log("set_data_source", action.dataSource);
-			//state.dataSourceOriginal = [...action.dataSource];
-			//update = true;
-			break;
+		// case "set_data_source":
+		// 	console.log("set_data_source", action.dataSource);
+		// 	if (state.updateDataSource) {
+		// 		state.dataSource = [...action.dataSource];
+		// 		state.updateDataSource = false;
+		// 	}
+		// 	break;
 
 		case "set_all_fields_filter":
 			state.allFieldsFilter = action.filter;
-			//update = true;
+			state.timeStamp = Date.now();
 			break;
 
 		case "set_fields_filter":
 			state.fieldsFilter = action.filter;
-			//update = true;
+			state.timeStamp = Date.now();
 			break;
 
 		default:
@@ -114,16 +114,6 @@ export function dataGridState(state: TState, action: TAction) {
 
 			return state;
 	}
-
-	//state = {
-		//...state,
-		//timeStamp: new Date(),
-		// dataSource: prepareDataSource(state.columnsDef, state.dataSourceOriginal,
-		// 	state.allFieldsFilter, state.fieldsFilter, state.groupingInfo,
-		// 	state.sortedColumn).slice(state.itemOffset, state.itemOffset + state.pageSize)
-	//}
-
-	//state.totalItems = state.dataSource.length;
 
 	return state;
 }
