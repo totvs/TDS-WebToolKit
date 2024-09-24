@@ -713,10 +713,10 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 					/>}
 			</div>
 
-			<div className="tds-data-grid-content" key={`${props.id}_content_${keyContent}`}>
+			<div className="tds-data-grid-content" key={`${props.id}_content`}>
 				<VSCodeDataGrid
 					id={`${props.id}_grid`}
-					key={`${props.id}_grid_${keyContent}`}
+					key={`${props.id}_grid_`}
 					generate-header="sticky"
 					grid-template-columns={
 						state.columnsDef
