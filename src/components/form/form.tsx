@@ -242,9 +242,6 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 		(methods.formState.errors === undefined || Object.keys(methods.formState.errors).length === 0);
 	let actions: IFormAction[] = props.actions ? props.actions : getDefaultActionsForm();
 
-	// console.log("methods.formState", methods.formState)
-	// console.log("methods.formState.errors", methods.formState.errors)
-
 	if (actions.length == 1) {
 		actions[0].appearance = "primary"
 	}
