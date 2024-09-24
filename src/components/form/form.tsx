@@ -17,7 +17,7 @@ limitations under the License.
 import "./form.css";
 import React from "react";
 import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
-import { FieldValues, FormProvider, RegisterOptions, UseFormReturn, UseFormSetError, UseFormSetValue, useForm } from "react-hook-form";
+import { DefaultValues, FieldValues, FormProvider, RegisterOptions, UseFormReturn, UseFormSetError, UseFormSetValue, useForm } from "react-hook-form";
 import { VSCodeButton, VSCodeCheckbox, VSCodeDivider, VSCodeLink } from "@vscode/webview-ui-toolkit/react";
 import { sendClose } from "../../utilities/common-command-webview";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
@@ -242,6 +242,9 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 		(methods.formState.errors === undefined || Object.keys(methods.formState.errors).length === 0);
 	let actions: IFormAction[] = props.actions ? props.actions : getDefaultActionsForm();
 
+	// console.log("methods.formState", methods.formState)
+	// console.log("methods.formState.errors", methods.formState.errors)
+
 	if (actions.length == 1) {
 		actions[0].appearance = "primary"
 	}
@@ -267,8 +270,7 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 				onReset={(e) => {
 					e.stopPropagation();
 					e.preventDefault();
-					methods.reset();
-					props.onReset!();
+					methods.reset(methods.formState.defaultValues as DefaultValues<M>);
 				}}
 				autoComplete="off"
 			>
