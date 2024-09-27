@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 export type TTdsTableColumn = (
-	string |
 	{
-		label: string;
-		type: "string" | "number" | "boolean" | "date" | "time" | "datetime";
+		name: string;
+		label?: string;
+		type?: "string" | "number" | "boolean" | "date" | "time" | "datetime";
 		displayType?: "date" | "time" | "datetime" | "int" | "float" | "hex" | "HEX";
 		width?: string | number;
 		align?: "left" | "center" | "right";

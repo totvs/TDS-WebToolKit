@@ -16,15 +16,18 @@ body * {
 
 .demo-left-side {
     background-color: slategrey;
-    /* flex-grow: 1; */
     flex-shrink: 1;
-    /* align-items: flex-start; */
+    align-items: flex-start;
     order: 0;
     height: 90vh;
     max-height: 90vh;
     flex-direction: row;
-    width: min-content;
+    width: max-content;
     padding: 10px;
+}
+
+.demo-left-side>vscode-button {
+    margin-bottom: 5px;
 }
 
 .demo-right-side {

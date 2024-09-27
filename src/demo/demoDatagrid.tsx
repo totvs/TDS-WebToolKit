@@ -30,6 +30,7 @@ enum ReceiveCommandEnum {
 type ReceiveCommand = ReceiveMessage<CommonCommandEnum & ReceiveCommandEnum, TDemoModel>
 
 type TCountry = {
+    mark: boolean,
     name: string;
     capital: string;
     population: number;
@@ -39,21 +40,31 @@ type TCountry = {
 }
 
 type TDemoModel = {
-    datasource: TCountry[];
+    dataSource: TCountry[];
 }
 
 type TDemoDataGridProps = {
-    multiRow: boolean;
+    multiRow?: boolean;
+    selectRow?: boolean;
     locale?: string;
 }
 
-export default function DemoDatagrid(props: TDemoDataGridProps) {
+export default function DemoDataGrid(props: TDemoDataGridProps) {
+    if (props.selectRow) {
+        return dataGridSelectRow(props);
+    } else {
+        return dataGrid(props)
+    }
+}
+
+function dataGrid(props: TDemoDataGridProps) {
     const methods = useForm<TDemoModel>({
         defaultValues: {
-            datasource: countries.map((country) => {
+            dataSource: countries.map((country) => {
                 return {
                     ...country,
-                    independenceDate: new Date(`${country.independenceDate}T00:00:00`)
+                    independenceDate: new Date(`${country.independenceDate}T00:00:00`),
+                    mark: true
                 }
             })
         },
@@ -155,7 +166,7 @@ export default function DemoDatagrid(props: TDemoDataGridProps) {
 
                 <TdsDataGrid id={"result_dataGrid"}
                     columnsDef={columnsDef()}
-                    dataSource={model.datasource}
+                    dataSource={model.dataSource}
                     options={{
                         grouping: true,
                         pageSize: 10,
@@ -167,3 +178,129 @@ export default function DemoDatagrid(props: TDemoDataGridProps) {
     );
 }
 
+
+function dataGridSelectRow(props: TDemoDataGridProps) {
+    const methods = useForm<TDemoModel>({
+        defaultValues: {
+            dataSource: countries.map((country) => {
+                return {
+                    ...country,
+                    independenceDate: new Date(`${country.independenceDate}T00:00:00`),
+                    mark: true
+                }
+            })
+        },
+        mode: "all"
+    })
+
+    const onSubmit: SubmitHandler<TDemoModel> = (data) => {
+        sendSaveAndClose(data);
+    }
+
+    React.useEffect(() => {
+        const listener = (event: any) => {
+            const command: ReceiveCommand = event.data as ReceiveCommand;
+
+            switch (command.command) {
+                case CommonCommandEnum.UpdateModel:
+                    const model: TDemoModel = command.data.model;
+                    const errors: any = command.data.errors;
+
+                    setDataModel<TDemoModel>(methods.setValue, model);
+                    setErrorModel(methods.setError, errors);
+
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        window.addEventListener('message', listener);
+
+        return () => {
+            window.removeEventListener('message', listener);
+        }
+    }, []);
+
+    function columnsDef(): TTdsDataGridColumnDef[] {
+        return [
+            {
+                type: "boolean",
+                name: "mark",
+                label: tdsVscode.l10n.t("Mark"),
+                width: "1fr",
+                rowGroup: props.multiRow ? 0 : undefined,
+                readOnly: false
+            },
+            {
+                type: "string",
+                name: "name",
+                label: tdsVscode.l10n.t("Country"),
+                width: "8fr",
+                sortDirection: "asc",
+                rowGroup: props.multiRow ? 0 : undefined,
+            },
+            {
+                type: "string",
+                name: "capital",
+                label: tdsVscode.l10n.t("Capital"),
+                width: "10fr",
+                rowGroup: props.multiRow ? 0 : undefined,
+            },
+            {
+                type: "number",
+                name: "population",
+                label: tdsVscode.l10n.t("Population"),
+                width: "5fr",
+                rowGroup: props.multiRow ? 1 : undefined,
+            },
+            {
+                type: "number",
+                name: "area",
+                label: tdsVscode.l10n.t("Area"),
+                width: "4fr",
+                rowGroup: props.multiRow ? 1 : undefined,
+            },
+            {
+                type: "string",
+                name: "continent",
+                label: tdsVscode.l10n.t("Continent"),
+                width: "10fr",
+                grouping: true,
+                rowGroup: props.multiRow ? 0 : undefined,
+            },
+            {
+                type: "datetime",
+                name: "independenceDate",
+                label: tdsVscode.l10n.t("Independence"),
+                width: "10fr",
+                displayType: "datetime",
+                rowGroup: props.multiRow ? 1 : undefined,
+            }
+        ];
+    }
+
+    const model: TDemoModel = methods.getValues();
+    //const indexFirstPathFree: number = model.includePaths.findIndex((row: TIncludePath) => row.path == "");
+
+    //    actions={formActions}
+    return (
+        <TdsPage title="Demo: TdsDataGrid" >
+            <TdsForm<TDemoModel>
+                methods={methods}
+                actions={[]}
+                onSubmit={onSubmit}>
+
+                <TdsDataGrid id={"result_dataGrid"}
+                    columnsDef={columnsDef()}
+                    dataSource={model.dataSource}
+                    options={{
+                        grouping: true,
+                        pageSize: 10,
+                        pageSizeOptions: [5, 10, 15, 20, 25, 50, 100],
+                        rowSeparator: props.multiRow
+                    }} />
+            </TdsForm>
+        </TdsPage>
+    );
+}

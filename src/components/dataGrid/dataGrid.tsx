@@ -59,7 +59,6 @@ type TBuildRowsProps = {
 }
 
 function BuildRows(props: TBuildRowsProps) {
-	const forceRefresh: number = Date.now();
 	const buildRow = (row: any, index: number, itemOffset: number): React.ReactElement[] => {
 		let reactElements: React.ReactElement[] = [];
 		let rowNumber: number = 0;
@@ -81,8 +80,7 @@ function BuildRows(props: TBuildRowsProps) {
 										fieldDef: column,
 										row: row,
 										fieldName: `${props.id}.${index + itemOffset}.${column.name}`
-									},
-									forceRefresh)
+									})
 								}
 							</VSCodeDataGridCell>
 						))}
@@ -117,8 +115,7 @@ function BuildRows(props: TBuildRowsProps) {
 		return reactElements;
 	}
 
-	return props.rows
-		.map((row: any, index: number) => buildRow(row, index, props.itemOffset))
+	return props.rows.map((row: any, index: number) => buildRow(row, index, props.itemOffset))
 }
 
 function FieldFilter(props: TFieldFilterProps) {
@@ -175,11 +172,15 @@ function FieldFilter(props: TFieldFilterProps) {
 	)
 }
 
-function fieldData(props: TFieldDataProps, forceRefresh: number = -1) {
+function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 	const methods = useFormContext();
 	const column = props.fieldDef;
 	const row = props.row;
 	let alignClass: string | undefined = column.align ? `tds-text-${column.align}` : undefined;
+
+
+	const forceRefresh = 0;
+
 
 	//Campo DATE, TIME e DATETIME
 	if ((column.type == "date") || (column.type == "time") || (column.type == "datetime")) {
@@ -189,7 +190,7 @@ function fieldData(props: TFieldDataProps, forceRefresh: number = -1) {
 			<VSCodeTextField
 				className={alignClass}
 				data-type={column.type}
-				key={`${props.fieldName}${forceRefresh > 0 ? forceRefresh : ""} `}
+				key={`${props.fieldName}${forceRefresh > 0 ? forceRefresh : ""}`}
 				readOnly={column.readOnly == undefined ? true : column.readOnly}
 				value={text}
 				title={text.startsWith("Invalid") ? row[column.name] : text}
@@ -204,20 +205,24 @@ function fieldData(props: TFieldDataProps, forceRefresh: number = -1) {
 		return (
 			<VSCodeCheckbox
 				className={alignClass}
-				key={`${props.fieldName}${forceRefresh > 0 ? forceRefresh : ""} `}
+				key={`${props.fieldName}${forceRefresh > 0 ? forceRefresh : ""}`}
 				readOnly={column.readOnly == undefined ? true : column.readOnly}
-				checked={column.lookup && column.lookup[row[column.name]]
-					? column.lookup[row[column.name]] : row[column.name]}
+				checked={methods.getValues(props.fieldName) || false}
 				onChange={(e) => {
 					e.preventDefault();
+					e.stopPropagation();
 					const target = e.target as HTMLInputElement;
-					methods.setValue(props.fieldName, target.checked ? true : false);
-					column.onChange!(e, props.fieldName, row);
 
+					methods.setValue(props.fieldName, target.checked ? true : false);
+					if (column.onChange) {
+						column.onChange(e, props.fieldName, row);
+					}
 					return target.checked;
-				}}
+				}
+				}
 			></VSCodeCheckbox>
 		)
+
 	}
 
 	const text: string = (column.lookup && column.lookup[row[column.name]])
@@ -498,16 +503,11 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 	const [dataSource, setDataSource] = React.useState([]);
 	const methods = useFormContext();
 	const [state, dispatch] = React.useReducer<TDataGridState>(dataGridState, {
-		// updateDataSource: false,
-		// dataSource: [],
 		timeStamp: Date.now(),
 		isReady: false,
 		itemOffset: 0,
 		currentPage: 0,
 		pageSize: props.options.pageSize || 50,
-		//totalItems: 0,
-		//dataSource: props.dataSource,
-		//dataSourceOriginal: props.dataSource,
 		columnsDef: props.columnsDef.map((columnDef: TTdsDataGridColumnDef) => {
 			columnDef.sortable = columnDef.sortable == undefined ? true : columnDef.sortable;
 			columnDef.sortDirection = columnDef.sortDirection == undefined ? "" : columnDef.sortDirection;
@@ -716,7 +716,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 			<div className="tds-data-grid-content" key={`${props.id}_content`}>
 				<VSCodeDataGrid
 					id={`${props.id}_grid`}
-					key={`${props.id}_grid_`}
+					key={`${props.id}_grid`}
 					generate-header="sticky"
 					grid-template-columns={
 						state.columnsDef
@@ -743,8 +743,8 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 					{((dataSource == undefined) || (dataSource.length == 0)) ?
 						<>No data to show.</>
 						: <BuildRows
-							key={`${props.id}_${keyContent}`}
-							id={`${props.id}_${keyContent}`}
+							key={`${props.id}`}
+							id={`${props.id}`}
 							columnsDef={state.columnsDef}
 							rows={dataSource.slice(state.itemOffset, state.itemOffset + state.pageSize)}
 							rowSeparator={props.options.rowSeparator || false}

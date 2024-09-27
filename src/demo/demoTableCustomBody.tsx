@@ -94,14 +94,17 @@ export default function DemoTableCustomBody(props: TDemoTableCustomBodyProps) {
     function columnsDef(): TTdsTableColumn[] {
         return [
             {
+                name: "country",
                 type: "string",
                 label: tdsVscode.l10n.t("Country/Population"),
             },
             {
+                name: "capital",
                 type: "string",
                 label: tdsVscode.l10n.t("Capital/Area"),
             },
             {
+                name: "continent",
                 type: "number",
                 label: tdsVscode.l10n.t("Continent/Independence"),
             },

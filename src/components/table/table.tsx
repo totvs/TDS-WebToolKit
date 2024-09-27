@@ -32,13 +32,7 @@ type TBuildRowsProps = {
 }
 
 function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColumn, value: any) {
-	const column: TTdsTableColumn =
-		typeof (headerColumn) !== "string"
-			? headerColumn
-			: {
-				label: headerColumn,
-				type: "string"
-			}
+	const column: TTdsTableColumn = headerColumn;
 	let alignClass: string | undefined = column.align !== undefined ? `tds-text-${column.align}` : undefined;
 
 	//Campo BOOLEAN

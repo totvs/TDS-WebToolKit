@@ -31,13 +31,13 @@ enum ReceiveCommandEnum {
 type ReceiveCommand = ReceiveMessage<CommonCommandEnum & ReceiveCommandEnum, TDemoModel>
 
 type TCountry = {
-    name: string;
+    country: string;
     capital: string;
     area: number;
 }
 
 type TDemoModel = {
-    datasource: TCountry[];
+    dataSource: TCountry[];
 }
 
 type TDemoTableProps = {
@@ -48,9 +48,9 @@ type TDemoTableProps = {
 export default function DemoTable(props: TDemoTableProps) {
     const methods = useForm<TDemoModel>({
         defaultValues: {
-            datasource: countries.map((country: any) => {
+            dataSource: countries.map((country: any) => {
                 return {
-                    name: country.name,
+                    country: country.name,
                     capital: country.capital,
                     area: Number.parseInt(country.area)
                 }
@@ -91,14 +91,17 @@ export default function DemoTable(props: TDemoTableProps) {
     function columnsDef(): TTdsTableColumn[] {
         return [
             {
+                name: "country",
                 type: "string",
                 label: tdsVscode.l10n.t("Country"),
             },
             {
+                name: "capital",
                 type: "string",
                 label: tdsVscode.l10n.t("Capital"),
             },
             {
+                name: "area",
                 type: "number",
                 label: tdsVscode.l10n.t("Area"),
             },
@@ -118,7 +121,7 @@ export default function DemoTable(props: TDemoTableProps) {
 
                 <TdsTable id={"result_table"}
                     columns={columnsDef()}
-                    dataSource={model.datasource}
+                    dataSource={model.dataSource}
                     highlightRows={props.highlightRows}
                     highlightGroups={props.highlightGroups}
                 />
