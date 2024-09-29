@@ -64,16 +64,27 @@ function BuildRows(props: TBuildRowsProps) {
 		let rowNumber: number = 0;
 
 		while (rowNumber != -1) {
+			let gridTemplate: string = "";
+
+			props.columnsDef
+				.filter(column => column.visible)
+				.filter((column) => (column.rowGroup || 0) == rowNumber)
+				.map((column, _index: number) => {
+					gridTemplate += ` ${column.width || "1fr"} `;
+				});
+
 			reactElements.push(
 				<VSCodeDataGridRow row-type="default"
-					id={`${props.id}_row_${index + itemOffset}`}
-					key={`${props.id}_row_${index + itemOffset}`}>
+					id={`${props.id}_row_${rowNumber}_${index + itemOffset}`}
+					key={`${props.id}_row_${rowNumber}_${index + itemOffset}`}
+					gridTemplateColumns={gridTemplate}
+				>
 					{props.columnsDef.filter(column => column.visible)
 						.filter(column => (column.rowGroup || 0) == rowNumber)
 						.map((column, indexCol: number) => (
 							<VSCodeDataGridCell
-								id={`${props.id}_cell_${index + itemOffset}${indexCol + 1}`}
-								key={`${props.id}_cell_${index + itemOffset}${indexCol + 1}`}
+								id={`${props.id}_cell_${rowNumber}_${index + itemOffset}${indexCol + 1}`}
+								key={`${props.id}_cell__${rowNumber}_${index + itemOffset}${indexCol + 1}`}
 								grid-column={indexCol + 1}>
 								{fieldData(
 									{
@@ -419,18 +430,31 @@ function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[] {
 
 	if (props.show) {
 		while (rowNumber != -1) {
+			let gridTemplate: string = "";
+
+			props.columnDefs
+				.filter(column => column.visible)
+				.filter((column) => (column.rowGroup || 0) == rowNumber)
+				.map((column, _index: number) => {
+					gridTemplate += ` ${column.width || "1fr"} `;
+				});
+
 			reactElements.push(
-				<VSCodeDataGridRow row-type="default" key={`${props.id}_filter_${0}`}>
+				<VSCodeDataGridRow
+					row-type="default"
+					key={`${props.id}_filter_${rowNumber}_${0}`}
+					gridTemplateColumns={gridTemplate}
+				>
 					{props.columnDefs
 						.filter(column => column.visible)
 						.filter(column => (column.rowGroup || 0) == rowNumber)
 						.map((column, indexCol: number) => (
 							<VSCodeDataGridCell
 								grid-column={indexCol + 1}
-								key={`${props.id}_cell_${indexCol + 1}`}
+								key={`${props.id}_filter_cell_${rowNumber}_${indexCol + 1}`}
 							>
 								<FieldFilter
-									key={`${props.id}_field_filter_${indexCol + 1}`}
+									key={`${props.id}_filter_field_${rowNumber}_${indexCol + 1}`}
 									methods={props.methods}
 									fieldDef={column}
 									values={props.fieldsFilter || {}}
@@ -466,9 +490,19 @@ function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[] {
 			}
 		}
 
+		let gridTemplate: string = "";
+
+		props.columnDefs
+			.filter(column => column.visible)
+			.filter((column) => (column.rowGroup || 0) == rowNumber)
+			.map((column, _index: number) => {
+				gridTemplate += ` ${column.width || "1fr"} `;
+			});
+
 		reactElements.push(
 			<VSCodeDataGridRow row-type="default"
 				key={`${props.id}_filter_separator_${forceRefresh}`}
+				gridTemplateColumns={gridTemplate}
 			>
 				{props.columnDefs.filter(column => column.visible)
 					.filter(column => (column.rowGroup || 0) == 0)
@@ -612,10 +646,21 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 		let rowNumber: number = 0;
 
 		while (rowNumber != -1) {
+			let gridTemplate: string = "";
+
+			columnDefs
+				.filter(column => column.visible)
+				.filter((column) => (column.rowGroup || 0) == rowNumber)
+				.map((column, _index: number) => {
+					gridTemplate += ` ${column.width || "1fr"} `;
+				});
+
 			reactElements.push(
 				<VSCodeDataGridRow
+					gridTemplateColumns={gridTemplate}
 					row-type="header"
-					key={`${props.id}_header`}
+					id={`${props.id}_header_${rowNumber}`}
+					key={`${props.id}_header_${rowNumber}`}
 				>
 					{
 						columnDefs
@@ -625,7 +670,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 								<VSCodeDataGridCell
 									cell-type="columnheader"
 									grid-column={_index + 1}
-									key={`${props.id}_header_column_${_index}`}
+									key={`${props.id}_header_column_${rowNumber}_${_index}`}
 								>
 									{column.label || column.name}
 									{props.options.sortable && column.sortable &&
@@ -718,12 +763,6 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 					id={`${props.id}_grid`}
 					key={`${props.id}_grid`}
 					generate-header="sticky"
-					grid-template-columns={
-						state.columnsDef
-							.filter(column => column.visible)
-							.filter(column => (column.rowGroup || 0) == 0)
-							.map(column => column.width || "1fr").join(" ")
-					}
 				>
 					{buildRowHeader(state.columnsDef)}
 
