@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { VSCodeTextArea, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
-import { ControllerFieldState, UseFormReturn, useController, useFormContext } from "react-hook-form";
+import { ControllerFieldState, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from "../mdToHtml";
@@ -42,6 +42,9 @@ type TdsTextFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
+    if (useFormContext() == null) {
+        console.log("TdsTextField: useFormContext() == null");
+    }
     const { register, control, getValues, getFieldState } = useFormContext();
     const fieldState: ControllerFieldState = getFieldState(props.name);
 
