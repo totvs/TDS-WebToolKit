@@ -266,13 +266,15 @@ function GroupingBlock(props: TGroupingBlockProps) {
 	const groupingFilter = props.groupingInfo.groupingFilter;
 	const groupingValues: Record<string, number> = props.groupingInfo.groupingValues;
 	const values = Object.keys(groupingValues).sort((v1: string, v2: string) => v1.localeCompare(v2));
+	const getValueGrouping = (groupingCol: TTdsDataGridColumnDef, data: string): string => {
+		let result: string = groupingCol.lookup[data]
+			? groupingCol.lookup[data] : data
+		return result.length == 0 ? "(empty)" : result;
+	}
 
 	return (
 		<section className="tds-row-container">
 			<div className="tds-data-grid-grouping">
-				{
-					//<span className="label">{tdsVscode.l10n.t("Group by:")}</span>
-				}
 				<span className="field_name">{groupingCol.label || groupingCol.name}: </span>
 				{values.map((data: string, index: number) => (
 					<VSCodeButton
@@ -291,8 +293,7 @@ function GroupingBlock(props: TGroupingBlockProps) {
 							props.onFilterValues(filter);
 						}}
 					>
-						{groupingCol.lookup && groupingCol.lookup[data]
-							? groupingCol.lookup[data] : data}
+						{groupingCol.lookup && getValueGrouping(groupingCol, data)}
 						<VSCodeBadge>{groupingValues[data]}</VSCodeBadge>
 					</VSCodeButton>
 				))
