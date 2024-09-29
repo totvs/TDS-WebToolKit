@@ -4,3 +4,7 @@
     max-height: 500px;
     margin: auto;
 }
+
+vscode-data-grid-row[id^="result_dataGrid_row_1"] {
+    margin-left: var(--tds-indent-group);
+}
