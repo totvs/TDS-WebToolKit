@@ -16,9 +16,9 @@ limitations under the License.
 
 import "./demoForm.css";
 import React from "react";
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilities/common-command-webview";
-import { getDefaultActionsForm, IFormAction, setDataModel, setErrorModel, TdsForm } from "../components/form/form";
+import { IFormAction, setDataModel, setErrorModel, TdsForm } from "../components/form/form";
 import { TdsPage } from "../components/page/page";
 import { TdsTextField } from "../components/fields/textField";
 import { tdsVscode } from "../utilities/vscodeWrapper";
