@@ -3,6 +3,8 @@ import { ControllerFieldState, useFormContext } from "react-hook-form";
 import { TSendSelectResourceOptions, sendSelectResource } from "../../utilities/common-command-webview";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
+import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { L10n } from './../../utilities/l10n';
 
 type TdsSelectionResourceFieldProps = Omit<TdsFieldProps, "label"> & TSendSelectResourceOptions;
 type TdsSelectionFolderFieldProps = Omit<TdsSelectionResourceFieldProps, "model" | "canSelectMany" | "canSelectFiles" | "canSelectFolders" | "filters">;
@@ -98,12 +100,12 @@ export function TdsSelectionFolderField(props: Partial<TdsSelectionFolderFieldPr
 	return (<TdsSelectionResourceField
 		key={`selection_folder_${props.name}`}
 		name={props.name || "btnSelectionFolder"}
-		title={props.title || "Select Folder"}
+		title={props.title || tdsVscode.l10n.t("_Select Folder")}
+		openLabel={props.openLabel || tdsVscode.l10n.t("_Select Folder")}
 		canSelectFolders={true}
 		canSelectFiles={false}
 		canSelectMany={false}
 		currentFolder={props.currentFolder || ""}
-		openLabel={props.openLabel || "Select Folder"}
 		filters={{}}
 		readOnly={props.readOnly || false}
 		fileSystem={props.fileSystem}
@@ -141,12 +143,12 @@ export function TdsSelectionFileField(props: Partial<TdsSelectionFileFieldProps>
 	return (<TdsSelectionResourceField
 		key={`selection_file_${props.name}`}
 		name={props.name || "btnSelectionFile"}
-		title={props.title || "Select File"}
+		title={props.title || tdsVscode.l10n.t("_Select File")}
+		openLabel={props.openLabel || tdsVscode.l10n.t("_Select File")}
 		canSelectFolders={false}
 		canSelectFiles={true}
 		canSelectMany={props.canSelectMany || false}
 		currentFolder={props.currentFolder || ""}
-		openLabel={props.openLabel || "Select File"}
 		filters={filters || {}}
 		readOnly={props.readOnly || false}
 	/>)

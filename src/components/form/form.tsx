@@ -49,8 +49,8 @@ export function getDefaultActionsForm(): IFormAction[] {
 	return [
 		{
 			id: TdsFormActionsEnum.Save,
-			caption: "Save",
-			hint: tdsVscode.l10n.t("Save the information and close the page"),
+			caption: tdsVscode.l10n.t("_Save"),
+			hint: tdsVscode.l10n.t("_Save the information and close the page"),
 			appearance: "primary", //enter acione o botão
 			type: "submit",
 			isProcessRing: true,
@@ -60,16 +60,16 @@ export function getDefaultActionsForm(): IFormAction[] {
 		},
 		{
 			id: TdsFormActionsEnum.Close,
-			caption: "Close",
-			hint: tdsVscode.l10n.t("Closes the page without saving the information"),
+			caption: tdsVscode.l10n.t("_Close"),
+			hint: tdsVscode.l10n.t("_Closes the page without saving the information"),
 			onClick: () => {
 				sendClose();
 			},
 		},
 		{
 			id: TdsFormActionsEnum.Clear,
-			caption: "Clear",
-			hint: tdsVscode.l10n.t("Reset the fields"),
+			caption: tdsVscode.l10n.t("_Clear"),
+			hint: tdsVscode.l10n.t("_Reset the fields"),
 			type: "reset",
 			visible: false,
 			enabled: (isDirty: boolean, _isValid: boolean) => { // _ evita aviso de não utilizado
@@ -123,7 +123,7 @@ type TDSFormProps<M extends FieldValues> = {
 	id?: string;
 	methods: UseFormReturn<M, any, undefined>;
 	onSubmit: (data: any) => void;
-	onReset?: () => void;
+	onManualReset?: () => void;
 	actions?: IFormAction[];
 	children: any
 	isProcessRing?: boolean;
@@ -265,9 +265,12 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 				id={id}
 				onSubmit={methods.handleSubmit(props.onSubmit)}
 				onReset={(e) => {
-					e.stopPropagation();
 					e.preventDefault();
+
 					methods.reset(methods.formState.defaultValues as DefaultValues<M>);
+					if (props.onManualReset) {
+						props.onManualReset();
+					}
 				}}
 				autoComplete="off"
 			>
@@ -280,8 +283,8 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 
 				<section className="tds-form-footer">
 					<div className="tds-message">
-						{!isValid && <span className={"tds-error"}>{tdsVscode.l10n.t("There is invalid information. See the error by hovering the mouse over the field marking.")}</span>}
-						{isProcessRing && isSubmitting && <><TdsProgressRing /><span>Wait please. Processing...</span></>}
+						{!isValid && <span className={"tds-error"}>{tdsVscode.l10n.t("_There is invalid information. See the error by hovering the mouse over the field marking.")}</span>}
+						{isProcessRing && isSubmitting && <><TdsProgressRing /><span>{tdsVscode.l10n.t("_Wait please. Processing...")}</span></>}
 					</div>
 					<div className="tds-actions">
 						{actions.map((action: IFormAction) => {

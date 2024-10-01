@@ -24,6 +24,8 @@ export class L10n {
   public set translations(value: any) {
     this._translations = value.translations || {};
     this._formatLocale = value.formatLocale || "";
+
+    this.loadInternalTranslations();
   }
 
   public get formatLocale(): string {
@@ -191,6 +193,53 @@ export class L10n {
 
     return result;
   }
+
+  private loadInternalTranslations() {
+    if (this._formatLocale == "pt-BR") {
+      this._translations["_Filter"] = "Filtro";
+      this._translations["_Filters on all columns and can accept regular expressions"] = "Filtros em todas as colunas e aceita expressões regulares";
+      this._translations["_Elements/page"] = "Elementos/página";
+      this._translations["_Save"] = "Salvar";
+      this._translations["_Save the information and close the page"] = "Salva as informações e fecha a página";
+      this._translations["_Close"] = "Fechar";
+      this._translations["_Closes the page without saving the information"] = "Fecha a página sem salvar as informações";
+      this._translations["_Clear"] = "Limpar";
+      this._translations["_Reset the fields"] = "Restaura valores padrões";
+      this._translations["_Select Folder"] = "Selecionar Pasta";
+      this._translations["_Select File"] = "Selecionar Arquivo";
+      this._translations["_There is invalid information. See the error by hovering the mouse over the field marking."] = "Há informações inválidas. Veja o erro passando o mouse sobre a marcação do campo.";
+      this._translations["_Wait please. Processing..."] = "Espere, por favor. Processando...";
+    } else if (this._formatLocale == "es") {
+      this._translations["_Filter"] = "Filtrar";
+      this._translations["_Filters on all columns and can accept regular expressions"] = "Filtros en todas las columnas y puede aceptar expresiones regulares";
+      this._translations["_Elements/page"] = "Elementos/página";
+      this._translations["_Save"] = "Guarde";
+      this._translations["_Save the information and close the page"] = "Guarde la información y cierre la página";
+      this._translations["_Close"] = "Cierra";
+      this._translations["_Closes the page without saving the information"] = "Cierra la página sin guardar la información";
+      this._translations["_Clear"] = "Clara";
+      this._translations["_Reset the fields"] = "Restablecer los campos";
+      this._translations["_Select Folder"] = "Seleccionar Carpeta";
+      this._translations["_Select File"] = "Seleccionar Archivo";
+      this._translations["_There is invalid information. See the error by hovering the mouse over the field marking."] = "Hay información inválida. Vea el error flotando el ratón sobre el marcado de campo.";
+      this._translations["_Wait please. Processing..."] = "Espera por favor. Tratamiento...";
+    } else {
+      this._translations["_Filter"] = "Filter";
+      this._translations["_Filters on all columns and can accept regular expressions"] = "Filters on all columns and can accept regular expressions";
+      this._translations["_Elements/page"] = "Elements/page";
+      this._translations["_Save"] = "Save";
+      this._translations["_Save the information and close the page"] = "Save the information and close the page";
+      this._translations["_Close"] = "Close";
+      this._translations["_Closes the page without saving the information"] = "Closes the page without saving the information";
+      this._translations["_Clear"] = "Clear";
+      this._translations["_Reset the fields"] = "Reset the fields";
+      this._translations["_Select Folder"] = "Select Folder";
+      this._translations["_Select File"] = "Select File";
+      this._translations["_There is invalid information. See the error by hovering the mouse over the field marking."] = "There is invalid information. See the error by hovering the mouse over the field marking.";
+      this._translations["_Wait please. Processing..."] = "Wait please. Processing...";
+    }
+  }
 }
+
 
 export const l10n: L10n = new L10n();
