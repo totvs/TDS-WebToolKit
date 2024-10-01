@@ -189,10 +189,14 @@ export function prepareDataSource(columnsDef: TTdsDataGridColumnDef[], dataSourc
 	let rows: any[] = [...dataSource];
 
 	if (allFieldsFilter) {
-		const filter: RegExp = new RegExp(`${allFieldsFilter}`, "i");
-		const filters: Record<string, RegExp[]> = initFilters(filter);
+		try {
+			const filter: RegExp = new RegExp(`${allFieldsFilter}`, "i");
+			const filters: Record<string, RegExp[]> = initFilters(filter);
 
-		rows = applyOrFilter(rows, filters);
+			rows = applyOrFilter(rows, filters);
+		} catch (error) {
+			console.log("Invalid RegExp");
+		}
 	}
 
 	if ((fieldsFilter) && (Object.keys(fieldsFilter).length > 0)) {

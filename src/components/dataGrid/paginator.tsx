@@ -89,7 +89,7 @@ export interface ITdsPaginatorProps {
 export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElement {
 	const [currentPage, setCurrentPage] = useState(props.currentPage);
 	const [totalPages, setTotalPages] = useState(0);
-	const [currentItem, setCurrentItem] = useState(props.currentItem);
+	const [currentItem, setCurrentItem] = useState(0);
 	const [totalItems, setTotalItems] = useState(props.totalItems);
 	const lastItem: number = currentItem + props.pageSize > totalItems ? totalItems : currentItem + props.pageSize;
 
@@ -111,6 +111,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 	}
 
 	React.useEffect(() => {
+		setCurrentItem(props.currentItem);
 		setTotalItems(props.totalItems);
 		setTotalPages(Math.ceil(props.totalItems / props.pageSize));
 	}, [props.totalItems, props.pageSize]);
@@ -119,7 +120,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 		<div className="tds-data-grid-pagination">
 			{props.pageSizeOptions.length &&
 				<>
-					<span>{tdsVscode.l10n.t("Elements/page")}</span>
+					<span>{tdsVscode.l10n.t("_Elements/page")}</span>
 					<VSCodeDropdown
 						key={`dropdown_elements_page`}
 						value={`${props.pageSize}`}

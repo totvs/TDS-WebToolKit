@@ -260,7 +260,7 @@ function GroupingBlock(props: TGroupingBlockProps) {
 		<section className="tds-row-container">
 			<div className="tds-data-grid-grouping">
 				{
-					//<span className="label">{tdsVscode.l10n.t("Group by:")}</span>
+					//<span className="label">{tdsVscode.l10n.t("_Group by:")}</span>
 				}
 				<span className="field_name">{groupingCol.label || groupingCol.name}: </span>
 				{values.map((data: string, index: number) => (
@@ -318,8 +318,8 @@ function FilterBlock(props: TFilterBlockProps) {
 			<TdsTextField
 				name="filter"
 				key={`all_filter`}
-				label={tdsVscode.l10n.t("Filter")}
-				info={tdsVscode.l10n.t("Filters on all columns and can accept regular expressions")}
+				label={tdsVscode.l10n.t("_Filter")}
+				info={tdsVscode.l10n.t("_Filters on all columns and can accept regular expressions")}
 				value={filterValue}
 				onInput={(e: any) => {
 					e.preventDefault();
@@ -529,7 +529,6 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 
 	const handlePageClick = (newPage: number) => {
 		const newOffset = (newPage * (props.options.pageSize)) % dataSource.length;
-
 		dispatch({ type: "set_item_offset", value: newOffset });
 		dispatch({ type: "set_current_page", value: newPage });
 	}
@@ -686,7 +685,8 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 					showFilter={true}
 					actions={props.options.topActions}
 					onFilterChanged={(value: string) => {
-						dispatch({ type: "set_all_fields_filter", filter: value })
+						dispatch({ type: "set_all_fields_filter", filter: value });
+						handlePageClick(0);
 					}}
 					onShowFieldsFilter={(value: boolean) => {
 						dispatch({ type: "set_show_fields_filter", value: value });
@@ -736,6 +736,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 						fieldsFilter={state.fieldsFilter || ""}
 						onFilterFieldChanged={(filter: Record<string, string>) => {
 							dispatch({ type: "set_fields_filter", filter: filter });
+							handlePageClick(0);
 						}}
 						dataSource={dataSource}
 					/>}
