@@ -112,6 +112,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 
 	React.useEffect(() => {
 		setCurrentItem(props.currentItem);
+		setCurrentPage(props.currentPage);
 		setTotalItems(props.totalItems);
 		setTotalPages(Math.ceil(props.totalItems / props.pageSize));
 	}, [props.totalItems, props.pageSize]);
