@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 :root {
-	/* --tds-hor-spacing: 0.8rem;
-	--tds-ver-spacing: 0.8rem; */
 	--tds-hor-spacing: calc(var(--design-unit)*3px);
 	--tds-ver-spacing: calc(var(--design-unit)*3px);
 	--tds-padding: calc(var(--design-unit)*3px);
+	--tds-indent-group: calc(var(--design-unit)*6px);
 }
 
 .tds-page {
