@@ -814,7 +814,6 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 							propsField["id"] = action.id;
 						}
 
-						propsField["key"] = action.id;
 						propsField["type"] = action.type || "button";
 
 						if (action.enabled !== undefined) {
