@@ -4,7 +4,6 @@ import { TSendSelectResourceOptions, sendSelectResource } from "../../utilities/
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
-import { L10n } from './../../utilities/l10n';
 
 type TdsSelectionResourceFieldProps = Omit<TdsFieldProps, "label"> & TSendSelectResourceOptions;
 type TdsSelectionFolderFieldProps = Omit<TdsSelectionResourceFieldProps, "model" | "canSelectMany" | "canSelectFiles" | "canSelectFolders" | "filters">;
@@ -38,8 +37,6 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 	const { register, control, getValues, getFieldState } = useFormContext();
 	const fieldState: ControllerFieldState = getFieldState(props.name);
 
-	//	registerField.disabled = props.readOnly || false;
-
 	const options: TSendSelectResourceOptions = {
 		canSelectMany: props.canSelectMany,
 		canSelectFiles: props.canSelectFiles,
@@ -58,11 +55,12 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 			className={`tds-field-container tds-selection-resource-field tds-label-field ${props.className ? props.className : ''}`}
 		>
 			<VSCodeButton
+				key={`selection_resource_button_${props.name}`}
 				onClick={() => {
 					sendSelectResource(props.name, getValues(), options);
 				}}
-				key={`selection_resource_button_${props.name}`}
 				{...register(props.name, props.rules)}
+				disabled={props.readOnly}
 			>
 				{props.openLabel}
 				<PopupMessage field={{ ...props, label: props.openLabel }} fieldState={fieldState} />
