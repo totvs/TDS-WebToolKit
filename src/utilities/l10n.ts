@@ -209,6 +209,9 @@ export class L10n {
       this._translations["_Select File"] = "Selecionar Arquivo";
       this._translations["_There is invalid information. See the error by hovering the mouse over the field marking."] = "Há informações inválidas. Veja o erro passando o mouse sobre a marcação do campo.";
       this._translations["_Wait please. Processing..."] = "Espere, por favor. Processando...";
+      this._translations["_[{0}] is required."] = "[{0}] é obrigatório.";
+      this._translations["_[{0}] is not valid range (min value)."] = "[{0}] não é válido para faixa (valor mínimo).";
+      this._translations["_[{0}] is not valid range (max value)."] = "[{0}] não é válido para faixa (valor máximo).";
     } else if (this._formatLocale == "es") {
       this._translations["_Filter"] = "Filtrar";
       this._translations["_Filters on all columns and can accept regular expressions"] = "Filtros en todas las columnas y puede aceptar expresiones regulares";
@@ -223,6 +226,9 @@ export class L10n {
       this._translations["_Select File"] = "Seleccionar Archivo";
       this._translations["_There is invalid information. See the error by hovering the mouse over the field marking."] = "Hay información inválida. Vea el error flotando el ratón sobre el marcado de campo.";
       this._translations["_Wait please. Processing..."] = "Espera por favor. Tratamiento...";
+      this._translations["_[{0}] is required."] = "[{0}] se requiere.";
+      this._translations["_[{0}] is not valid range (min value)."] = "[{0}] no es un rango válido (valor mínimo).";
+      this._translations["_[{0}] is not valid range (max value)."] = "[{0}] no es un rango válido (valor máximo).";
     } else {
       this._translations["_Filter"] = "Filter";
       this._translations["_Filters on all columns and can accept regular expressions"] = "Filters on all columns and can accept regular expressions";
@@ -237,6 +243,9 @@ export class L10n {
       this._translations["_Select File"] = "Select File";
       this._translations["_There is invalid information. See the error by hovering the mouse over the field marking."] = "There is invalid information. See the error by hovering the mouse over the field marking.";
       this._translations["_Wait please. Processing..."] = "Wait please. Processing...";
+      this._translations["_[{0}] is required."] = "[{0}] is required.";
+      this._translations["_[{0}] is not valid range (min value)."] = "[{0}] is not valid range (min value).";
+      this._translations["_[{0}] is not valid range (max value)."] = "[{0}] is not valid range (max value).";
     }
   }
 }

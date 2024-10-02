@@ -16,6 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsFieldProps } from "../form/form";
 import "./popup-message.css";
 import { ControllerFieldState } from "react-hook-form";
@@ -32,11 +33,11 @@ function buildMessage(props: IPopupMessage): string {
 
 	if (error) {
 		if (error.type == "required") {
-			message = error.message || `[${label}] is required.`;
+			message = error.message || tdsVscode.l10n.t(`_[{0}] is required.`, label);
 		} else if (error.type == "min") {
-			message = error.message || `[${label}] is not valid range (min value).`;
+			message = error.message || tdsVscode.l10n.t(`_[{0}] is not valid range (min value).`, label);
 		} else if (error.type == "max") {
-			message = error.message || `[${label}] is not valid range (max value).`;
+			message = error.message || tdsVscode.l10n.t(`_[{0}] is not valid range (max value).`, label);
 		} else {
 			message = error.message || error.message || `${error.type}<Unknown>`
 		}
