@@ -108,7 +108,7 @@ vscode-text-field.tds-text-center::part(control) {
 }
 
 .tds-field-container vscode-button {
-	/* width: 120px; */
+	max-width: 250px;
 	text-wrap: "nowrap";
 }
 
