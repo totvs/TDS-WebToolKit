@@ -119,7 +119,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 
 	return (
 		<div className="tds-data-grid-pagination">
-			{props.pageSizeOptions.length &&
+			{(props.pageSizeOptions.length > 0) &&
 				<>
 					<span>{tdsVscode.l10n.t("_Elements/page")}</span>
 					<VSCodeDropdown
