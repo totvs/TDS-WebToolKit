@@ -21,6 +21,10 @@ export class L10n {
   private _translations: any = {};
   private _formatLocale: string = "";
 
+  constructor() {
+    this.loadInternalTranslations();
+  }
+
   public set translations(value: any) {
     this._translations = value.translations || {};
     this._formatLocale = value.formatLocale || "";
