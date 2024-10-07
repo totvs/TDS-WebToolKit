@@ -105,5 +105,4 @@ export type TTdsDataGridProps = {
 export type TGroupingInfo = {
 	groupingCol: TTdsDataGridColumnDef;
 	groupingValues?: Record<string, number>;
-	groupingFilter?: string[];
 }

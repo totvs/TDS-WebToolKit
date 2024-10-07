@@ -18,32 +18,24 @@ import "./dataGrid.css";
 import React from "react";
 import {
 	VSCodeButton, VSCodeDataGrid, VSCodeDataGridCell, VSCodeDataGridRow,
-	VSCodeTextField, VSCodeDropdown, VSCodeOption,
+	VSCodeTextField,
 	VSCodeLink,
 	VSCodeCheckbox,
-	VSCodeDivider,
-	VSCodeBadge
+	VSCodeDivider
 } from "@vscode/webview-ui-toolkit/react";
-import { UseFormReturn, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { TGroupingInfo, TTdsDataGridAction, TTdsDataGridColumnDef, TTdsDataGridProps } from "./dataGrid.type";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
-import { TdsTextField } from "../fields/textField";
 import TdsPaginator from "./paginator";
-import { dataGridState, prepareDataSource, TDataGridState } from './dataGridState';
+import { BuildRowFilter, FilterBlock } from "./fieldFilter";
+import { DataSourceProvider, useDataSourceContext } from "./dataSourceContext";
+import { GroupingPanel } from "./groupingPanel";
 
 /**
  * Renders the data grid component.
  *
  * @param props - The data grid component props.
  */
-type TFieldFilterProps = {
-	methods: UseFormReturn;
-	fieldDef: TTdsDataGridColumnDef;
-	values: Record<string, string>;
-	dataSource: any;
-	onFilterChanged(fieldName: string, filter: string): void;
-}
-
 type TFieldDataProps = {
 	fieldDef: TTdsDataGridColumnDef;
 	row: any;
@@ -53,12 +45,14 @@ type TFieldDataProps = {
 type TBuildRowsProps = {
 	id: string;  //ID Datagrid 
 	columnsDef: TTdsDataGridColumnDef[];
-	rows: any[];
+	//rows: any[];
 	rowSeparator: boolean;
 	itemOffset: number;
 }
 
 function BuildRows(props: TBuildRowsProps) {
+	const { dataSource, itemOffset } = useDataSourceContext();
+
 	const buildRow = (row: any, index: number, itemOffset: number): React.ReactElement[] => {
 		let reactElements: React.ReactElement[] = [];
 		let rowNumber: number = 0;
@@ -76,7 +70,7 @@ function BuildRows(props: TBuildRowsProps) {
 			reactElements.push(
 				<VSCodeDataGridRow row-type="default"
 					id={`${props.id}_row_${rowNumber}_${index + itemOffset}`}
-					key={`${props.id}_row_${rowNumber}_${index + itemOffset}`}
+					key={`${row.id}`}
 					gridTemplateColumns={gridTemplate}
 				>
 					{props.columnsDef.filter(column => column.visible)
@@ -126,61 +120,9 @@ function BuildRows(props: TBuildRowsProps) {
 		return reactElements;
 	}
 
-	return props.rows.map((row: any, index: number) => buildRow(row, index, props.itemOffset))
-}
-
-function FieldFilter(props: TFieldFilterProps) {
-	let currentValue: string = props.values[props.fieldDef.name] || "";
-
-	if (props.fieldDef.lookup) {
-		const currentValue: string = props.methods.getValues(props.fieldDef.name) as string;
-		const options: Record<string, string> = !props.dataSource
-			? {}
-			: props.dataSource.reduce((acc: Record<string, string>, item: any) => {
-
-				if (!acc[item[props.fieldDef.name]]) {
-					acc[item[props.fieldDef.name]] = props.fieldDef.lookup![item[props.fieldDef.name]];
-				}
-
-				return acc;
-			}, []);
-
-		if (Object.keys(options).length > 0) {
-			return (
-				<VSCodeDropdown
-					onChange={(e: any) => {
-						e.preventDefault();
-						const value: string = e?.target?.value;
-						return props.onFilterChanged(props.fieldDef.name, value);
-					}}>
-					<VSCodeOption key={0}
-						value={""}
-						checked={currentValue === ""}>{"(All)"}
-					</VSCodeOption>
-					{Object.keys(options).map((key: string, index: number) => {
-						return (
-							<VSCodeOption key={index}
-								value={key}
-								checked={currentValue === key}>{options[key]}
-							</VSCodeOption>
-						)
-					})}
-				</VSCodeDropdown>
-			)
-		}
-	}
-
-	return (
-		<VSCodeTextField
-			onInput={(e: any) => {
-				e.preventDefault();
-				return props.onFilterChanged(props.fieldDef.name, e.target.value);
-			}}
-			value={currentValue}
-		>
-			<span slot="end" className="codicon codicon-list-filter"></span>
-		</VSCodeTextField>
-	)
+	return dataSource
+		.slice(itemOffset, itemOffset + 10)
+		.map((row: any, index: number) => buildRow(row, index, props.itemOffset))
 }
 
 function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
@@ -189,9 +131,9 @@ function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 	const row = props.row;
 	let alignClass: string | undefined = column.align ? `tds-text-${column.align}` : undefined;
 
-
-	const forceRefresh = 0;
-
+	if (!row) {
+		console.log("noRow");
+	}
 
 	//Campo DATE, TIME e DATETIME
 	if ((column.type == "date") || (column.type == "time") || (column.type == "datetime")) {
@@ -201,7 +143,7 @@ function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 			<VSCodeTextField
 				className={alignClass}
 				data-type={column.type}
-				key={`${props.fieldName}${forceRefresh > 0 ? forceRefresh : ""}`}
+				key={`${props.fieldName}}`}
 				readOnly={column.readOnly == undefined ? true : column.readOnly}
 				value={text}
 				title={text.startsWith("Invalid") ? row[column.name] : text}
@@ -216,7 +158,7 @@ function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 		return (
 			<VSCodeCheckbox
 				className={alignClass}
-				key={`${props.fieldName}${forceRefresh > 0 ? forceRefresh : ""}`}
+				key={`${props.fieldName}`}
 				readOnly={column.readOnly == undefined ? true : column.readOnly}
 				checked={methods.getValues(props.fieldName) || false}
 				onChange={(e) => {
@@ -251,275 +193,120 @@ function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 			data-type={column.type}
 			key={`${props.fieldName}`}
 			readOnly={column.readOnly == undefined ? true : column.readOnly}
-			value={text.startsWith("Invalid") ? row[column.name] : text}
+			value={(text || "<error>").startsWith("Invalid") ? row[column.name] || "<error>" : text}
 		></VSCodeTextField>
 	)
 }
 
-type TGroupingBlockProps = {
-	groupingInfo: TGroupingInfo;
-	onFilterValues: (Filter: string[] | undefined) => void;
-}
+function prepareDataSource(columnsDef: TTdsDataGridColumnDef[], dataSource: any[],
+	allFieldsFilter: string, fieldsFilter: Record<string, string>,
+	groupingInfo: TGroupingInfo, groupingFilter: string[], sortedColumn: TTdsDataGridColumnDef): any[] {
 
-function GroupingBlock(props: TGroupingBlockProps) {
-	const groupingCol: TTdsDataGridColumnDef = props.groupingInfo.groupingCol;
-	const groupingFilter = props.groupingInfo.groupingFilter;
-	const groupingValues: Record<string, number> = props.groupingInfo.groupingValues;
-	const values = Object.keys(groupingValues).sort((v1: string, v2: string) => v1.localeCompare(v2));
+	const initFilters = (value?: RegExp): Record<string, RegExp[]> => {
+		const filters: Record<string, RegExp[]> = {};
 
-	return (
-		<section className="tds-row-container">
-			<div className="tds-data-grid-grouping">
-				{
-					//<span className="label">{tdsVscode.l10n.t("_Group by:")}</span>
-				}
-				<span className="field_name">{groupingCol.label || groupingCol.name}: </span>
-				{values.map((data: string, index: number) => (
-					<VSCodeButton
-						key={`btn_grouping_filter_${groupingCol.name}.${index}`}
-						appearance={groupingFilter.indexOf(data) > -1 ? "primary" : "secondary"}
-						onClick={() => {
-							let filter: string[] = groupingFilter;
-							let pos: number = groupingFilter.indexOf(data);
+		columnsDef.forEach((columnDef: TTdsDataGridColumnDef) => {
+			filters[columnDef.name] = value !== undefined ? [value] : [];
+		});
 
-							if (pos > -1) {
-								delete filter[pos];
-							} else {
-								filter.push(data);
-							}
+		return filters;
+	};
 
-							props.onFilterValues(filter);
-						}}
-					>
-						{groupingCol.lookup && groupingCol.lookup[data]
-							? groupingCol.lookup[data] : data}
-						<VSCodeBadge>{groupingValues[data]}</VSCodeBadge>
-					</VSCodeButton>
-				))
-				}
-				<VSCodeButton appearance="icon" aria-label="Ungroup"
-					key={`btn_grouping_${groupingCol.name}`}
-					onClick={() => {
-						props.onFilterValues(undefined);
-					}}
-				>
-					<span className="codicon codicon-close"></span>
-				</VSCodeButton>
-
-			</div>
-		</section>
-	)
-}
-
-
-type TFilterBlockProps = {
-	filter: string;
-	showFilter: boolean;
-	actions: TTdsDataGridAction[];
-	onFilterChanged: (filter: string | undefined) => void;
-	onShowFieldsFilter: (value: boolean) => void;
-}
-
-function FilterBlock(props: TFilterBlockProps) {
-	const [filterValue, setFilterValue] = React.useState(props.filter || "");
-	const [showFieldsFilter, setShowFieldsFilter] = React.useState(false);
-
-	return (
-		<section className="tds-row-container">
-			<TdsTextField
-				name="filter"
-				key={`all_filter`}
-				label={tdsVscode.l10n.t("_Filter")}
-				info={tdsVscode.l10n.t("_Filters on all columns and can accept regular expressions")}
-				value={filterValue}
-				onInput={(e: any) => {
-					e.preventDefault();
-					const filter: string = e.target.value.trim();
-
-					setFilterValue(filter);
-					if (filter.length > 0) {
-						props.onFilterChanged(filter);
-					} else {
-						props.onFilterChanged(undefined);
-					}
-				}}
-			/>
-
-			<VSCodeButton appearance="icon" aria-label="Filter"
-				onClick={() => {
-					setShowFieldsFilter(!showFieldsFilter);
-					props.onShowFieldsFilter(!showFieldsFilter); //ainda não deu tempo de atualizar useState
-				}}
-			>
-				<span className="codicon codicon-list-filter"></span>
-			</VSCodeButton>
-
-			{props.actions &&
-				<div className="tds-data-grid-actions">
-					{props.actions.map((action: TTdsDataGridAction) => {
-						let propsField: any = {};
-						let visible: string = "";
-
-						if (typeof action.id === "string") {
-							propsField["id"] = action.id;
-						}
-
-						propsField["type"] = action.type || "button";
-
-						if (action.enabled !== undefined) {
-							if (typeof action.enabled === "function") {
-								propsField["disabled"] = !(action.enabled as Function)(false, true);
-							} else {
-								propsField["disabled"] = !action.enabled;
-							}
-						}
-
-						if (action.appearance) {
-							propsField["appearance"] = action.appearance;
-						}
-
-						if (action.onClick) {
-							propsField["onClick"] = action.onClick;
-						}
-
-						if (action.visible !== undefined) {
-							let isVisible: boolean = false;
-
-							if (action.visible = typeof action.visible === "function") {
-								isVisible = (Function)(action.visible)(false, true)
-							} else {
-								isVisible = action.visible;
-							}
-
-							visible = isVisible ? "" : "tds-hidden";
-						}
-
-						return (action.type == "link" ?
-							<VSCodeLink
-								key={action.id}
-								href={action.href}>{action.caption}
-							</VSCodeLink>
-							: <VSCodeButton
-								key={action.id}
-								className={`tds-button-button ${visible}`}
-								{...propsField} >
-								{action.caption}
-							</VSCodeButton>)
-					})}
-				</div>
-			}
-		</section>
-	)
-}
-
-type BuildRowFilterProps = {
-	id: string;
-	columnDefs: TTdsDataGridColumnDef[];
-	methods: any;
-	fieldsFilter: any;
-	onFilterFieldChanged: (filter: Record<string, string> | undefined) => void;
-	dataSource: any[];
-	show: boolean;
-}
-
-function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[] {
-	const forceRefresh: number = Date.now();
-	const [filterValue, setFilterValue] = React.useState(props.fieldsFilter || {});
-	let reactElements: React.ReactElement[] = [];
-	let rowNumber: number = 0;
-
-	if (props.show) {
-		while (rowNumber != -1) {
-			let gridTemplate: string = "";
-
-			props.columnDefs
-				.filter(column => column.visible)
-				.filter((column) => (column.rowGroup || 0) == rowNumber)
-				.map((column, _index: number) => {
-					gridTemplate += ` ${column.width || "1fr"} `;
+	const applyOrFilter = (rows: any[], filters: Record<string, RegExp[]>): any[] => {
+		if (Object.keys(filters).length > 0) {
+			rows = rows.filter((row: any, index: number) => {
+				let found: boolean = false;
+				const filtersKey: string[] = Object.keys(filters).filter((key: string) => {
+					return filters[key].length > 0 ? key : undefined;
 				});
 
-			reactElements.push(
-				<VSCodeDataGridRow
-					row-type="default"
-					key={`${props.id}_filter_${rowNumber}_${0}`}
-					gridTemplateColumns={gridTemplate}
-				>
-					{props.columnDefs
-						.filter(column => column.visible)
-						.filter(column => (column.rowGroup || 0) == rowNumber)
-						.map((column, indexCol: number) => (
-							<VSCodeDataGridCell
-								grid-column={indexCol + 1}
-								key={`${props.id}_filter_cell_${rowNumber}_${indexCol + 1}`}
-							>
-								<FieldFilter
-									key={`${props.id}_filter_field_${rowNumber}_${indexCol + 1}`}
-									methods={props.methods}
-									fieldDef={column}
-									values={props.fieldsFilter || {}}
-									onFilterChanged={
-										(fieldName: string, filter: string) => {
-											let filters: Record<string, string> = props.fieldsFilter || {};
+				if (filtersKey.length > 0) {
+					filtersKey.forEach((key: string) => {
+						filters[key].forEach((filter: RegExp) => {
+							if (filter.test(row[key])) {
+								found = true;
+							}
+						});
+					});
+				} else {
+					found = true;
+				}
 
-											if (filter.trim() !== "") {
-												filters[fieldName] = filter;
-											} else if (filters[fieldName]) {
-												delete filters[fieldName];
-											}
-
-											if (Object.keys(filters).length == 0) {
-												filters = undefined;;
-											}
-
-											setFilterValue(filters);
-											props.onFilterFieldChanged(filters);
-										}
-									}
-									dataSource={props.dataSource}
-								/>
-							</VSCodeDataGridCell>
-						))}
-				</VSCodeDataGridRow>
-			)
-
-			rowNumber = rowNumber + 1;
-
-			if (props.columnDefs.findIndex(column => (column.rowGroup || 0) == rowNumber) == -1) {
-				rowNumber = -1;
-			}
+				return found ? row : null;
+			})
 		}
 
-		let gridTemplate: string = "";
-
-		props.columnDefs
-			.filter(column => column.visible)
-			.filter((column) => (column.rowGroup || 0) == rowNumber)
-			.map((column, _index: number) => {
-				gridTemplate += ` ${column.width || "1fr"} `;
-			});
-
-		reactElements.push(
-			<VSCodeDataGridRow row-type="default"
-				key={`${props.id}_filter_separator_${forceRefresh}`}
-				gridTemplateColumns={gridTemplate}
-			>
-				{props.columnDefs.filter(column => column.visible)
-					.filter(column => (column.rowGroup || 0) == 0)
-					.map((_column, indexCol: number) => (
-						<VSCodeDataGridCell
-							key={`${props.id}_filter_separator_${indexCol}`}
-							grid-column={indexCol + 1}
-							cell-type="rowseparator"
-						>
-							<VSCodeDivider role="separator"></VSCodeDivider>
-						</VSCodeDataGridCell>
-					))}
-			</VSCodeDataGridRow>
-		);
+		return rows;
 	}
 
-	return reactElements;
+	const applyAndFilter = (rows: any[], filters: Record<string, RegExp[]>): any[] => {
+		if (Object.keys(filters).length > 0) {
+			rows = rows.filter((row: any, index: number) => {
+				let found: boolean = true;
+
+				const filtersKey: string[] = Object.keys(filters).filter((key: string) => {
+					return filters[key].length > 0 ? key : undefined;
+				});
+
+				if (filtersKey.length > 0) {
+					filtersKey.forEach((key: string) => {
+						filters[key].forEach((filter: RegExp) => {
+							found &&= filter.test(row[key])
+						});
+					});
+				} else {
+					found = true;
+				}
+
+				return found ? row : null;
+			})
+		}
+
+		return rows;
+	}
+
+	let rows: any[] = [...dataSource];
+
+	if (allFieldsFilter) {
+		try {
+			const filter: RegExp = new RegExp(`${allFieldsFilter}`, "i");
+			const filters: Record<string, RegExp[]> = initFilters(filter);
+
+			rows = applyOrFilter(rows, filters);
+		} catch (error) {
+			console.log("Invalid RegExp");
+		}
+	}
+
+	if ((fieldsFilter) && (Object.keys(fieldsFilter).length > 0)) {
+		const filters: Record<string, RegExp[]> = initFilters();
+
+		Object.keys(fieldsFilter).forEach((key: string) => {
+			filters[key].push(new RegExp(`${fieldsFilter[key]}`, "i"));
+		});
+
+		rows = applyAndFilter(rows, filters);
+	};
+
+	if (groupingInfo && groupingFilter) {
+		const filters: Record<string, RegExp[]> = initFilters();
+
+		groupingFilter.forEach((filter: string) => {
+			filters[groupingInfo.groupingCol.name].push(new RegExp(`${filter}`, "i"));
+		});
+
+		rows = applyOrFilter(rows, filters);
+	}
+
+	if (sortedColumn) {
+		if (sortedColumn.sortDirection == "asc") {
+			rows = rows.sort((r1: any, r2: any) => r1[sortedColumn.name] > r2[sortedColumn.name] ? 1 : -1);
+		} else if (sortedColumn.sortDirection == "desc") {
+			rows = rows.sort((r1: any, r2: any) => r1[sortedColumn.name] > r2[sortedColumn.name] ? -1 : 1);
+		}
+	}
+
+	return rows;
 }
 
 /**
@@ -533,91 +320,6 @@ function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[] {
  * @returns A React element representing the data grid.
  */
 export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
-	const [keyContent, setKeyContent] = React.useState(0);
-	const [dataSource, setDataSource] = React.useState([]);
-	const methods = useFormContext();
-	const [state, dispatch] = React.useReducer<TDataGridState>(dataGridState, {
-		timeStamp: Date.now(),
-		isReady: false,
-		itemOffset: 0,
-		currentPage: 0,
-		pageSize: props.options.pageSize || 50,
-		columnsDef: props.columnsDef.map((columnDef: TTdsDataGridColumnDef) => {
-			columnDef.sortable = columnDef.sortable == undefined ? true : columnDef.sortable;
-			columnDef.sortDirection = columnDef.sortDirection == undefined ? "" : columnDef.sortDirection;
-			columnDef.visible = columnDef.visible == undefined ? true : columnDef.visible;
-			columnDef.grouping = columnDef.grouping == undefined ? false : columnDef.grouping;
-
-			return columnDef;
-		}),
-		showFieldsFilter: false,
-		allFieldsFilter: undefined,
-		fieldsFilter: undefined,
-		sortedColumn: props.columnsDef.find((columnDef: TTdsDataGridColumnDef) => {
-
-			return (columnDef.sortable && (columnDef.sortDirection !== "")) ? columnDef.sortable : undefined;
-		}),
-
-		groupingInfo: undefined,
-	});
-
-	const handlePageClick = (newPage: number) => {
-		const newOffset = (newPage * (props.options.pageSize)) % dataSource.length;
-		dispatch({ type: "set_item_offset", value: newOffset });
-		dispatch({ type: "set_current_page", value: newPage });
-	}
-
-	const handlePageSizeClick = (newSize: number) => {
-		dispatch({ type: "set_page_size", value: newSize });
-		dispatch({ type: "set_item_offset", value: 0 });
-		dispatch({ type: "set_current_page", value: 0 });
-	};
-
-	const handleSortClick = (columnSort: TTdsDataGridColumnDef) => {
-		const newColumnDef: TTdsDataGridColumnDef = {
-			...columnSort,
-			sortDirection: columnSort.sortDirection === "asc" ? "desc"
-				: columnSort.sortDirection === "desc" ? "" : "asc"
-		}
-
-		state.columnsDef.forEach((column: TTdsDataGridColumnDef) => {
-			column.sortDirection = "";
-		})
-
-		const indexColumn = state.columnsDef.indexOf(columnSort);
-		state.columnsDef[indexColumn] = newColumnDef;
-
-		dispatch({ type: "set_columns_def", columnsDef: state.columnsDef });
-		dispatch({ type: "set_sorted_column", columnIndex: indexColumn, direction: newColumnDef.sortDirection });
-	}
-
-	const handleGroupingClick = (columnDef: TTdsDataGridColumnDef | undefined) => {
-		if (columnDef) {
-			const groupingValues: Record<string, number> = props.dataSource.reduce((acc: Record<string, number>, item: any) => {
-				if (acc[item[columnDef.name]]) {
-					acc[item[columnDef.name]] += 1;
-				} else {
-					acc[item[columnDef.name]] = 1;
-				}
-
-				return acc;
-			}, []);
-
-			const indexColumn = state.columnsDef.indexOf(columnDef);
-			dispatch({
-				type: "set_grouping_info", grouping: {
-					groupingCol: state.columnsDef[indexColumn],
-					groupingValues: groupingValues,
-					groupingFilter: []
-				}
-			})
-		} else {
-			dispatch({
-				type: "set_grouping_info", grouping: undefined
-			})
-		}
-	}
-
 	if (props.options.topActions == undefined) {
 		props.options.topActions = [];
 	}
@@ -638,6 +340,81 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 	}
 	if (props.options.pageSizeOptions == undefined) {
 		props.options.pageSizeOptions = [50, 100, 250, 500, 1000];
+	}
+
+	props.columnsDef.forEach((columnDef: TTdsDataGridColumnDef) => {
+		columnDef.sortable = columnDef.sortable == undefined ? true : columnDef.sortable;
+		columnDef.sortDirection = columnDef.sortDirection == undefined ? "" : columnDef.sortDirection;
+		columnDef.visible = columnDef.visible == undefined ? true : columnDef.visible;
+		columnDef.grouping = columnDef.grouping == undefined ? false : columnDef.grouping;
+	});
+
+	return (<DataSourceProvider>
+		<TdsDataGrid2 {...props} />
+	</DataSourceProvider>
+	)
+}
+
+function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
+	const {
+		dataSource, setDataSource,
+		filter, setFilter,
+		sortedColumn, setSortedColumn,
+		sortedDirection, setSortedDirection,
+		currentPage, setCurrentPage,
+		pageSize, setPageSize,
+		itemOffset, setItemOffset,
+		showFieldsFilter, setShowFieldsFilter,
+		filterByField, setFilterByField,
+		groupingInfo, setGroupingInfo,
+		groupingFilter, setGroupingFilter
+	} = useDataSourceContext();
+	const methods = useFormContext();
+	const handlePageClick = (newPage: number) => {
+		const newOffset = (newPage * (props.options.pageSize)) % dataSource.length;
+
+		setCurrentPage(newPage);
+		setItemOffset(newOffset);
+	}
+
+	const handlePageSizeClick = (newSize: number) => {
+		setPageSize(newSize);
+		setCurrentPage(0);
+		setItemOffset(0);
+	};
+
+	const handleSortClick = (columnSort: TTdsDataGridColumnDef) => {
+		columnSort.sortDirection = columnSort.sortDirection === "asc" ? "desc"
+			: columnSort.sortDirection === "desc" ? "" : "asc";
+		//}
+
+		//dispatch({ type: "set_columns_def", columnsDef: props.columnsDef });
+		setSortedColumn(columnSort);
+		setSortedDirection(columnSort.sortDirection);
+		//dispatch({ type: "set_sorted_column", columnIndex: indexColumn, direction: newColumnDef.sortDirection });
+	}
+
+	const handleGroupingClick = (columnDef: TTdsDataGridColumnDef | undefined) => {
+		if (columnDef) {
+			const groupingValues: Record<string, number> = dataSource.reduce((acc: Record<string, number>, item: any) => {
+				if (acc[item[columnDef.name]]) {
+					acc[item[columnDef.name]] += 1;
+				} else {
+					acc[item[columnDef.name]] = 1;
+				}
+
+				return acc;
+			}, []);
+
+			const indexColumn = props.columnsDef.indexOf(columnDef);
+			setGroupingInfo({
+				groupingCol: props.columnsDef[indexColumn],
+				groupingValues: groupingValues
+			});
+			setGroupingFilter([]);
+		} else {
+			setGroupingInfo(undefined);
+		}
 	}
 
 	const buildRowHeader = (columnDefs: TTdsDataGridColumnDef[]): React.ReactElement[] => {
@@ -711,51 +488,38 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 		return reactElements;
 	}
 
-	if (!state.isReady) {
-		dispatch({ type: "is_ready" });
+	props.columnsDef.forEach((columnDef: TTdsDataGridColumnDef) => {
+		if (!sortedColumn && (columnDef.sortDirection != "")) {
+			setSortedColumn(columnDef);
+			setSortedDirection(columnDef.sortDirection);
+		}
+	});
+
+	if (props.options.pageSize !== pageSize) {
+		setPageSize(props.options.pageSize);
 	}
 
-	if (keyContent !== state.timeStamp) {
-		setKeyContent(state.timeStamp);
-		setDataSource(prepareDataSource(state.columnsDef, [...props.dataSource],
-			state.allFieldsFilter, state.fieldsFilter, state.groupingInfo,
-			state.sortedColumn));
-	}
+	React.useEffect(() => {
+		console.log(">>>> useEffect")
+		const data = prepareDataSource(props.columnsDef, props.dataSource,
+			filter, filterByField, groupingInfo, groupingFilter,
+			sortedColumn);
+		setDataSource(data);
+	}, [
+		filter,
+		groupingInfo, groupingFilter,
+		itemOffset, currentPage, pageSize,
+		showFieldsFilter, filterByField,
+		sortedColumn, sortedDirection
+	]);
 
 	return (
 		<section className="tds-data-grid" id={`${props.id}`}>
 			<div className="tds-data-grid-header">
 				{(props.options.filter) && <FilterBlock
-					filter={state.allFieldsFilter}
-					showFilter={true}
 					actions={props.options.topActions}
-					onFilterChanged={(value: string) => {
-						dispatch({ type: "set_all_fields_filter", filter: value });
-						handlePageClick(0);
-					}}
-					onShowFieldsFilter={(value: boolean) => {
-						dispatch({ type: "set_show_fields_filter", value: value });
-					}}
 				/>}
-				{state.groupingInfo &&
-					<GroupingBlock
-						groupingInfo={state.groupingInfo}
-						onFilterValues={(filterValues: string[]) => {
-							if (filterValues) {
-								dispatch({
-									type: "set_grouping_info", grouping: {
-										...state.groupingInfo,
-										groupingFilter: filterValues
-									}
-								})
-
-							} else {
-								dispatch({
-									type: "set_grouping_info", grouping: undefined
-								});
-							}
-						}}
-					/>}
+				{groupingInfo && <GroupingPanel />}
 			</div>
 
 			<div className="tds-data-grid-content" key={`${props.id}_content`}>
@@ -764,19 +528,13 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 					key={`${props.id}_grid`}
 					generate-header="sticky"
 				>
-					{buildRowHeader(state.columnsDef)}
+					{buildRowHeader(props.columnsDef)}
 
-					{<BuildRowFilter
-						show={state.showFieldsFilter}
+					{showFieldsFilter && <BuildRowFilter
 						id={`${props.id}_grid_filter`}
 						key={`${props.id}_grid_filter`}
-						columnDefs={state.columnsDef}
+						columnDefs={props.columnsDef}
 						methods={methods}
-						fieldsFilter={state.fieldsFilter || ""}
-						onFilterFieldChanged={(filter: Record<string, string>) => {
-							dispatch({ type: "set_fields_filter", filter: filter });
-							handlePageClick(0);
-						}}
 						dataSource={dataSource}
 					/>}
 
@@ -785,10 +543,9 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 						: <BuildRows
 							key={`${props.id}`}
 							id={`${props.id}`}
-							columnsDef={state.columnsDef}
-							rows={dataSource.slice(state.itemOffset, state.itemOffset + state.pageSize)}
+							columnsDef={props.columnsDef}
 							rowSeparator={props.options.rowSeparator || false}
-							itemOffset={state.itemOffset}
+							itemOffset={itemOffset}
 						/>
 					}
 				</VSCodeDataGrid>
@@ -797,10 +554,10 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 			<div className="tds-data-grid-footer">
 				<TdsPaginator
 					key={"paginator"}
-					pageSize={state.pageSize}
-					currentPage={state.currentPage}
-					currentItem={state.itemOffset}
-					totalItems={dataSource.length}
+					pageSize={pageSize}
+					currentPage={currentPage}
+					currentItem={itemOffset}
+					totalItems={dataSource ? dataSource.length : 0}
 					pageSizeOptions={props.options.pageSizeOptions}
 					onPageChange={handlePageClick}
 					onPageSizeChange={handlePageSizeClick}

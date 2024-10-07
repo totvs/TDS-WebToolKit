@@ -78,6 +78,7 @@ export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
                     placeholder={props.placeholder}
                     size={props.size ?? 30}
                     onInput={props.onInput}
+                    onChange={props.onChange}
                     key={`text_field_${props.name}`}
                     value={textValue}
                     {...register(props.name, props.rules)}
