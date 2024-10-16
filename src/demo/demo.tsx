@@ -17,12 +17,12 @@ limitations under the License.
 import "./demo.css"
 import React from "react";
 import { TdsPage } from "../components/page/page";
-import { VSCodeButton } from "@vscode/webview-ui-toolkit/react";
 import { DemoPage } from "./demoPage";
 import DemoForm from "./demoForm";
 import DemoDataGrid from "./demoDatagrid";
 import DemoTable from "./demoTable";
-import DemoTableCustomBody from "./demoTableCustomBody";
+import DemoDualSelection from "./demoDualSelection";
+import { VscodeButton } from "@vscode-elements/react-elements";
 
 enum DemoEnum {
   None,
@@ -32,7 +32,7 @@ enum DemoEnum {
   DataGrid,
   DataGridMultiRow,
   DataGridLocale,
-  DataGridSelectRow,
+  DualSelection,
   Table,
   TableHighlightRows,
   TableHighlightGroup,
@@ -43,19 +43,19 @@ export function Demo() {
 
   return (
     <React.StrictMode>
-      <TdsPage title="TOTVS Web Toolkit: Demo" showFooter={true}>
+      <TdsPage title="TOTVS Web Toolkit: Demo" showFooter={false}>
         <div className="demo-left-side tds-column-container">
-          <VSCodeButton onClick={() => setDemo(DemoEnum.Page)}>TdsPage</VSCodeButton>
-          <VSCodeButton onClick={() => setDemo(DemoEnum.Form)}>TdsForm</VSCodeButton>
-          <VSCodeButton onClick={() => setDemo(DemoEnum.FormCustomActions)}>TdsForm (custom actions)</VSCodeButton>
-          <VSCodeButton onClick={() => setDemo(DemoEnum.DataGrid)}>TdsDataGrid</VSCodeButton>
-          <VSCodeButton onClick={() => setDemo(DemoEnum.DataGridMultiRow)}>TdsDataGrid (MultiRow)</VSCodeButton>
-          <VSCodeButton onClick={() => setDemo(DemoEnum.DataGridLocale)}>TdsDataGrid (pt-BR)</VSCodeButton>
-          <VSCodeButton onClick={() => setDemo(DemoEnum.DataGridSelectRow)}>TdsDataGrid (select row)</VSCodeButton>
-          <VSCodeButton onClick={() => setDemo(DemoEnum.Table)}>TdsTable</VSCodeButton>
-          <VSCodeButton onClick={() => setDemo(DemoEnum.TableHighlightRows)}>TdsTable (highlight rows)</VSCodeButton>
-          <VSCodeButton onClick={() => setDemo(DemoEnum.TableHighlightGroup)}>TdsTable (highlight groups)</VSCodeButton>
-          <VSCodeButton onClick={() => setDemo(DemoEnum.TableZebra)}>TdsTable (zebra)</VSCodeButton>
+          <VscodeButton onClick={() => setDemo(DemoEnum.Page)}>TdsPage</VscodeButton>
+          <VscodeButton onClick={() => setDemo(DemoEnum.Form)}>TdsForm</VscodeButton>
+          <VscodeButton onClick={() => setDemo(DemoEnum.FormCustomActions)}>TdsForm (custom actions)</VscodeButton>
+          <VscodeButton onClick={() => setDemo(DemoEnum.DataGrid)}>TdsDataGrid</VscodeButton>
+          <VscodeButton onClick={() => setDemo(DemoEnum.DataGridMultiRow)}>TdsDataGrid (MultiRow)</VscodeButton>
+          <VscodeButton onClick={() => setDemo(DemoEnum.DataGridLocale)}>TdsDataGrid (pt-BR)</VscodeButton>
+          <VscodeButton onClick={() => setDemo(DemoEnum.Table)}>TdsTable</VscodeButton>
+          <VscodeButton onClick={() => setDemo(DemoEnum.TableHighlightRows)}>TdsTable (highlight rows)</VscodeButton>
+          <VscodeButton onClick={() => setDemo(DemoEnum.TableHighlightGroup)}>TdsTable (highlight groups)</VscodeButton>
+          <VscodeButton onClick={() => setDemo(DemoEnum.TableZebra)}>TdsTable (zebra)</VscodeButton>
+          <VscodeButton onClick={() => setDemo(DemoEnum.DualSelection)}>Dual Selection List</VscodeButton>
         </div>
         <div className="demo-right-side" id="root">
           {demo == 0 && <>
@@ -71,7 +71,7 @@ export function Demo() {
           {demo == DemoEnum.DataGrid && <DemoDataGrid />}
           {demo == DemoEnum.DataGridMultiRow && <DemoDataGrid multiRow={true} />}
           {demo == DemoEnum.DataGridLocale && <DemoDataGrid locale="pt-BR" />}
-          {demo == DemoEnum.DataGridSelectRow && <DemoDataGrid selectRow={true} locale="pt-BR" />}
+          {demo == DemoEnum.DualSelection && <DemoDualSelection />}
           {demo == DemoEnum.Table && <DemoTable />}
           {demo == DemoEnum.TableHighlightRows && <DemoTable highlightRows={[2, 5, 8, 11, 14]} />}
           {demo == DemoEnum.TableHighlightGroup && <DemoTable highlightGroups={{

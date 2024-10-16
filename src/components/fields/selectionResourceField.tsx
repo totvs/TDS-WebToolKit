@@ -1,9 +1,9 @@
-import { VSCodeButton } from "@vscode/webview-ui-toolkit/react";
-import { ControllerFieldState, useFormContext } from "react-hook-form";
 import { TSendSelectResourceOptions, sendSelectResource } from "../../utilities/common-command-webview";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { VscodeButton, VscodeFormGroup, VscodeFormHelper, VscodeIcon, VscodeLabel, VscodeTextfield } from "@vscode-elements/react-elements";
+import { mdToHtml } from "../mdToHtml";
 
 type TdsSelectionResourceFieldProps = Omit<TdsFieldProps, "label"> & TSendSelectResourceOptions;
 type TdsSelectionFolderFieldProps = Omit<TdsSelectionResourceFieldProps, "model" | "canSelectMany" | "canSelectFiles" | "canSelectFolders" | "filters">;
@@ -34,8 +34,6 @@ type TdsSelectionFileFieldProps = Omit<TdsSelectionResourceFieldProps, "folders"
  * @returns
  */
 export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps): React.ReactElement {
-	const { register, control, getValues, getFieldState } = useFormContext();
-	const fieldState: ControllerFieldState = getFieldState(props.name);
 
 	const options: TSendSelectResourceOptions = {
 		canSelectMany: props.canSelectMany,
@@ -51,20 +49,47 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 	}
 
 	return (
+		<VscodeFormGroup variant="vertical"
+			key={props.name}
+		>
+			<VscodeLabel htmlFor={props.name}
+				required={props.rules?.required || false}
+			>
+				{mdToHtml(props.openLabel)}
+			</VscodeLabel>
+			<VscodeTextfield name={props.name}
+				readonly={props.rules?.readOnly || false}
+				required={props.rules?.required || false}
+			>
+				<VscodeIcon
+					slot="content-after"
+					name={options.canSelectFolders ? "folder" : "file"}
+					title="Select resource"
+					action-icon
+				/>
+			</VscodeTextfield>
+			{props.info &&
+				<VscodeFormHelper>
+					{mdToHtml(props.info)}
+				</VscodeFormHelper>
+			}
+		</VscodeFormGroup>
+	)
+
+	return (
 		<section
 			className={`tds-field-container tds-selection-resource-field tds-label-field ${props.className ? props.className : ''}`}
 		>
-			<VSCodeButton
+			<VscodeButton
 				key={`selection_resource_button_${props.name}`}
 				onClick={() => {
-					sendSelectResource(props.name, getValues(), options);
+					//sendSelectResource(props.name, getValues(), options);
 				}}
-				{...register(props.name, props.rules)}
-				disabled={props.readOnly}
+				disabled={(props.rules && props.rules.readOnly)}
 			>
 				{props.openLabel}
-				<PopupMessage field={{ ...props, label: props.openLabel }} fieldState={fieldState} />
-			</VSCodeButton>
+				<PopupMessage field={{ ...props, label: props.openLabel }} />
+			</VscodeButton>
 		</section >
 	)
 }
@@ -105,7 +130,7 @@ export function TdsSelectionFolderField(props: Partial<TdsSelectionFolderFieldPr
 		canSelectMany={false}
 		currentFolder={props.currentFolder || ""}
 		filters={{}}
-		readOnly={props.readOnly || false}
+		//readOnly={props.rules.readOnly || false}
 		fileSystem={props.fileSystem}
 	/>)
 }
@@ -148,6 +173,6 @@ export function TdsSelectionFileField(props: Partial<TdsSelectionFileFieldProps>
 		canSelectMany={props.canSelectMany || false}
 		currentFolder={props.currentFolder || ""}
 		filters={filters || {}}
-		readOnly={props.readOnly || false}
+	//readOnly={props.readOnly || false}
 	/>)
 }

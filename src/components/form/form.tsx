@@ -16,13 +16,14 @@ limitations under the License.
 
 import "./form.css";
 import React from "react";
-import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
-import { DefaultValues, FieldValues, FormProvider, RegisterOptions, UseFormReturn, UseFormSetError, UseFormSetValue, useForm } from "react-hook-form";
-import { VSCodeButton, VSCodeCheckbox, VSCodeDivider, VSCodeLink } from "@vscode/webview-ui-toolkit/react";
+import { ButtonAppearance } from "../vscode-elements";
 import { sendClose } from "../../utilities/common-command-webview";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsProgressRing } from "../decorator/progress-ring";
 import { mdToHtml } from "../mdToHtml";
+import { TdsAbstractModel } from "../../model/modelData";
+import { VscodeButton, VscodeCheckbox, VscodeDivider } from "@vscode-elements/react-elements";
+import { TdsLink } from './../decorator/link';
 
 /**
  * Enum representing the default actions available in a form.
@@ -119,10 +120,9 @@ export function getCloseActionForm(): IFormAction {
  * @property {boolean} [isProcessRing] - An optional flag to show a processing indicator when necessary.
  * @property {string} [description] - An optional description for the form. You can use Markdown format.
  */
-type TDSFormProps<M extends FieldValues> = {
+type TDSFormProps<M extends TdsAbstractModel> = {
 	id?: string;
-	methods: UseFormReturn<M, any, undefined>;
-	onSubmit: (data: any) => void;
+	onSubmit: (data: M) => void;
 	onManualReset?: () => void;
 	actions?: IFormAction[];
 	children: any
@@ -147,6 +147,13 @@ export interface IFormAction {
 	href?: string;
 }
 
+export type TdsFieldRules = {
+	readOnly?: boolean
+	required?: boolean;
+	min?: { value: number, message: string };
+	max?: { value: number, message: string };
+	pattern?: RegExp;
+}
 /**
  * Interface for form field components.
  * Defines the props shape for form fields.
@@ -155,12 +162,11 @@ export type TdsFieldProps = {
 	name: string;
 	label: string;
 	info?: string;
-	readOnly?: boolean
 	className?: string;
-	rules?: RegisterOptions<FieldValues, string>;
+	rules?: TdsFieldRules;
 	//https://github.com/microsoft/vscode-webview-ui-toolkit/blob/main/src/react/README.md#use-oninput-instead-of-onchange-to-handle-keystrokes
-	onInput?: any;
-	onChange?: any;
+	onInput?: React.FormEventHandler<any>; //VscodeTextfield
+	onChange?: React.FormEventHandler<any>; //VscodeTextfield
 }
 
 /**
@@ -171,8 +177,8 @@ export type TdsFieldProps = {
  * Passing ``setValue`` is necessary, as this function
  * is executed outside the form context.
 */
-export function setDataModel<DataModel extends FieldValues>
-	(setValue: UseFormSetValue<DataModel>, dataModel: Partial<DataModel>) {
+export function setDataModel<M extends TdsAbstractModel>
+	(setValue: any, dataModel: Partial<M>) {
 	if (dataModel) {
 		Object.keys(dataModel).forEach((fieldName: string) => {
 			if (dataModel[fieldName] !== undefined) {
@@ -202,7 +208,7 @@ type TFieldErrors<M> = Partial<Record<keyof M | "root", TFieldError>>;
  * is executed outside the form context.
 *
 */
-export function setErrorModel<DataModel extends FieldValues>(setError: UseFormSetError<DataModel>, errorModel: TFieldErrors<DataModel>) {
+export function setErrorModel<M extends TdsAbstractModel>(setError: any, errorModel: TFieldErrors<M>) {
 	if (errorModel) {
 		Object.keys(errorModel).forEach((fieldName: string) => {
 			if (errorModel[fieldName] !== undefined) {
@@ -234,23 +240,24 @@ let isProcessRing: boolean = false;
  * Renders form content, messages, and action buttons.
  * Handles submit and reset events.
  */
-export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.ReactElement {
-	const methods = props.methods;
-	const isSubmitting: boolean = methods.formState.isSubmitting;
-	const isDirty: boolean = methods.formState.isDirty;
-	const isValid: boolean = /*methods.formState.isValid &&*/ // vem false, mesmo sem erros
-		(methods.formState.errors === undefined || Object.keys(methods.formState.errors).length === 0);
+export function TdsForm<M extends TdsAbstractModel>(props: TDSFormProps<M>): React.ReactElement {
+	//const methods = props.methods;
+	//const isSubmitting: boolean = methods ? methods.formState.isSubmitting : false;
+	const isDirty: boolean = false;  //methods ? methods.formState.isDirty : false;
+	const isValid: boolean = true;  //methods ?
+	// 	(methods.formState.errors === undefined || Object.keys(methods.formState.errors).length === 0)
+	//	: true;
 	let actions: IFormAction[] = props.actions ? props.actions : getDefaultActionsForm();
 
 	if (actions.length == 1) {
 		actions[0].appearance = "primary"
 	}
 
-	if (isSubmitting && (actions.length > 0)) {
-		isProcessRing = props.isProcessRing !== undefined ? props.isProcessRing : true;
-	} else if (!isValid) {
-		isProcessRing = props.isProcessRing !== undefined ? props.isProcessRing : false;
-	}
+	// if (isSubmitting && (actions.length > 0)) {
+	// 	isProcessRing = props.isProcessRing !== undefined ? props.isProcessRing : true;
+	// } else if (!isValid) {
+	// 	isProcessRing = props.isProcessRing !== undefined ? props.isProcessRing : false;
+	// }
 
 	actions.forEach((action: IFormAction) => {
 		action.isProcessRing = (action.isProcessRing !== undefined ? action.isProcessRing && isProcessRing : undefined)
@@ -260,99 +267,110 @@ export function TdsForm<M extends FieldValues>(props: TDSFormProps<M>): React.Re
 	const children = React.Children.toArray(props.children);
 
 	return (
-		<FormProvider {...methods}>
-			<form className="tds-form"
-				id={id}
-				onSubmit={methods.handleSubmit(props.onSubmit)}
-				onReset={(e) => {
-					e.preventDefault();
+		<form className="tds-form"
+			id={id}
+			onSubmit={(e) => {
+				e.preventDefault();
+				console.log(e);
+				const form = document.querySelector(`#${id}`) as HTMLFormElement;
+				const fd = new FormData(form);
+				let out: TdsAbstractModel = {};
 
-					methods.reset(methods.formState.defaultValues as DefaultValues<M>);
-					if (props.onManualReset) {
-						props.onManualReset();
-					}
-				}}
-				autoComplete="off"
-			>
-				{props.description && <h3>{mdToHtml(props.description)}</h3>}
-				<section className={"tds-form-content"}>
-					{...children}
-				</section>
+				for (let [name, value] of fd) {
+					out[name] = value;
+				}
 
-				<VSCodeDivider role="presentation" />
+				props.onSubmit(out as M);
+			}}
+			onReset={(e) => {
+				// if (methods) {
+				// 	e.preventDefault();
+				// 	methods.reset(methods.formState.defaultValues as DefaultValues<M>);
+				// 	if (props.onManualReset) {
+				// 		props.onManualReset();
+				// 	}
+				// }
+			}}
+			autoComplete="off"
+		>
+			{props.description && <h3>{mdToHtml(props.description)}</h3>}
+			<section className={"tds-form-content"}>
+				{...children}
+			</section>
 
-				<section className="tds-form-footer">
-					<div className="tds-message">
-						{!isValid && <span className={"tds-error"}>{tdsVscode.l10n.t("_There is invalid information. See the error by hovering the mouse over the field marking.")}</span>}
-						{isProcessRing && isSubmitting && <><TdsProgressRing /><span>{tdsVscode.l10n.t("_Wait please. Processing...")}</span></>}
-					</div>
-					<div className="tds-actions">
-						{actions.map((action: IFormAction) => {
-							let propsField: any = {};
-							let visible: string = "";
+			<VscodeDivider role="presentation" />
 
-							if (typeof action.id === "string") {
-								propsField["id"] = action.id;
-							}
+			<section className="tds-form-footer">
+				<div className="tds-message">
+					!isValid && <span className={"tds-error"}>{tdsVscode.l10n.t("_There is invalid information. See the error by hovering the mouse over the field marking.")}</span>
+					isProcessRing && isSubmitting && <><TdsProgressRing /><span>{tdsVscode.l10n.t("_Wait please. Processing...")}</span></>
+				</div>
+				<div className="tds-actions">
+					{actions.map((action: IFormAction) => {
+						let propsField: any = {};
+						let visible: string = "";
 
-							propsField["type"] = action.type || "button";
+						if (typeof action.id === "string") {
+							propsField["id"] = action.id;
+						}
 
-							if (isProcessRing) {
-								propsField["disabled"] = true;
-							} else if (action.enabled !== undefined) {
-								if (typeof action.enabled === "function") {
-									propsField["disabled"] = !(action.enabled as Function)(isDirty, isValid);
-								} else {
-									propsField["disabled"] = !action.enabled;
-								}
+						propsField["type"] = action.type || "button";
+
+						if (isProcessRing) {
+							propsField["disabled"] = true;
+						} else if (action.enabled !== undefined) {
+							if (typeof action.enabled === "function") {
+								propsField["disabled"] = !(action.enabled as Function)(isDirty, isValid);
 							} else {
-								propsField["disabled"] = false;
+								propsField["disabled"] = !action.enabled;
 							}
+						} else {
+							propsField["disabled"] = false;
+						}
 
-							if (action.onClick) {
-								propsField["onClick"] = action.onClick;
-							}
+						if (action.onClick) {
+							propsField["onClick"] = action.onClick;
+						}
 
-							if (action.visible !== undefined) {
-								let isVisible: boolean = false;
+						if (action.visible !== undefined) {
+							let isVisible: boolean = false;
 
-								if (action.visible = typeof action.visible === "function") {
-									isVisible = (Function)(action.visible)(isDirty, isValid)
-								} else {
-									isVisible = action.visible;
-								}
-
-								visible = isVisible ? "" : "tds-hidden";
-							}
-
-							if (action.type == "link") {
-								return (<VSCodeLink
-									key={action.id}
-									href={action.href}
-									title={action.hint}
-								>{action.caption}
-								</VSCodeLink>)
-							} else if (action.type == "checkbox") {
-								return (<VSCodeCheckbox
-									key={action.id}
-									className={`tds-button-button ${visible}`}
-									{...propsField} >
-									{action.caption}
-								</VSCodeCheckbox>)
+							if (action.visible = typeof action.visible === "function") {
+								isVisible = (Function)(action.visible)(isDirty, isValid)
 							} else {
-								return (<VSCodeButton
-									key={action.id}
-									className={`tds-button-button ${visible}`}
-									title={action.hint}
-									appearance={action.appearance || "secondary"}
-									{...propsField}>
-									{action.caption}
-								</VSCodeButton>)
+								isVisible = action.visible;
 							}
-						})}
-					</div>
-				</section>
-			</form >
-		</FormProvider>
+
+							visible = isVisible ? "" : "tds-hidden";
+						}
+
+						if (action.type == "link") {
+							(<TdsLink
+								key={action.id}
+								href={action.href}
+								title={action.hint}
+							>{action.caption}
+							</TdsLink>)
+						} else if (action.type == "checkbox") {
+							return (<VscodeCheckbox
+								key={action.id}
+								className={`tds-button-button ${visible}`}
+								{...propsField} >
+								{action.caption}
+							</VscodeCheckbox>)
+						} else {
+							return (<VscodeButton
+								key={action.id}
+								className={`tds-button-button ${visible}`}
+								title={action.hint}
+								appearance={action.appearance || "secondary"}
+								{...propsField}>
+								{action.caption}
+							</VscodeButton>)
+						}
+					})}
+				</div>
+			</section>
+		</form >
 	);
 }

@@ -1,4 +1,4 @@
-import { VSCodeBadge, VSCodeButton } from "@vscode/webview-ui-toolkit/react";
+import { VscodeBadge, VscodeButton } from "@vscode-elements/react-elements";
 import { TTdsDataGridColumnDef } from "./dataGrid.type";
 import { useDataSourceContext } from "./dataSourceContext";
 
@@ -10,6 +10,7 @@ export function GroupingPanel() {
     const groupingCol: TTdsDataGridColumnDef = groupingInfo.groupingCol;
     const values = Object.keys(groupingInfo.groupingValues || []).sort((v1: string, v2: string) => v1.localeCompare(v2));
 
+    //appearance={groupingFilter.indexOf(data) > -1 ? "primary" : "secondary"}
     return (
         <section className="tds-row-container">
             <div className="tds-data-grid-grouping">
@@ -18,9 +19,8 @@ export function GroupingPanel() {
                 }
                 <span className="field_name">{groupingCol.label || groupingCol.name}: </span>
                 {values.map((data: string, index: number) => (
-                    <VSCodeButton
+                    <VscodeButton
                         key={`btn_grouping_filter_${groupingCol.name}.${index}`}
-                        appearance={groupingFilter.indexOf(data) > -1 ? "primary" : "secondary"}
                         onClick={() => {
                             let filter: string[] = groupingFilter;
                             let pos: number = groupingFilter.indexOf(data);
@@ -36,18 +36,18 @@ export function GroupingPanel() {
                     >
                         {groupingCol.lookup && groupingCol.lookup[data]
                             ? groupingCol.lookup[data] : data}
-                        <VSCodeBadge>groupingValues[data]</VSCodeBadge>
-                    </VSCodeButton>
+                        <VscodeBadge>{groupingInfo.groupingValues[data]}</VscodeBadge>
+                    </VscodeButton>
                 ))
                 }
-                <VSCodeButton appearance="icon" aria-label="Ungroup"
+                <VscodeButton aria-label="Ungroup"
                     key={`btn_grouping_${groupingCol.name}`}
                     onClick={() => {
                         setGroupingFilter(undefined);
                     }}
                 >
                     <span className="codicon codicon-close"></span>
-                </VSCodeButton>
+                </VscodeButton>
             </div>
         </section>
     )

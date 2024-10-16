@@ -1,18 +1,14 @@
-import {
-	provideFASTDesignSystem,
-	fastTreeItem,
-	fastTreeView
-} from "@microsoft/fast-components";
-import { provideReactWrapper } from '@microsoft/fast-react-wrapper';
 import React from 'react';
 
 import "./tree.css";
 
-const { wrap } = provideReactWrapper(
-	React,
-	provideFASTDesignSystem()
-);
+import {
+	VscodeTree,
+} from "@vscode-elements/react-elements";
 
-export const TdsTreeView = wrap(fastTreeView());
-export const TdsTreeItem = wrap(fastTreeItem());
+export {
+	VscodeTree as TdsTreeView,
+
+}
+
 

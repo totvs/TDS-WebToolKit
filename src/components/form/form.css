@@ -18,7 +18,7 @@ limitations under the License.
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	height: 100%;
+	/* height: 100%; */
 	overflow: hidden;
 }
 
@@ -172,7 +172,7 @@ vscode-text-field.tds-text-center::part(control) {
 
 .tds-scroll {
 	overflow: scroll;
-	height: 400px;
+	/* height: 400px; */
 }
 
 span.tds-required::after {

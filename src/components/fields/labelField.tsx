@@ -14,14 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
+import { VscodeFormGroup, VscodeLabel } from "@vscode-elements/react-elements";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from './../mdToHtml';
 
-export type TdsLabelFieldProps = TdsFieldProps & {
-	//
-}
+export type TdsLabelFieldProps = Omit<TdsFieldProps, "onChange" | "onInput">
 
 /**
  *
@@ -34,21 +32,29 @@ export type TdsLabelFieldProps = TdsFieldProps & {
  *
  * @returns
  */
-export function TdsLabelField(props: TdsLabelFieldProps): React.ReactElement {
-	const { register, control, getValues, getFieldState } = useFormContext();
-	const fieldState: ControllerFieldState = getFieldState(props.name);
+export function TdsLabelField(props: TdsLabelFieldProps): any /*React.ReactElement*/ {
+
+	return (
+		<VscodeFormGroup variant="vertical"
+			key={props.name}
+		>
+			<VscodeLabel id={props.name}
+				required={props.rules?.required || false}
+			>
+				{mdToHtml(props.label)}
+			</VscodeLabel>
+		</VscodeFormGroup>
+	)
 
 	return (
 		<section
 			className={`tds-field-container tds-label-field ${props.className ? props.className : ''}`}
 		>
-			<label
-				key={`label_${props.name}`}
-				{...register(props.name, props.rules)}
-			>
+			<VscodeLabel required={props.rules.required || false}>
 				{mdToHtml(props.label)}
-				<PopupMessage field={props} fieldState={fieldState} />
-			</label>
+				<PopupMessage field={props} />
+			</VscodeLabel>
 		</section>
 	)
 }
+

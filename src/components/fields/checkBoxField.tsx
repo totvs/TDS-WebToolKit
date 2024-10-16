@@ -1,11 +1,11 @@
-import { VSCodeCheckbox } from "@vscode/webview-ui-toolkit/react";
-import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from "../mdToHtml";
-import { Checkbox } from "@vscode/webview-ui-toolkit";
+import { VscodeCheckbox, VscodeFormGroup, VscodeFormHelper, VscodeTextfield } from "@vscode-elements/react-elements";
 
-type TdsCheckBoxFieldProps = TdsFieldProps;
+type TdsCheckBoxFieldProps = TdsFieldProps & {
+	checked: boolean;
+};
 
 //TODO: colocar labelOn, labelOff e label
 
@@ -21,33 +21,40 @@ type TdsCheckBoxFieldProps = TdsFieldProps;
  * @returns
  */
 export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactElement {
-	const { register, control, getValues, getFieldState } = useFormContext();
-	const fieldState: ControllerFieldState = getFieldState(props.name);
-
-	const {
-		field: { onChange, value },
-	} = useController({
-		name: props.name,
-		control,
-		rules: props.rules,
-	});
+	return (
+		<VscodeFormGroup variant="vertical"
+			key={props.name}
+		>
+			<VscodeCheckbox name={props.name}
+				disabled={props.rules?.readOnly || false}
+				required={props.rules?.required || false}
+			>
+				{mdToHtml(props.label)}
+			</VscodeCheckbox>
+			{props.info &&
+				<VscodeFormHelper>
+					{mdToHtml(props.info)}
+				</VscodeFormHelper>
+			}
+		</VscodeFormGroup>
+	)
 
 	return (
 		<section
 			className={`tds-field-container tds-simple-checkbox-field ${props.className ? props.className : ''}`}
 		>
-			<VSCodeCheckbox
-				checked={value}
+			<VscodeCheckbox
+				checked={props.checked}
 				onChange={e => {
-					onChange((e.target as Checkbox).checked);
+					//onChange((e.target as Checkbox).checked);
 
 					if (props.onChange) {
 						props.onChange(e);
 					}
 				}}>
 				{mdToHtml(props.label)}
-				{props.info && <PopupMessage field={{ ...props, label: "" }} fieldState={fieldState} />}
-			</VSCodeCheckbox>
+				{props.info && <PopupMessage field={{ ...props, label: "" }} />}
+			</VscodeCheckbox>
 		</section>
 	)
 }

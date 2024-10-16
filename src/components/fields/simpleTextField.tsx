@@ -1,9 +1,12 @@
-import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
-import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
+import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeTextfield } from "@vscode-elements/react-elements";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
+import { mdToHtml } from "../mdToHtml";
 
-type TdsSimpleTextFieldProps = Omit<TdsFieldProps, "label">;
+type TdsSimpleTextFieldProps = Omit<TdsFieldProps, "label"> &
+{
+	placeholder?: string;
+};
 
 /**
  *
@@ -17,20 +20,33 @@ type TdsSimpleTextFieldProps = Omit<TdsFieldProps, "label">;
  * @returns
  */
 export function TdsSimpleTextField(props: TdsSimpleTextFieldProps): React.ReactElement {
-	const { register, control, getValues, getFieldState } = useFormContext();
-	const fieldState: ControllerFieldState = getFieldState(props.name);
 
+	return (
+		<VscodeFormGroup variant="vertical"
+			key={props.name}
+		>
+			<VscodeTextfield name={props.name}
+				readonly={props.rules?.readOnly || false}
+				required={props.rules?.required || false}
+				placeholder={props.placeholder}
+			/>
+			{props.info &&
+				<VscodeFormHelper>
+					{mdToHtml(props.info)}
+				</VscodeFormHelper>
+			}
+		</VscodeFormGroup>
+	)
 	return (
 		<section
 			className={`tds-field-container tds-simple-text-field ${props.className ? props.className : ''}`}
 		>
-			<VSCodeTextField
+			<VscodeTextfield
 				key={`text_field_${props.name}`}
-				readOnly={props.readOnly || false}
-				{...register(props.name, props.rules)}
+				readonly={props.rules.readOnly || false}
 			>
-				<PopupMessage field={{ ...props, label: "" }} fieldState={fieldState} />
-			</VSCodeTextField>
+				<PopupMessage field={{ ...props, label: "" }} />
+			</VscodeTextfield>
 		</section>
 	)
 }

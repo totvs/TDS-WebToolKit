@@ -17,8 +17,8 @@ limitations under the License.
 import "./table.css";
 import React from "react";
 import { TTdsTableColumn, TTdsOnClickTableCell, TTdsTableProps } from "./table.type";
-import { VSCodeCheckbox, VSCodeDataGrid, VSCodeDataGridCell, VSCodeDataGridRow, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { VscodeCheckbox, VscodeTable, VscodeTableCell, VscodeTableRow, VscodeTextfield } from "@vscode-elements/react-elements";
 
 type TBuildRowsProps = {
 	id: string;  //ID tabela 
@@ -38,14 +38,14 @@ function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColu
 	//Campo BOOLEAN
 	if (column.type == "boolean") {
 		alignClass = alignClass || "tds-text-center";
+		//readOnly={true}
 
 		return (
-			<VSCodeCheckbox
+			<VscodeCheckbox
 				className={alignClass}
 				key={`${rowKey}_${colIndex}`}
-				readOnly={true}
 				checked={value || value.toString() == "true"}
-			></VSCodeCheckbox>
+			></VscodeCheckbox>
 		)
 	}
 
@@ -61,15 +61,15 @@ function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColu
 
 	const text: string = tdsVscode.l10n.format(value, (column.displayType || column.type));
 
+	//readOnly={false}
 	return (
-		<VSCodeTextField
+		<VscodeTextfield
 			className={alignClass}
 			title={text}
 			data-type={column.type}
 			key={`${rowKey}_${colIndex}`}
-			readOnly={false}
 			value={text}
-		></VSCodeTextField>
+		></VscodeTextfield>
 	)
 }
 
@@ -95,7 +95,7 @@ function BuildRow(props: TBuildRowsProps) {
 
 	dataList.forEach((value: any, index: number) => {
 		reactElements.push(
-			<VSCodeDataGridCell
+			<VscodeTableCell
 				key={`${props.id}_cell_${props.rowIndex}_${index}`}
 				grid-column={index + 1}>
 				{fieldData(
@@ -104,18 +104,18 @@ function BuildRow(props: TBuildRowsProps) {
 					props.headerColumn[index],
 					value
 				)}
-			</VSCodeDataGridCell>
+			</VscodeTableCell>
 		);
 	});
 
 	return (
-		<VSCodeDataGridRow
+		<VscodeTableRow
 			row-type="default"
 			className={rowClassName}
 			key={`${props.id}_row_${props.rowIndex}`}
 		>
 			{...reactElements}
-		</VSCodeDataGridRow>
+		</VscodeTableRow>
 	);
 }
 
@@ -154,25 +154,25 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 				onKeyUpCapture={(event) => console.log("TdsTable onKeyUpCapture", event)}
 			>
 				{props.dataSource && props.dataSource.length != 0 &&
-					<VSCodeDataGrid
+					<VscodeTable
 						id={`${props.id}_table`}
 						key={`${props.id}_table`}
 						generate-header="sticky"
 						grid-template-columns={widthColumns}
 					>
 						{widthColumns.length > 0 &&
-							<VSCodeDataGridRow
+							<VscodeTableRow
 								id={`${props.id}_header`}
 								key={`${props.id}_header`}
 							>
 								{headerColumns.map((header: string, index: number) =>
-									<VSCodeDataGridCell
+									<VscodeTableCell
 										key={`${props.id}_header_${index}`}
 										grid-column={index + 1}
 									>
 										{header}
-									</VSCodeDataGridCell>)}
-							</VSCodeDataGridRow>
+									</VscodeTableCell>)}
+							</VscodeTableRow>
 						}
 						{props.onCustomBody && props.onCustomBody(props.dataSource)}
 						{!props.onCustomBody && props.dataSource.map((row: any, index: number) =>
@@ -201,7 +201,7 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 									})}
 							/>
 						)}
-					</VSCodeDataGrid>
+					</VscodeTable>
 				}
 			</div>
 

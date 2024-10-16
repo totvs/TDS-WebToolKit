@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { VSCodeLink } from "@vscode/webview-ui-toolkit/react";
 import React from "react";
+import { TdsLink } from "./decorator/link";
 
 const PARAGRAPH_RE = /\n\n/i
 const PHRASE_RE = /\n/i
@@ -79,12 +79,13 @@ export function mdToHtml(text: string): any[] {
                 let matchesLink: any;  //RegExpMatchArray | null;
                 if (matchesLink = link.match(LINK_COMMAND_RE)) {
                     children.push(
-                        <VSCodeLink key={spanSeq++} href={matchesLink[2]}
+                        <TdsLink key={spanSeq++}
+                            href={matchesLink[2]}
                             onClick={() => {
                                 (document.getElementsByName("newMessage")[0] as any).control.value = caption;
                             }
-                            }> {matchesLink[1]}
-                        </VSCodeLink>
+                            }>{matchesLink[1]}
+                        </TdsLink>
                     );
                 } else {
                     children.push(<span key={spanSeq++}> {part} </span>);

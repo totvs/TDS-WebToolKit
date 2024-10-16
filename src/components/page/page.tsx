@@ -20,6 +20,7 @@ import TdsHeader from "./header";
 import TdsFooter from "./footer";
 import TdsContent from "./content";
 import { ErrorBoundary } from "../error-boundary";
+import { VscodeScrollable } from "@vscode-elements/react-elements";
 
 export interface IPageView {
 	title?: string;
@@ -37,15 +38,17 @@ export interface IPageView {
 
  */
 export function TdsPage(props: IPageView): React.ReactElement {
-	
+
 	return (
 		<ErrorBoundary fallback={<p>Something unexpected occurred. See navigator console log for details.</p>}>
 			<section className="tds-page">
 				{props.title && <TdsHeader title={props.title} />}
 
-				<TdsContent>
-					{props.children}
-				</TdsContent>
+				<VscodeScrollable shadow={false}>
+					<TdsContent>
+						{props.children}
+					</TdsContent>
+				</VscodeScrollable>
 
 				{props.showFooter && <TdsFooter />}
 			</section>

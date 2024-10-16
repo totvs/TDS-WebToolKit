@@ -2,6 +2,8 @@ import * as React from "react";
 import { TGroupingInfo, TTdsDataGridColumnDef } from "./dataGrid.type";
 
 interface DataSourceContextInterface {
+    modelField: string;
+    setModelField: (fieldName: string) => void;
     dataSource: any[];
     setDataSource: (dataSource: any[]) => void;
     setFilter: (filter: string) => void;
@@ -39,11 +41,11 @@ export function useDataSourceContext() {
 };
 
 interface DataSourceProviderProps {
+    modelField: string;
     children: React.ReactElement;
 }
 
 export function DataSourceProvider(props: DataSourceProviderProps) {
-    const [dataSource, setDataSource] = React.useState<any[]>(undefined);
     const [filter, setFilter] = React.useState<string>(undefined);
     const [filterByField, setFilterByField] = React.useState<Record<string, string>>(undefined);
     const [showFieldsFilter, setShowFieldsFilter] = React.useState<boolean>(false);
@@ -54,6 +56,8 @@ export function DataSourceProvider(props: DataSourceProviderProps) {
     const [itemOffset, setItemOffset] = React.useState<number>(0);
     const [groupingInfo, setGroupingInfo] = React.useState<TGroupingInfo | undefined>(undefined);
     const [groupingFilter, setGroupingFilter] = React.useState<string[]>([]);
+    const [modelField, setModelField] = React.useState<string>(props.modelField);
+    const [dataSource, setDataSource] = React.useState<any[]>(undefined);
 
     return (
         <DataSourceContext.Provider value={{
@@ -78,7 +82,9 @@ export function DataSourceProvider(props: DataSourceProviderProps) {
             groupingInfo: groupingInfo,
             setGroupingInfo: setGroupingInfo,
             groupingFilter: groupingFilter,
-            setGroupingFilter: setGroupingFilter
+            setGroupingFilter: setGroupingFilter,
+            modelField: modelField,
+            setModelField: setModelField
         }}>
             {props.children}
         </DataSourceContext.Provider>

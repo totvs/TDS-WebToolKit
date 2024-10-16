@@ -16,9 +16,9 @@ limitations under the License.
 
 import "./paginator.css";
 import React, { useState } from "react";
-import { VSCodeButton, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
 import { tdsVscode } from './../../utilities/vscodeWrapper';
 import { TTdsPaginatorProps } from "./paginator.type";
+import { VscodeButton, VscodeTextfield } from "@vscode-elements/react-elements";
 
 
 const FirstPage = () => {
@@ -92,7 +92,7 @@ export function TdsPaginator(props: TTdsPaginatorProps): React.ReactElement {
 
 	return (
 		<div className="tds-paginator">
-			<VSCodeButton appearance="icon"
+			<VscodeButton icon=""
 				aria-label="First page"
 				title="First page"
 				onClick={() => {
@@ -100,9 +100,9 @@ export function TdsPaginator(props: TTdsPaginatorProps): React.ReactElement {
 				}}
 			>
 				<FirstPage />
-			</VSCodeButton>
+			</VscodeButton>
 
-			<VSCodeButton appearance="icon"
+			<VscodeButton icon=""
 				aria-label="Previous 10 pages"
 				title="Previous 10 pages"
 				onClick={() => {
@@ -112,9 +112,9 @@ export function TdsPaginator(props: TTdsPaginatorProps): React.ReactElement {
 			>
 				<LeftPage />
 				<LeftPage />
-			</VSCodeButton>
+			</VscodeButton>
 
-			<VSCodeButton appearance="icon"
+			<VscodeButton icon=""
 				aria-label="Previous page"
 				title="Previous page"
 				onClick={() => {
@@ -122,11 +122,11 @@ export function TdsPaginator(props: TTdsPaginatorProps): React.ReactElement {
 				}}
 			>
 				<LeftPage />
-			</VSCodeButton>
+			</VscodeButton>
 
 			<div className="tds-paginator-label">
 				{tdsVscode.l10n.formatNumber(props.firstPageItem + 1)}-{tdsVscode.l10n.formatNumber(props.firstPageItem + props.pageSize)} of {tdsVscode.l10n.formatNumber(props.totalItems)} (Page:
-				<VSCodeTextField
+				<VscodeTextfield
 					key="current-page"
 					value={`${props.currentPage + 1}`}
 					onChange={(e: any) => {
@@ -145,7 +145,7 @@ export function TdsPaginator(props: TTdsPaginatorProps): React.ReactElement {
 				of {tdsVscode.l10n.formatNumber(totalPages)})
 			</div>
 
-			<VSCodeButton appearance="icon"
+			<VscodeButton icon=""
 				aria-label="Next page"
 				title="Next page"
 				onClick={() => {
@@ -153,9 +153,9 @@ export function TdsPaginator(props: TTdsPaginatorProps): React.ReactElement {
 				}}
 			>
 				<RightPage />
-			</VSCodeButton>
+			</VscodeButton>
 
-			<VSCodeButton appearance="icon"
+			<VscodeButton icon=""
 				aria-label="Next 10 page"
 				title="Next 10 page"
 				onClick={() => {
@@ -165,15 +165,15 @@ export function TdsPaginator(props: TTdsPaginatorProps): React.ReactElement {
 			>
 				<RightPage />
 				<RightPage />
-			</VSCodeButton>
+			</VscodeButton>
 
-			<VSCodeButton appearance="icon" aria-label="Last page"
+			<VscodeButton icon="" aria-label="Last page"
 				onClick={() => {
 					changePageCallback(totalPages + 1);
 				}}
 			>
 				<LastPage />
-			</VSCodeButton>
+			</VscodeButton>
 		</div >
 	);
 }
