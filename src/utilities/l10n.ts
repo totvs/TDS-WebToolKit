@@ -48,7 +48,7 @@ export class L10n {
    * @returns The formatted date or date&time string.
    */
   public formatDate(value: Date, type: TDateFormat = "datetime"): string {
-    let result: string = value.toLocaleString();
+    let result: string = (value || "").toLocaleString();
 
     if (this._formatLocale !== "") {
       try {
@@ -97,8 +97,9 @@ export class L10n {
    */
   public formatNumber(value: number, type: TNumberFormat = "int", decimalsOrHexDigits: number = 8): string {
     let result: string = value.toLocaleString();
+    const locale: string = this._formatLocale || Intl.DateTimeFormat().resolvedOptions().locale;
 
-    if (this._formatLocale !== "") {
+    if (locale !== "") {
       try {
         if ((type === "hex") || (type === "HEX")) {
           result = "0".repeat(decimalsOrHexDigits) + value.toString(16);
@@ -129,7 +130,7 @@ export class L10n {
               // maximumSignificantDigits: decimalsOrHexDigits
             };
           }
-          const valueFormat = new Intl.NumberFormat(this._formatLocale, options);
+          const valueFormat = new Intl.NumberFormat(locale, options);
           result = valueFormat.format(value);
         }
       } catch (error) {

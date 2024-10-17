@@ -8,9 +8,13 @@
 </head>
 
 <link rel="stylesheet" href="./node_modules/@vscode/codicons/dist/codicon.css" id="vscode-codicon-stylesheet" />
+<script type="module" src="node_modules/@vscode-elements/webview-playground/dist/index.js"></script>
+<link rel="stylesheet" href="./index.css" />
 
 <body>
-  <div id="main"></div>
+  <vscode-demo>
+    <div id="main"></div>
+  </vscode-demo>
   <script type="module" src="/src/demo/index.tsx"></script>
 </body>
 

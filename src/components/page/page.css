@@ -13,21 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+/*
+ ---------------------------------------------------------------------------------------------------
+ General purpose
+---------------------------------------------------------------------------------------------------
+*/
 :root {
 	--tds-hor-spacing: calc(var(--design-unit)*3px);
 	--tds-ver-spacing: calc(var(--design-unit)*3px);
 	--tds-padding: calc(var(--design-unit)*3px);
 	--tds-indent-group: calc(var(--design-unit)*6px);
-}
-
-.tds-page {
-	display: flex;
-	flex-direction: column;
-	height: -webkit-fill-available;
-	/* margin: 5vh; */
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 0px;
 }
 
 .tds-error {
@@ -52,11 +48,91 @@ limitations under the License.
 	background-color: transparent;
 }
 
-vscode-scrollable {
-	width: 100%;
+/*
+ ---------------------------------------------------------------------------------------------------
+ Page
+---------------------------------------------------------------------------------------------------
+*/
+.tds-page {
+	display: flex;
+	flex-direction: column;
 	height: -webkit-fill-available;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 0px;
 }
 
-vscode-scrollable::part(div.scrollable-container) {
-	scrollbar-width: thin
+/*--< Header Page >-------------------------------------------------------------------------------*/
+.tds-page .tds-header {
+	display: flex;
+	flex-grow: 0;
+	flex-shrink: 1;
+	flex-basis: auto;
+	align-self: auto;
+	order: 0;
+	flex-direction: row;
+	align-items: flex-end;
+	margin-bottom: var(--tds-hor-spacing);
+}
+
+.tds-header h1 {
+	margin: 3px;
+	flex-grow: 1;
+}
+
+.tds-header div.tds-logo {
+	display: none;
+	width: 32px;
+	height: 32px;
+	padding: 3px;
+	flex-grow: 0;
+	flex-shrink: 0;
+	margin-right: 1rem;
+	/* background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4wEfEAsoo3l/tAAABERJREFUSMeNVm1MU2cUPvfa3nuhH6yl4KANBX+M4QRmZMsGtJSMQCmSReZUomzLMtF9Jf7YD7KPZIniPtARl/0Q2cAiui1Ds4QRGc6tA8GYwBYdrghW6EpBafG2tLb3Xu693Q9GVy794CQ3ue95zznP+57znvd5EYgjzceO5g0NWvYtLzPlYjH2LEUFcQAEpFIZL5VKb5Lkw8sFhU/3tJz44s9YMZBoynfeejPHZptqDgYD9SsmoXjrAK025yqCou+eNZ+zJgTYs3vX3sXFxQ6OY5NhQxJeQECrzTliPne+PXJ2U+TAoC9pfPTIbw6FeHGE2q1Uqh4Gg0F5jA2vitjr9dZWVVX5x8b+uL4O4HDjwZ2LbtcFoReRlNTU29e/r6mp6ctAMGihadqGYTgLEFLzPC8S2i+6XZWlJSW2W3+N3wqnqOXzz1RXBvqtDMOohPl+Mu+pl063tV8SBpqanMRPnWo1OGcdZThB1N2fn8sNJw1BAqW6sq1Hjx23IwAAL5TrWzmOPbK2LKtASJFlcHgsUSXq976cxfP86x4P2UTTFC4Sibt/+fX3BqRhf71kft65wLJsskyW4larNR94PGSm272QL5HI9F4vabQMjozBBuXFWtOw1+spxnECdLoytWjOOWvieC4ZAIAgiNunz7SfiXSorCj/sbLC4EtL2/wby7ID3/9wcTYegNfrGQeAYpqmwG63N4gy1Zoah8MOAAAu14M7QgeGoTUAyA6n03EAAIHaGuOdUCh0MX3z45c6Os1xd+ZyPShFnc7ZbQmOX0Q9QuDzLeX6/b7379nujpqMlR8JLVNTVeE6UhSVjfI8F7dTZbIULnpfhgDDxAahvUaTFY6H4/g2NFHRxGKxNdacx+NJEer8ft+aMYqim+ICyOSyn3CcINemSpi6/2V62hb+p2l6HFWrNePxAMxd53t6+/ozMAyv1mZvaZPJ5I549jzPh9NJEMSMyOmc7QOAVwEAFIpUdTQnDMNoAOj/74PDhw7m2Gemy1WqtPzXXtnyxNmu7slVW7k8Rb20tAQAIVClpV9DDuyvl9yfn1tg2eVkALBaBke2brSpDPriHQAwShBJJMMwN1AE+YfluDoAUOE4DjpdmXrdVfGYQjmkUCg7MzIye49/8qk7MQAyGq0Wq1cFCgBgNNY0YxjuBgDwkKRu+t7djpHhIVdNdeW16qqKj/fsrtNzHLfuxBUUbldEoxcEQQLPPV/y4ZqDfajxjZ2TE9be0LrVrBAKQSTRDMNYcBy/QVHU9SqjaerKQH8tx7GtUXqhofvCd93rGM2gL24EgLbYNJlIj0Bubt57be1fn4zKaDN2x9gzRUUTNE2ZBKwWESjWtYIEtNrst7/pNH8VkzIBAP62TtyuMVV/u+TzpbMsm782qHAHK/osbc5VhVK5y9zV/fOGXhXxny0AUqmcl0glNz0kebmgcHtPy4mTMZ8t/wK0tcZOcUiGBgAAAABJRU5ErkJggg==") */
+}
+
+.tds-header div.tds-help-doc {
+	text-align: left;
+	align-self: flex-end;
+}
+
+/*--< Content Page >-------------------------------------------------------------------------------*/
+.tds-page .tds-content {
+	/* display: flex; */
+	flex-grow: 1;
+	flex-shrink: 1;
+	flex-basis: auto;
+	order: 0;
+}
+
+.tds-page .tds-content .split-layout-content {
+	overflow-y: auto;
+}
+
+
+vscode-split-layout {
+	border: none;
+}
+
+/*--< Footer Page >-------------------------------------------------------------------------------*/
+.tds-page .tds-footer {
+	display: flex;
+	flex-grow: 0;
+	flex-shrink: 1;
+	flex-basis: auto;
+	align-self: auto;
+	order: 0;
+	flex-direction: column;
+	align-items: flex-end;
+	margin-top: calc(var(--tds-hor-spacing)/2);
+}
+
+.tds-footer .tds-footer-content {
+	display: flex;
+	flex-grow: 1;
+}
+
+.tds-footer .tds-help-doc {
+	text-align: left;
+	align-self: flex-end;
 }

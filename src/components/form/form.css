@@ -40,7 +40,12 @@ limitations under the License.
 	align-self: auto;
 	order: 0;
 	flex-direction: column;
-	overflow: hidden auto;
+
+	display: grid;
+	grid-template-columns: auto auto auto;
+	gap: 10px;
+	background-color: #2196F3;
+	padding: 10px;
 }
 
 .tds-form-footer {

@@ -152,7 +152,7 @@ export type TdsFieldRules = {
 	required?: boolean;
 	min?: { value: number, message: string };
 	max?: { value: number, message: string };
-	pattern?: RegExp;
+	pattern?: RegExp
 }
 /**
  * Interface for form field components.

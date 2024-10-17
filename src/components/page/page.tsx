@@ -44,11 +44,9 @@ export function TdsPage(props: IPageView): React.ReactElement {
 			<section className="tds-page">
 				{props.title && <TdsHeader title={props.title} />}
 
-				<VscodeScrollable shadow={false}>
-					<TdsContent>
-						{props.children}
-					</TdsContent>
-				</VscodeScrollable>
+				<TdsContent>
+					{props.children}
+				</TdsContent>
 
 				{props.showFooter && <TdsFooter />}
 			</section>

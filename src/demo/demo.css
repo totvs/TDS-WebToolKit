@@ -1,18 +1,3 @@
-:root {
-    --font-family: "Segoe WPC", "Segoe UI", sans-serif;
-    --font-size: 13px;
-    --font-weight: normal;
-}
-
-body * {
-    /* Padrão Dark do VSCode */
-    font-family: var(--font-family);
-}
-
-#main .tds-page {
-    /* height: 90vh; */
-}
-
 .demo-left-side {
     background-color: slategrey;
     flex-shrink: 0;
@@ -29,11 +14,11 @@ body * {
 }
 
 .demo-right-side {
-    background-color: rgb(188, 171, 171);
+    /* background-color: rgb(188, 171, 171); */
     flex-grow: 1;
     flex-shrink: 0;
     order: 0;
-    height: 650px;
+    height: 600px;
     color: var(--foreground);
     width: 100vh;
 }

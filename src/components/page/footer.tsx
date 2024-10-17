@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import { VscodeDivider } from "@vscode-elements/react-elements";
-import "./footer.css";
 import React from "react";
 import { TdsLink } from "../decorator/link";
 
