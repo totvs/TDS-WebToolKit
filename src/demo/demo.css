@@ -1,26 +1,9 @@
-:root {
-    --font-family: "Segoe WPC", "Segoe UI", sans-serif;
-    --font-size: 13px;
-    --font-weight: normal;
-}
-
-body * {
-    /* Padrão Dark do VSCode */
-    font-family: var(--font-family);
-}
-
-#main .tds-page {
-    width: 95%;
-    height: 80vh;
-}
-
 .demo-left-side {
     background-color: slategrey;
-    flex-shrink: 1;
+    flex-shrink: 0;
     align-items: flex-start;
     order: 0;
-    height: 90vh;
-    max-height: 90vh;
+    height: 650px;
     flex-direction: row;
     width: max-content;
     padding: 10px;
@@ -31,13 +14,12 @@ body * {
 }
 
 .demo-right-side {
-    background-color: rgb(14, 2, 2);
     flex-grow: 1;
-    flex-shrink: 1;
+    flex-shrink: 0;
     order: 0;
-    height: 90vh;
-    max-height: 90vh;
+    height: 600px;
     color: var(--foreground);
+    width: 90%;
 }
 
 .demo-right-side #warning {

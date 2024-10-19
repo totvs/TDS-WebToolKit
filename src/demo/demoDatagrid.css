@@ -1,10 +1,10 @@
 #demoDatagrid .tds-page {
-    /* width: 90%;
-    height: 100%; */
     max-height: 500px;
     margin: auto;
 }
 
-vscode-data-grid-row[id^="result_dataGrid_row_1"] {
+vscode-data-grid-row[id^="result_dataGrid_row_1"],
+vscode-data-grid-row[id^="result_dataGrid_row_2"],
+vscode-data-grid-row[id^="result_dataGrid_row_3"] {
     margin-left: var(--tds-indent-group);
 }

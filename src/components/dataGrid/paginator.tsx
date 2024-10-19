@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
-import { VSCodeButton, VSCodeDropdown, VSCodeOption, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
 import { tdsVscode } from './../../utilities/vscodeWrapper';
-
+import { VscodeButton, VscodeSingleSelect, VscodeTextfield } from "@vscode-elements/react-elements";
 
 const FirstPage = () => {
 	return (
@@ -89,7 +88,7 @@ export interface ITdsPaginatorProps {
 export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElement {
 	const [currentPage, setCurrentPage] = useState(props.currentPage);
 	const [totalPages, setTotalPages] = useState(0);
-	const [currentItem, setCurrentItem] = useState(props.currentItem);
+	const [currentItem, setCurrentItem] = useState(0);
 	const [totalItems, setTotalItems] = useState(props.totalItems);
 	const lastItem: number = currentItem + props.pageSize > totalItems ? totalItems : currentItem + props.pageSize;
 
@@ -111,16 +110,18 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 	}
 
 	React.useEffect(() => {
+		setCurrentItem(props.currentItem);
+		setCurrentPage(props.currentPage);
 		setTotalItems(props.totalItems);
 		setTotalPages(Math.ceil(props.totalItems / props.pageSize));
 	}, [props.totalItems, props.pageSize]);
 
 	return (
 		<div className="tds-data-grid-pagination">
-			{props.pageSizeOptions.length &&
+			{(props.pageSizeOptions.length > 0) &&
 				<>
-					<span>{tdsVscode.l10n.t("Elements/page")}</span>
-					<VSCodeDropdown
+					<span>{tdsVscode.l10n.t("_Elements/page")}</span>
+					<VscodeSingleSelect
 						key={`dropdown_elements_page`}
 						value={`${props.pageSize}`}
 						onChange={(event: any) => {
@@ -130,19 +131,20 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 						}}
 					>
 						{props.pageSizeOptions.map((size: number, index: number) => (
-							<VSCodeOption
+							<>VscodeOption
 								key={`dropdown_elements_page_${index}`}
 								value={`${size}`}
 								checked={props.pageSize === size}
-							>
+
 								{size}
-							</VSCodeOption>
+								VscodeOption
+							</>
 						))}
-					</VSCodeDropdown>
+					</VscodeSingleSelect>
 				</>
 			}
 
-			<VSCodeButton appearance="icon"
+			<VscodeButton icon=""
 				aria-label="First page"
 				title="First page"
 				onClick={() => {
@@ -150,9 +152,9 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 				}}
 			>
 				<FirstPage />
-			</VSCodeButton>
+			</VscodeButton>
 
-			<VSCodeButton appearance="icon"
+			<VscodeButton icon=""
 				aria-label="Previous 10 pages"
 				title="Previous 10 pages"
 				onClick={() => {
@@ -162,9 +164,9 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 			>
 				<LeftPage />
 				<LeftPage />
-			</VSCodeButton>
+			</VscodeButton>
 
-			<VSCodeButton appearance="icon"
+			<VscodeButton icon=""
 				aria-label="Previous page"
 				title="Previous page"
 				onClick={() => {
@@ -172,13 +174,12 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 				}}
 			>
 				<LeftPage />
-			</VSCodeButton>
+			</VscodeButton>
 
 			<div className="tds-data-grid-pagination-label">
 				{tdsVscode.l10n.formatNumber(currentItem + 1)}-{tdsVscode.l10n.formatNumber(lastItem)} of {tdsVscode.l10n.formatNumber(totalItems)} (Page:
-				<VSCodeTextField
+				<VscodeTextfield
 					key="current-page"
-					readOnly={totalPages == 1}
 					value={`${currentPage + 1}`}
 					onChange={(e: any) => {
 						let page = parseInt(e.target.value);
@@ -196,7 +197,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 				of {tdsVscode.l10n.formatNumber(totalPages)})
 			</div>
 
-			<VSCodeButton appearance="icon"
+			<VscodeButton icon=""
 				aria-label="Next page"
 				title="Next page"
 				onClick={() => {
@@ -204,9 +205,9 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 				}}
 			>
 				<RightPage />
-			</VSCodeButton>
+			</VscodeButton>
 
-			<VSCodeButton appearance="icon"
+			<VscodeButton icon=""
 				aria-label="Next 10 page"
 				title="Next 10 page"
 				onClick={() => {
@@ -216,15 +217,15 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 			>
 				<RightPage />
 				<RightPage />
-			</VSCodeButton>
+			</VscodeButton>
 
-			<VSCodeButton appearance="icon" aria-label="Last page"
+			<VscodeButton icon="" aria-label="Last page"
 				onClick={() => {
 					changePage(totalPages + 1);
 				}}
 			>
 				<LastPage />
-			</VSCodeButton>
+			</VscodeButton>
 		</div >
 	);
 }

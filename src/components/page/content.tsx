@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import "./content.css";
+import { VscodeScrollable, VscodeSplitLayout } from "@vscode-elements/react-elements";
 import React from "react";
 
 export interface IContent {
@@ -29,8 +29,8 @@ export default function TdsContent(props: IContent) {
 	let children = React.Children.toArray(props.children);
 
 	return (
-		<div className="tds-content">
+		<VscodeScrollable className="tds-content">
 			{...children}
-		</div>
+		</VscodeScrollable>
 	);
 }

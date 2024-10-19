@@ -54,7 +54,8 @@ export { TdsDialog } from './components/dialog';
 export { TdsLabelField } from './components/fields/labelField'
 export type { TdsLabelFieldProps } from './components/fields/labelField'
 
-export { TdsTreeView, TdsTreeItem } from "./components/tree";
+export { TdsTree } from "./components/tree";
+export type { TdsTreeItem, TdsTreeItemAction, TdsTreeItemDecoration, TdsTreeActionEvent, TdsTreeSelectEvent } from "./components/tree";
 
 declare global {
   interface Window {

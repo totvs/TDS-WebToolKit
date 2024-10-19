@@ -14,24 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.tds-footer {
-	display: flex;
-	flex-grow: 0;
-	flex-shrink: 1;
-	flex-basis: auto;
-	align-self: auto;
-	order: 0;
-	flex-direction: column;
-	align-items: flex-end;
-	margin-top: calc(var(--tds-hor-spacing)/2);
+import { VscodeScrollable, VscodeSplitLayout } from "@vscode-elements/react-elements";
+import React from "react";
+
+export interface IContent {
+	children: any
 }
 
-.tds-footer .tds-footer-content {
-	display: flex;
-	flex-grow: 1;
-}
+/**
+ * Renders the content section.
+ * @param props - The content section props.
+ */
+export default function TdsContentForm(props: IContent) {
+	let children = React.Children.toArray(props.children);
 
-.tds-help-doc {
-	text-align: left;
-	align-self: flex-end;
+	return (
+		<VscodeScrollable className="tds-content-form">
+			{...children}
+		</VscodeScrollable>
+	);
 }

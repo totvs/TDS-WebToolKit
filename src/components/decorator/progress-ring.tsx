@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { VscodeProgressRing } from "@vscode-elements/react-elements";
 import "./progress-ring.css";
-import { VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react";
 import React from "react";
 
 /**
@@ -37,11 +37,11 @@ export function TdsProgressRing(props: TTdsProcessRing): React.ReactElement {
     return props.size == "full" ?
         (
             <section className={`tds-progress-ring-full`}>
-                <VSCodeProgressRing className={`tds-progress-ring-full`} />
+                <VscodeProgressRing className={`tds-progress-ring-full`} />
                 {props.message && <div className="message">{props.message}</div>}
             </section>
         )
         : (
-            <VSCodeProgressRing className={`tds-progress-ring${classSize}`} />
+            <VscodeProgressRing className={`tds-progress-ring${classSize}`} />
         )
 }

@@ -15,5 +15,5 @@ type TdsSimpleCheckBoxFieldProps = TdsFieldProps;
  * @returns
  */
 export function TdsSimpleCheckBoxField(props: TdsSimpleCheckBoxFieldProps): React.ReactElement {
-	return <TdsCheckBoxField {...props} />
+	return <TdsCheckBoxField checked={false} {...props} />
 }

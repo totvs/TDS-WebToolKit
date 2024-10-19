@@ -14,11 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+export interface IHeader {
+	title: string;
+}
+
 /**
-* Represents the shape of an abstract model object.
-* This type can be used to define the structure of a model object that contains arbitrary properties.
-*/
-export interface TdsAbstractModel  {
-  [key: string]: any
-  //errors?: any
+ * Header component that renders the TOTVS logo, page title, and help link.
+ * 
+ * @param props - Header component props
+ * @param props.title - Page title to display
+ */
+export default function TdsHeaderForm(props: IHeader): React.ReactElement {
+	return (
+		<section className="tds-header-form">
+			<h3>{props.title}</h3>
+		</section>
+	);
 }

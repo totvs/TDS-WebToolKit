@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { VSCodeTextArea, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
-import { ControllerFieldState, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from "../mdToHtml";
+import { VscodeFormGroup, VscodeTextarea, VscodeTextfield } from "@vscode-elements/react-elements";
+import { VscodeLabel, VscodeFormHelper } from "@vscode-elements/react-elements";
 
 type TdsTextFieldProps = TdsFieldProps & {
     textArea?: boolean
@@ -41,16 +41,30 @@ type TdsTextFieldProps = TdsFieldProps & {
  *
  * @returns
  */
-export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
-    if (useFormContext() == null) {
-        console.log("TdsTextField: useFormContext() == null");
-    }
-    const { register, control, getValues, getFieldState } = useFormContext();
-    const fieldState: ControllerFieldState = getFieldState(props.name);
+export function TdsTextField(props: TdsTextFieldProps): any {
+    const textValue: string = props.value !== undefined ? props.value : "currentValue"
 
-    const textValue: string = props.value !== undefined ? props.value :
-        props.format ? props.format(getValues(props.name) as string) : getValues(props.name)
-
+    return (
+        <VscodeFormGroup variant="vertical"
+            key={props.name}
+        >
+            <VscodeLabel htmlFor={props.name}
+                required={props.rules?.required || false}
+            >
+                {mdToHtml(props.label || props.name)}
+            </VscodeLabel>
+            <VscodeTextfield name={props.name}
+                readonly={props.rules?.readOnly || false}
+                required={props.rules?.required || false}
+                placeholder={props.placeholder}
+            />
+            {props.info &&
+                <VscodeFormHelper>
+                    {mdToHtml(props.info)}
+                </VscodeFormHelper>
+            }
+        </VscodeFormGroup>
+    )
     return (
         <section
             className={`tds-field-container tds-text-field ${props.className ? props.className : ''}`}
@@ -62,8 +76,7 @@ export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
                 {props.rules?.required && <span className="tds-required" />}
             </label>
             {props.textArea ?? false ? (
-                <VSCodeTextArea
-                    readOnly={props.readOnly || false}
+                <VscodeTextarea
                     placeholder={props.placeholder}
                     resize="vertical"
                     cols={props.cols ?? 30}
@@ -71,22 +84,21 @@ export function TdsTextField(props: TdsTextFieldProps): React.ReactElement {
                     onInput={props.onInput}
                     key={`text_area_${props.name}`}
                     value={textValue}
-                    {...register(props.name, props.rules)}
                 >
-                    <PopupMessage field={props} fieldState={fieldState} />
-                </VSCodeTextArea>
+                    <PopupMessage field={props} />
+                </VscodeTextarea>
             ) : (
-                <VSCodeTextField
-                    readOnly={props.readOnly || false}
-                    placeholder={props.placeholder}
-                    size={props.size ?? 30}
-                    onInput={props.onInput}
-                    key={`text_field_${props.name}`}
-                    value={textValue}
-                    {...register(props.name, props.rules)}
-                >
-                    <PopupMessage field={props} fieldState={fieldState} />
-                </VSCodeTextField>
+                <>
+                    <VscodeTextfield
+                        placeholder={props.placeholder}
+                        onInput={props.onInput}
+                        onChange={props.onChange}
+                        key={`text_field_${props.name}`}
+                        value={textValue}
+                    >
+                        <PopupMessage field={props} />
+                    </VscodeTextfield>
+                </>
             )}
         </section>
     )

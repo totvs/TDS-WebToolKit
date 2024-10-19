@@ -16,7 +16,6 @@ limitations under the License.
 
 import "./demoTable.css";
 import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilities/common-command-webview";
 import { setDataModel, setErrorModel, TdsForm } from "../components/form/form";
 import { TdsPage } from "../components/page/page";
@@ -46,20 +45,20 @@ type TDemoTableProps = {
 }
 
 export default function DemoTable(props: TDemoTableProps) {
-    const methods = useForm<TDemoModel>({
-        defaultValues: {
-            dataSource: countries.map((country: any) => {
-                return {
-                    country: country.name,
-                    capital: country.capital,
-                    area: Number.parseInt(country.area)
-                }
-            })
-        },
-        mode: "all"
-    })
+    // const methods = useForm<TDemoModel>({
+    //     defaultValues: {
+    //         dataSource: countries.map((country: any) => {
+    //             return {
+    //                 country: country.name,
+    //                 capital: country.capital,
+    //                 area: Number.parseInt(country.area)
+    //             }
+    //         })
+    //     },
+    //     mode: "all"
+    // })
 
-    const onSubmit: SubmitHandler<TDemoModel> = (data) => {
+    const onSubmit = (data: TDemoModel) => {
         sendSaveAndClose(data);
     }
 
@@ -72,8 +71,8 @@ export default function DemoTable(props: TDemoTableProps) {
                     const model: TDemoModel = command.data.model;
                     const errors: any = command.data.errors;
 
-                    setDataModel<TDemoModel>(methods.setValue, model);
-                    setErrorModel(methods.setError, errors);
+                    // setDataModel<TDemoModel>(methods.setValue, model);
+                    // setErrorModel(methods.setError, errors);
 
                     break;
                 default:
@@ -93,29 +92,36 @@ export default function DemoTable(props: TDemoTableProps) {
             {
                 name: "country",
                 type: "string",
-                label: tdsVscode.l10n.t("Country"),
+                label: tdsVscode.l10n.t("_Country"),
             },
             {
                 name: "capital",
                 type: "string",
-                label: tdsVscode.l10n.t("Capital"),
+                label: tdsVscode.l10n.t("_Capital"),
             },
             {
                 name: "area",
                 type: "number",
-                label: tdsVscode.l10n.t("Area"),
+                label: tdsVscode.l10n.t("_Area"),
             },
         ];
     }
 
-    const model: TDemoModel = methods.getValues();
+    const model: TDemoModel = {
+        dataSource: countries.map((country: any) => {
+            return {
+                country: country.name,
+                capital: country.capital,
+                area: Number.parseInt(country.area)
+            }
+        })
+    }
     //const indexFirstPathFree: number = model.includePaths.findIndex((row: TIncludePath) => row.path == "");
 
     //    actions={formActions}
     return (
         <TdsPage title="Demo: TdsTable" >
             <TdsForm<TDemoModel>
-                methods={methods}
                 actions={[]}
                 onSubmit={onSubmit}>
 

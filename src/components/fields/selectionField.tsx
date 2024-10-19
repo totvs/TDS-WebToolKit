@@ -1,7 +1,7 @@
-import { VSCodeDropdown, VSCodeOption } from "@vscode/webview-ui-toolkit/react";
-import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
 import { TdsFieldProps } from "../form/form";
+import { mdToHtml } from "../mdToHtml";
 import PopupMessage from "../popup-message/popup-message";
+import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeOption, VscodeSingleSelect } from "@vscode-elements/react-elements";
 
 type TdsSelectionFieldProps = TdsFieldProps & {
 	options?: {
@@ -22,10 +22,10 @@ type TdsSelectionFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactElement {
-	const { register, control, getValues, getFieldState } = useFormContext();
-	const fieldState: ControllerFieldState = getFieldState(props.name);
+	// const { register, control, getValues, getFieldState } = useFormContext();
+	// const fieldState: ControllerFieldState = getFieldState(props.name);
 	const options = props.options || [];
-	const currentValue: string = getValues(props.name) as string;
+	const currentValue: string = "currentValue";  //getValues(props.name) as string;
 
 	// registerField.onChange = (e) => {
 	// 	return new Promise(() => {
@@ -38,32 +38,62 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 	// }
 
 	return (
-		<section
-			className={`tds-field-container tds-selection-field ${props.className ? props.className : ''}`}
+		<VscodeFormGroup variant="vertical"
+			key={props.name}
 		>
-			<label
-				htmlFor={props.name}
+			<VscodeLabel htmlFor={props.name}
+				required={props.rules?.required || false}
 			>
-				{props.label}
-				{props.rules?.required && <span className="tds-required" />}
-			</label>
-			<VSCodeDropdown
-				key={`dropdown_${props.name}`}
-
-				{...register(props.name, props.rules)}
+				{mdToHtml(props.label || props.name)}
+			</VscodeLabel>
+			<VscodeSingleSelect name={props.name}
+				disabled={props.rules?.readOnly || false}
+				required={props.rules?.required || false}
 			>
 				{options.map(({ value, text }, index) => {
 					return (
-						<VSCodeOption
+						<VscodeOption
 							key={`dropdown_${props.name}_${index}`}
-							value={value}
-							checked={currentValue === value}>
+							value={value}>
 							{text}
-						</VSCodeOption>
+						</VscodeOption>
 					)
 				})}
-				<PopupMessage field={props} fieldState={fieldState} />
-			</VSCodeDropdown>
+			</VscodeSingleSelect>
+			{props.info &&
+				<VscodeFormHelper>
+					{mdToHtml(props.info)}
+				</VscodeFormHelper>
+			}
+		</VscodeFormGroup>
+	)
+
+
+	return (
+		<section
+			className={`tds-field-container tds-selection-field ${props.className ? props.className : ''}`}
+		>
+			<VscodeLabel
+				htmlFor={props.name}
+				required={props.rules?.required || false}
+			>
+				{props.label}
+			</VscodeLabel>
+			<VscodeSingleSelect
+				key={`dropdown_${props.name}`}
+				required={props.rules?.readOnly || false}
+			>
+				{options.map(({ value, text }, index) => {
+					return (
+						<VscodeOption
+							key={`dropdown_${props.name}_${index}`}
+							value={value}>
+							{text}
+						</VscodeOption>
+					)
+				})}
+				<PopupMessage field={props} />
+			</VscodeSingleSelect>
 		</section>
 	)
 }

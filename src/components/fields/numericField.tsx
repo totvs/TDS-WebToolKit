@@ -1,7 +1,7 @@
-import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
-import { ControllerFieldState, useController, useFormContext } from "react-hook-form";
+import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeTextfield } from "@vscode-elements/react-elements";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
+import { mdToHtml } from "../mdToHtml";
 
 type TdsNumericFieldProps = TdsFieldProps & {
 
@@ -19,8 +19,31 @@ type TdsNumericFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement {
-	const { register, control, getValues, getFieldState } = useFormContext();
-	const fieldState: ControllerFieldState = getFieldState(props.name);
+	return (
+		<VscodeFormGroup variant="vertical"
+			key={props.name}
+		>
+			<VscodeLabel htmlFor={props.name}
+				required={props.rules?.required || false}
+			>
+				{mdToHtml(props.label || props.name)}
+			</VscodeLabel>
+			<VscodeTextfield name={props.name}
+				type="number"
+				pattern={(props.rules?.pattern ? props.rules.pattern : /\d+/).source}
+				readonly={props.rules?.readOnly || false}
+				required={props.rules?.required || false}
+			/>
+			{props.info &&
+				<VscodeFormHelper>
+					{mdToHtml(props.info)}
+				</VscodeFormHelper>
+			}
+		</VscodeFormGroup>
+	)
+
+	// const { register, control, getValues, getFieldState } = useFormContext();
+	// const fieldState: ControllerFieldState = getFieldState(props.name);
 
 	const rules = {
 		...props.rules,
@@ -35,20 +58,21 @@ export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement
 		<section
 			className={`tds-field-container tds-numeric-field ${props.className ? props.className : ''}`}
 		>
-			<label
+			<VscodeLabel
 				htmlFor={props.name}
+				required={props.rules?.required || false}
 			>
 				{props.label}
-				{props.rules?.required && <span className="tds-required" />}
-			</label>
-			<VSCodeTextField
-				readOnly={props.readOnly || false}
+			</VscodeLabel>
+			<VscodeTextfield
+				readonly={rules.readOnly}
 				key={`text_field_${props.name}`}
-
-				{...register(props.name, props.rules)}
+				required={rules.required}
+				type="number"
+				pattern={rules.pattern.value.source}
 			>
-				<PopupMessage field={props} fieldState={fieldState} />
-			</VSCodeTextField>
+				<PopupMessage field={props} />
+			</VscodeTextfield>
 		</section>
 	)
 }

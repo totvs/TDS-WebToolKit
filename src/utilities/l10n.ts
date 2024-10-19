@@ -21,9 +21,15 @@ export class L10n {
   private _translations: any = {};
   private _formatLocale: string = "";
 
+  constructor() {
+    this.loadInternalTranslations();
+  }
+
   public set translations(value: any) {
     this._translations = value.translations || {};
     this._formatLocale = value.formatLocale || "";
+
+    this.loadInternalTranslations();
   }
 
   public get formatLocale(): string {
@@ -42,7 +48,7 @@ export class L10n {
    * @returns The formatted date or date&time string.
    */
   public formatDate(value: Date, type: TDateFormat = "datetime"): string {
-    let result: string = value.toLocaleString();
+    let result: string = (value || "").toLocaleString();
 
     if (this._formatLocale !== "") {
       try {
@@ -91,8 +97,9 @@ export class L10n {
    */
   public formatNumber(value: number, type: TNumberFormat = "int", decimalsOrHexDigits: number = 8): string {
     let result: string = value.toLocaleString();
+    const locale: string = this._formatLocale || Intl.DateTimeFormat().resolvedOptions().locale;
 
-    if (this._formatLocale !== "") {
+    if (locale !== "") {
       try {
         if ((type === "hex") || (type === "HEX")) {
           result = "0".repeat(decimalsOrHexDigits) + value.toString(16);
@@ -123,7 +130,7 @@ export class L10n {
               // maximumSignificantDigits: decimalsOrHexDigits
             };
           }
-          const valueFormat = new Intl.NumberFormat(this._formatLocale, options);
+          const valueFormat = new Intl.NumberFormat(locale, options);
           result = valueFormat.format(value);
         }
       } catch (error) {
@@ -191,6 +198,62 @@ export class L10n {
 
     return result;
   }
+
+  private loadInternalTranslations() {
+    if (this._formatLocale == "pt-BR") {
+      this._translations["_Filter"] = "Filtro";
+      this._translations["_Filters on all columns and can accept regular expressions"] = "Filtros em todas as colunas e aceita expressões regulares";
+      this._translations["_Elements/page"] = "Elementos/página";
+      this._translations["_Save"] = "Salvar";
+      this._translations["_Save the information and close the page"] = "Salva as informações e fecha a página";
+      this._translations["_Close"] = "Fechar";
+      this._translations["_Closes the page without saving the information"] = "Fecha a página sem salvar as informações";
+      this._translations["_Clear"] = "Limpar";
+      this._translations["_Reset the fields"] = "Restaura valores padrões";
+      this._translations["_Select Folder"] = "Selecionar Pasta";
+      this._translations["_Select File"] = "Selecionar Arquivo";
+      this._translations["_There is invalid information. See the error by hovering the mouse over the field marking."] = "Há informações inválidas. Veja o erro passando o mouse sobre a marcação do campo.";
+      this._translations["_Wait please. Processing..."] = "Espere, por favor. Processando...";
+      this._translations["_[{0}] is required."] = "[{0}] é obrigatório.";
+      this._translations["_[{0}] is not valid range (min value)."] = "[{0}] não é válido para faixa (valor mínimo).";
+      this._translations["_[{0}] is not valid range (max value)."] = "[{0}] não é válido para faixa (valor máximo).";
+    } else if (this._formatLocale == "es") {
+      this._translations["_Filter"] = "Filtrar";
+      this._translations["_Filters on all columns and can accept regular expressions"] = "Filtros en todas las columnas y puede aceptar expresiones regulares";
+      this._translations["_Elements/page"] = "Elementos/página";
+      this._translations["_Save"] = "Guarde";
+      this._translations["_Save the information and close the page"] = "Guarde la información y cierre la página";
+      this._translations["_Close"] = "Cierra";
+      this._translations["_Closes the page without saving the information"] = "Cierra la página sin guardar la información";
+      this._translations["_Clear"] = "Clara";
+      this._translations["_Reset the fields"] = "Restablecer los campos";
+      this._translations["_Select Folder"] = "Seleccionar Carpeta";
+      this._translations["_Select File"] = "Seleccionar Archivo";
+      this._translations["_There is invalid information. See the error by hovering the mouse over the field marking."] = "Hay información inválida. Vea el error flotando el ratón sobre el marcado de campo.";
+      this._translations["_Wait please. Processing..."] = "Espera por favor. Tratamiento...";
+      this._translations["_[{0}] is required."] = "[{0}] se requiere.";
+      this._translations["_[{0}] is not valid range (min value)."] = "[{0}] no es un rango válido (valor mínimo).";
+      this._translations["_[{0}] is not valid range (max value)."] = "[{0}] no es un rango válido (valor máximo).";
+    } else {
+      this._translations["_Filter"] = "Filter";
+      this._translations["_Filters on all columns and can accept regular expressions"] = "Filters on all columns and can accept regular expressions";
+      this._translations["_Elements/page"] = "Elements/page";
+      this._translations["_Save"] = "Save";
+      this._translations["_Save the information and close the page"] = "Save the information and close the page";
+      this._translations["_Close"] = "Close";
+      this._translations["_Closes the page without saving the information"] = "Closes the page without saving the information";
+      this._translations["_Clear"] = "Clear";
+      this._translations["_Reset the fields"] = "Reset the fields";
+      this._translations["_Select Folder"] = "Select Folder";
+      this._translations["_Select File"] = "Select File";
+      this._translations["_There is invalid information. See the error by hovering the mouse over the field marking."] = "There is invalid information. See the error by hovering the mouse over the field marking.";
+      this._translations["_Wait please. Processing..."] = "Wait please. Processing...";
+      this._translations["_[{0}] is required."] = "[{0}] is required.";
+      this._translations["_[{0}] is not valid range (min value)."] = "[{0}] is not valid range (min value).";
+      this._translations["_[{0}] is not valid range (max value)."] = "[{0}] is not valid range (max value).";
+    }
+  }
 }
+
 
 export const l10n: L10n = new L10n();

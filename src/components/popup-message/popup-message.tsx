@@ -16,31 +16,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsFieldProps } from "../form/form";
 import "./popup-message.css";
-import { ControllerFieldState } from "react-hook-form";
+//import { ControllerFieldState } from "react-hook-form";
 
 export interface IPopupMessage {
 	field: TdsFieldProps,
-	fieldState: ControllerFieldState
+	//fieldState: ControllerFieldState
 }
 
 function buildMessage(props: IPopupMessage): string {
 	const { label, info } = props.field;
-	const { error } = props.fieldState;
+	//const { error } =  //props.fieldState;
 	let message: string = info || "";
 
-	if (error) {
-		if (error.type == "required") {
-			message = error.message || `[${label}] is required.`;
-		} else if (error.type == "min") {
-			message = error.message || `[${label}] is not valid range (min value).`;
-		} else if (error.type == "max") {
-			message = error.message || `[${label}] is not valid range (max value).`;
-		} else {
-			message = error.message || error.message || `${error.type}<Unknown>`
-		}
-	}
+	// if (error) {
+	// 	if (error.type == "required") {
+	// 		message = error.message || tdsVscode.l10n.t(`_[{0}] is required.`, label);
+	// 	} else if (error.type == "min") {
+	// 		message = error.message || tdsVscode.l10n.t(`_[{0}] is not valid range (min value).`, label);
+	// 	} else if (error.type == "max") {
+	// 		message = error.message || tdsVscode.l10n.t(`_[{0}] is not valid range (max value).`, label);
+	// 	} else {
+	// 		message = error.message || error.message || `${error.type}<Unknown>`
+	// 	}
+	// }
 
 	return message;
 }
@@ -55,7 +56,7 @@ function buildMessage(props: IPopupMessage): string {
 export default function PopupMessage(props: IPopupMessage): React.ReactElement {
 	const OFFSET_LEFT: number = 20;
 	const OFFSET_TOP: number = 2;
-	const type: string = props.fieldState.invalid ? "error" : "info";
+	const type: string = /*props.fieldState.invalid ? "error" :*/ "info";
 
 	const message: string = buildMessage(props);
 

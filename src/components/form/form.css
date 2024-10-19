@@ -14,18 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/*
+ ---------------------------------------------------------------------------------------------------
+ Form
+---------------------------------------------------------------------------------------------------
+*/
 .tds-form {
 	display: flex;
 	flex-direction: column;
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-}
-
-.tds-form h3 {
-	font-weight: normal;
-	margin: 0px;
-	margin-bottom: var(--tds-hor-spacing);
+	height: -webkit-fill-available;
+	margin: none;
 }
 
 .tds-form p {
@@ -33,17 +31,8 @@ limitations under the License.
 	/* margin-bottom: var(--tds-hor-spacing); */
 }
 
-.tds-form-content {
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: auto;
-	align-self: auto;
-	order: 0;
-	flex-direction: column;
-	overflow: hidden auto;
-}
-
-.tds-form-footer {
+/*--< Form Header >----------------------------------------------------------------------------*/
+.tds-form .tds-header-form {
 	display: flex;
 	flex-grow: 0;
 	flex-shrink: 1;
@@ -52,29 +41,63 @@ limitations under the License.
 	order: 0;
 	flex-direction: row;
 	align-items: flex-end;
-	margin-top: var(--tds-ver-spacing);
+	margin-bottom: var(--tds-hor-spacing);
 }
 
-.tds-form-footer .tds-message {
+.tds-form .tds-header-form h3 {
+	flex-grow: 1;
+	font-weight: normal;
+	margin: 0px;
+	margin-bottom: var(--tds-hor-spacing);
+}
+
+/*--< Form Content >----------------------------------------------------------------------------*/
+.tds-form .tds-content-form {
+	flex-grow: 1;
+	flex-shrink: 1;
+	flex-basis: auto;
+	order: 0;
+}
+
+.tds-form vscode-scrollable {
+	overflow: auto;
+}
+
+/*--< Form Footer >----------------------------------------------------------------------------*/
+.tds-footer-form {
+	display: flex;
+	flex-grow: 0;
+	flex-shrink: 1;
+	flex-basis: auto;
+	align-self: auto;
+	order: 0;
+	flex-direction: column;
+	align-items: flex-end;
+	margin-top: calc(var(--tds-hor-spacing)/2);
+}
+
+.tds-footer-form .tds-message {
 	display: flex;
 	flex-grow: 1;
 }
 
-.tds-form-footer .tds-button-button+.tds-button-button {
+.tds-footer-form .tds-button-button+.tds-button-button {
 	margin-right: var(--tds-hor-spacing);
 }
 
-.tds-form-footer .tds-button-button {
+.tds-footer-form .tds-button-button {
 	width: fit-content;
 }
 
-.tds-form-footer .tds-actions {
+.tds-footer-form .tds-actions {
 	flex-flow: row-reverse;
 	display: flex;
 	flex-wrap: nowrap;
 	gap: 10px;
 }
 
+
+/*--< Form Content >----------------------------------------------------------------------------*/
 .tds-field-container {
 	box-sizing: border-box;
 	display: flex;
@@ -108,7 +131,7 @@ vscode-text-field.tds-text-center::part(control) {
 }
 
 .tds-field-container vscode-button {
-	width: 120px;
+	max-width: 250px;
 	text-wrap: "nowrap";
 }
 
@@ -172,7 +195,7 @@ vscode-text-field.tds-text-center::part(control) {
 
 .tds-scroll {
 	overflow: scroll;
-	height: 400px;
+	/* height: 400px; */
 }
 
 span.tds-required::after {

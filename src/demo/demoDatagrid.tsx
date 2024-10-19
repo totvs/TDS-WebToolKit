@@ -16,7 +16,6 @@ limitations under the License.
 
 import "./demoDatagrid.css";
 import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilities/common-command-webview";
 import { setDataModel, setErrorModel, TdsForm } from "../components/form/form";
 import { TdsPage } from "../components/page/page";
@@ -58,23 +57,10 @@ export default function DemoDataGrid(props: TDemoDataGridProps) {
 }
 
 function dataGrid(props: TDemoDataGridProps) {
-    const methods = useForm<TDemoModel>({
-        defaultValues: {
-            dataSource: countries.map((country) => {
-                return {
-                    ...country,
-                    independenceDate: new Date(`${country.independenceDate}T00:00:00`),
-                    mark: true
-                }
-            })
-        },
-        mode: "all"
-    })
-
     if (props.locale) {
         tdsVscode.l10n.translations = { formatLocale: props.locale };
     }
-    const onSubmit: SubmitHandler<TDemoModel> = (data) => {
+    const onSubmit = (data: TDemoModel) => {
         sendSaveAndClose(data);
     }
 
@@ -87,8 +73,8 @@ function dataGrid(props: TDemoDataGridProps) {
                     const model: TDemoModel = command.data.model;
                     const errors: any = command.data.errors;
 
-                    setDataModel<TDemoModel>(methods.setValue, model);
-                    setErrorModel(methods.setError, errors);
+                    // setDataModel<TDemoModel>(methods.setValue, model);
+                    // setErrorModel(methods.setError, errors);
 
                     break;
                 default:
@@ -153,20 +139,28 @@ function dataGrid(props: TDemoDataGridProps) {
         ];
     }
 
-    const model: TDemoModel = methods.getValues();
+    const model: TDemoModel = {
+        dataSource: countries.map((country) => {
+            return {
+                ...country,
+                independenceDate: new Date(`${country.independenceDate}T00:00:00`),
+                mark: true
+            }
+        })
+    }
     //const indexFirstPathFree: number = model.includePaths.findIndex((row: TIncludePath) => row.path == "");
 
     //    actions={formActions}
     return (
         <TdsPage title="Demo: TdsDataGrid" >
             <TdsForm<TDemoModel>
-                methods={methods}
                 actions={[]}
                 onSubmit={onSubmit}>
 
                 <TdsDataGrid id={"result_dataGrid"}
                     columnsDef={columnsDef()}
                     dataSource={model.dataSource}
+                    modelField=""
                     options={{
                         grouping: true,
                         pageSize: 10,
@@ -180,20 +174,20 @@ function dataGrid(props: TDemoDataGridProps) {
 
 
 function dataGridSelectRow(props: TDemoDataGridProps) {
-    const methods = useForm<TDemoModel>({
-        defaultValues: {
-            dataSource: countries.map((country) => {
-                return {
-                    ...country,
-                    independenceDate: new Date(`${country.independenceDate}T00:00:00`),
-                    mark: true
-                }
-            })
-        },
-        mode: "all"
-    })
+    // const methods = useForm<TDemoModel>({
+    //     defaultValues: {
+    //         dataSource: countries.map((country) => {
+    //             return {
+    //                 ...country,
+    //                 independenceDate: new Date(`${country.independenceDate}T00:00:00`),
+    //                 mark: true
+    //             }
+    //         })
+    //     },
+    //     mode: "all"
+    // })
 
-    const onSubmit: SubmitHandler<TDemoModel> = (data) => {
+    const onSubmit = (data: TDemoModel) => {
         sendSaveAndClose(data);
     }
 
@@ -206,8 +200,8 @@ function dataGridSelectRow(props: TDemoDataGridProps) {
                     const model: TDemoModel = command.data.model;
                     const errors: any = command.data.errors;
 
-                    setDataModel<TDemoModel>(methods.setValue, model);
-                    setErrorModel(methods.setError, errors);
+                    // setDataModel<TDemoModel>(methods.setValue, model);
+                    // setErrorModel(methods.setError, errors);
 
                     break;
                 default:
@@ -280,20 +274,28 @@ function dataGridSelectRow(props: TDemoDataGridProps) {
         ];
     }
 
-    const model: TDemoModel = methods.getValues();
+    const model: TDemoModel = {
+        dataSource: countries.map((country) => {
+            return {
+                ...country,
+                independenceDate: new Date(`${country.independenceDate}T00:00:00`),
+                mark: true
+            }
+        })
+    }
     //const indexFirstPathFree: number = model.includePaths.findIndex((row: TIncludePath) => row.path == "");
 
     //    actions={formActions}
     return (
         <TdsPage title="Demo: TdsDataGrid" >
             <TdsForm<TDemoModel>
-                methods={methods}
                 actions={[]}
                 onSubmit={onSubmit}>
 
                 <TdsDataGrid id={"result_dataGrid"}
                     columnsDef={columnsDef()}
                     dataSource={model.dataSource}
+                    modelField=""
                     options={{
                         grouping: true,
                         pageSize: 10,

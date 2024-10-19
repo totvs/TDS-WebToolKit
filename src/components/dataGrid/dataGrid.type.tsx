@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ButtonAppearance } from "@vscode/webview-ui-toolkit";
+import { ButtonAppearance } from "../vscode-elements";
 
 /**
  * Defines the configuration for a column in the data grid component.
@@ -87,6 +87,7 @@ export type TTdsDataGridProps = {
 	id: string;
 	columnsDef: TTdsDataGridColumnDef[]
 	dataSource: any[] //Record<string, string | number | Date | boolean>[]
+	modelField: string;
 	options: {
 		bottomActions?: TTdsDataGridAction[];
 		topActions?: TTdsDataGridAction[];
@@ -105,5 +106,4 @@ export type TTdsDataGridProps = {
 export type TGroupingInfo = {
 	groupingCol: TTdsDataGridColumnDef;
 	groupingValues?: Record<string, number>;
-	groupingFilter?: string[];
 }

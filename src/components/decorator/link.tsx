@@ -14,12 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.tds-content {
-	display: flex;
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: auto;
-	overflow-x: auto;
-	overflow-y: hidden;
-	order: 0;
+import React from "react";
+
+type TTdsLink = {
+    href: string;
+    target?: string;
+    title?: string;
+    onClick?: (event: React.MouseEventHandler<HTMLAnchorElement>) => void;
+    children: React.ReactElement | string;
+}
+
+export function TdsLink(props: TTdsLink): React.ReactElement {
+    return (<a
+        target={props.target}
+        title={props.title || ""}
+        href={props.href}
+        onClick={(e: any) => props.onClick && props.onClick(e)}>
+        {props.children}
+    </a>)
 }

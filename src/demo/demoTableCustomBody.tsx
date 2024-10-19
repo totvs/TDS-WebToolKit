@@ -16,7 +16,7 @@ limitations under the License.
 
 import "./demoTableCustomBody.css";
 import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+//import { SubmitHandler, useForm } from "react-hook-form";
 import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilities/common-command-webview";
 import { setDataModel, setErrorModel, TdsForm } from "../components/form/form";
 import { TdsPage } from "../components/page/page";
@@ -24,7 +24,7 @@ import { tdsVscode } from "../utilities/vscodeWrapper";
 import countries from './countries.json'; // This import style requires "esModuleInterop", see "side notes"
 import { TdsTable } from "../components/table";
 import { TTdsTableColumn } from "../components/table/table.type";
-import { VSCodeDataGridCell, VSCodeDataGridRow } from "@vscode/webview-ui-toolkit/react";
+import { VscodeTableCell, VscodeTableRow } from "@vscode-elements/react-elements";
 
 enum ReceiveCommandEnum {
 }
@@ -41,28 +41,28 @@ type TCountry = {
 }
 
 type TDemoModel = {
-    datasource: TCountry[];
+    dataSource: TCountry[];
 }
 
 type TDemoTableCustomBodyProps = {
-    //datasource: TCountry[];
+    dataSource: TCountry[];
 }
 
 export default function DemoTableCustomBody(props: TDemoTableCustomBodyProps) {
-    const methods = useForm<TDemoModel>({
-        defaultValues: {
-            datasource: countries .map((country: any) => {
-             return {
-                 ...country,
-                 independenceDate: new Date(country.independenceDate),
-                 area: Number.parseInt(country.area)
-             } as TCountry
-        })
-        },
-        mode: "all"
-    })
+    // const methods = useForm<TDemoModel>({
+    //     defaultValues: {
+    //         datasource: countries.map((country: any) => {
+    //             return {
+    //                 ...country,
+    //                 independenceDate: new Date(country.independenceDate),
+    //                 area: Number.parseInt(country.area)
+    //             } as TCountry
+    //         })
+    //     },
+    //     mode: "all"
+    // })
 
-    const onSubmit: SubmitHandler<TDemoModel> = (data) => {
+    const onSubmit = (data: TDemoModel) => {
         sendSaveAndClose(data);
     }
 
@@ -75,8 +75,8 @@ export default function DemoTableCustomBody(props: TDemoTableCustomBodyProps) {
                     const model: TDemoModel = command.data.model;
                     const errors: any = command.data.errors;
 
-                    setDataModel<TDemoModel>(methods.setValue, model);
-                    setErrorModel(methods.setError, errors);
+                    // setDataModel<TDemoModel>(methods.setValue, model);
+                    // setErrorModel(methods.setError, errors);
 
                     break;
                 default:
@@ -96,49 +96,55 @@ export default function DemoTableCustomBody(props: TDemoTableCustomBodyProps) {
             {
                 name: "country",
                 type: "string",
-                label: tdsVscode.l10n.t("Country/Population"),
+                label: tdsVscode.l10n.t("_Country/Population"),
             },
             {
                 name: "capital",
                 type: "string",
-                label: tdsVscode.l10n.t("Capital/Area"),
+                label: tdsVscode.l10n.t("_Capital/Area"),
             },
             {
                 name: "continent",
                 type: "number",
-                label: tdsVscode.l10n.t("Continent/Independence"),
+                label: tdsVscode.l10n.t("_Continent/Independence"),
             },
         ];
     }
 
-    const model: TDemoModel = methods.getValues();
+    const model: TDemoModel = {
+        dataSource: countries.map((country: any) => {
+            return {
+                ...country,
+                independenceDate: new Date(country.independenceDate),
+                area: Number.parseInt(country.area)
+            } as TCountry
+        })
+    }
 
     return (
         <TdsPage title="Demo: TdsTable (Custom Body)">
             <TdsForm<TDemoModel>
-                methods={methods}
                 actions={[]}
                 onSubmit={onSubmit}>
 
                 <TdsTable id={"result_table"}
                     columns={columnsDef()}
-                    dataSource={model.datasource}
+                    dataSource={model.dataSource}
                     onCustomBody={(dataSource: any[]) => <>
                         {
                             dataSource.map((row: any, index: number) => {
-                                console.log("ROW", row)
                                 return (
                                     <>
-                                        <VSCodeDataGridRow key={index}>
-                                            <VSCodeDataGridCell key={`${index}.1`} grid-column="1">{row.name}</VSCodeDataGridCell>
-                                            <VSCodeDataGridCell key={`${index}.2`} grid-column="2">{row.capital}</VSCodeDataGridCell>
-                                            <VSCodeDataGridCell key={`${index}.3`} grid-column="3">{row.continent}</VSCodeDataGridCell>
-                                        </VSCodeDataGridRow>
-                                        <VSCodeDataGridRow key={index}>
-                                            <VSCodeDataGridCell key={`${index}.4`} grid-column="1">{row.population}</VSCodeDataGridCell>
-                                            <VSCodeDataGridCell key={`${index}.5`} grid-column="2">{row.area}</VSCodeDataGridCell>
-                                            <VSCodeDataGridCell key={`${index}.6`} grid-column="3">{row.independenceDate}</VSCodeDataGridCell>
-                                        </VSCodeDataGridRow>
+                                        <VscodeTableRow key={index}>
+                                            <VscodeTableCell key={`${index}.1`} grid-column="1">{row.name}</VscodeTableCell>
+                                            <VscodeTableCell key={`${index}.2`} grid-column="2">{row.capital}</VscodeTableCell>
+                                            <VscodeTableCell key={`${index}.3`} grid-column="3">{row.continent}</VscodeTableCell>
+                                        </VscodeTableRow>
+                                        <VscodeTableRow key={index}>
+                                            <VscodeTableCell key={`${index}.4`} grid-column="1">{row.population}</VscodeTableCell>
+                                            <VscodeTableCell key={`${index}.5`} grid-column="2">{row.area}</VscodeTableCell>
+                                            <VscodeTableCell key={`${index}.6`} grid-column="3">{row.independenceDate}</VscodeTableCell>
+                                        </VscodeTableRow>
                                     </>
                                 );
                             })

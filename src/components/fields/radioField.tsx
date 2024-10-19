@@ -1,10 +1,16 @@
-import { TdsFieldProps } from "../form/form";
-import PopupMessage from "../popup-message/popup-message";
+import { TdsFieldProps, TdsFieldRules } from "../form/form";
 import { mdToHtml } from "../mdToHtml";
-import { VscodeCheckbox, VscodeFormGroup, VscodeFormHelper, VscodeTextfield } from "@vscode-elements/react-elements";
+import { VscodeFormGroup, VscodeFormHelper, VscodeRadio } from "@vscode-elements/react-elements";
 
-export type TdsCheckBoxFieldProps = TdsFieldProps & {
+export type TdsRadioFieldProps = TdsFieldProps & {
 	checked: boolean;
+};
+
+export type TdsRadioProps = {
+	name?: string;
+	label: string;
+	checked: boolean;
+	rules?: TdsFieldRules;
 };
 
 //TODO: colocar labelOn, labelOff e label
@@ -20,17 +26,17 @@ export type TdsCheckBoxFieldProps = TdsFieldProps & {
  *
  * @returns
  */
-export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactElement {
+export function TdsRadioField(props: TdsRadioFieldProps): React.ReactElement {
 	return (
 		<VscodeFormGroup variant="vertical"
 			key={props.name}
 		>
-			<VscodeCheckbox name={props.name}
+			<VscodeRadio name={props.name}
 				disabled={props.rules?.readOnly || false}
 				required={props.rules?.required || false}
 			>
 				{mdToHtml(props.label)}
-			</VscodeCheckbox>
+			</VscodeRadio>
 			{props.info &&
 				<VscodeFormHelper>
 					{mdToHtml(props.info)}
@@ -40,14 +46,13 @@ export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactEleme
 	)
 }
 
-export function TdsCheckBox(props: TdsCheckBoxFieldProps): React.ReactElement {
+export function TdsRadio(props: TdsRadioProps): React.ReactElement {
 	return (
-		<VscodeCheckbox name={props.name}
-			key={props.name}
+		<VscodeRadio name={props.name}
 			disabled={props.rules?.readOnly || false}
 			required={props.rules?.required || false}
 		>
 			{mdToHtml(props.label)}
-		</VscodeCheckbox>
+		</VscodeRadio>
 	)
 }
