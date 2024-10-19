@@ -87,9 +87,11 @@ export function TdsTree(props: TdsTreeProps): React.ReactElement {
 					indent-guides={props.indentGuides == undefined ? true : props.indentGuides}
 					arrows={props.arrows == undefined ? true : props.arrows}
 					onVscTreeAction={(e: VscTreeActionEvent) => {
+						e.preventDefault();
 						props.onTreeAction && props.onTreeAction(e.detail);
 					}}
 					onVscTreeSelect={(e: VscTreeSelectEvent) => {
+						e.preventDefault();
 						props.onTreeSelect && props.onTreeSelect(e.detail);
 					}}
 				/>

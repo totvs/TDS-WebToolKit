@@ -25,11 +25,11 @@ export interface IContent {
  * Renders the content section.
  * @param props - The content section props.
  */
-export default function TdsContent(props: IContent) {
+export default function TdsContentForm(props: IContent) {
 	let children = React.Children.toArray(props.children);
 
 	return (
-		<VscodeScrollable className="tds-content">
+		<VscodeScrollable className="tds-content-form">
 			{...children}
 		</VscodeScrollable>
 	);

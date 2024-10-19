@@ -98,20 +98,14 @@ limitations under the License.
 
 /*--< Content Page >-------------------------------------------------------------------------------*/
 .tds-page .tds-content {
-	/* display: flex; */
 	flex-grow: 1;
 	flex-shrink: 1;
 	flex-basis: auto;
 	order: 0;
 }
 
-.tds-page .tds-content .split-layout-content {
-	overflow-y: auto;
-}
-
-
-vscode-split-layout {
-	border: none;
+.tds-page vscode-scrollable {
+	overflow: auto;
 }
 
 /*--< Footer Page >-------------------------------------------------------------------------------*/

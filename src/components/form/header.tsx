@@ -14,23 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { VscodeScrollable, VscodeSplitLayout } from "@vscode-elements/react-elements";
-import React from "react";
-
-export interface IContent {
-	children: any
+export interface IHeader {
+	title: string;
 }
 
 /**
- * Renders the content section.
- * @param props - The content section props.
+ * Header component that renders the TOTVS logo, page title, and help link.
+ * 
+ * @param props - Header component props
+ * @param props.title - Page title to display
  */
-export default function TdsContent(props: IContent) {
-	let children = React.Children.toArray(props.children);
-
+export default function TdsHeaderForm(props: IHeader): React.ReactElement {
 	return (
-		<VscodeScrollable className="tds-content">
-			{...children}
-		</VscodeScrollable>
+		<section className="tds-header-form">
+			<h3>{props.title}</h3>
+		</section>
 	);
 }

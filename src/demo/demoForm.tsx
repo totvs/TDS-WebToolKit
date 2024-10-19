@@ -17,14 +17,9 @@ limitations under the License.
 import "./demoForm.css";
 import React from "react";
 import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilities/common-command-webview";
-import { IFormAction, setDataModel, setErrorModel, TdsForm } from "../components/form/form";
 import { TdsPage } from "../components/page/page";
-import { TdsTextField } from "../components/fields/textField";
 import { tdsVscode } from "../utilities/vscodeWrapper";
-import { TdsNumericField } from "../components/fields/numericField";
-import { TdsCheckBoxField } from "../components/fields/checkBoxField";
-import { TdsSelectionField } from "../components/fields/selectionField";
-import { TdsSelectionFileField, TdsSelectionFolderField } from "../components/fields/selectionResourceField";
+import { TdsForm, TdsFormAction } from "../components/form/form";
 
 enum ReceiveCommandEnum {
 }
@@ -72,32 +67,26 @@ export default function DemoForm(props: TDemoFormProps) {
         }
     }, []);
 
-    const customActions: IFormAction[] = [{
+    const customActions: TdsFormAction[] = [{
         id: 0,
         caption: tdsVscode.l10n.t("_Link"),
         type: "link",
-        href: "command:tds-gaia.clear",
+        //href: "command:tds-gaia.clear",
     }, {
         id: 1,
         caption: tdsVscode.l10n.t("_Button"),
         type: "button",
-        href: "command:tds-gaia.help",
+        //href: "command:tds-gaia.help",
     },
         , {
         id: 1,
         caption: tdsVscode.l10n.t("_Checkbox"),
         type: "checkbox",
-        href: "command:tds-gaia.help",
+        //href: "command:tds-gaia.help",
     }];
 
-    return (
-        <TdsPage title="Demo: TdsForm" showFooter={true}>
-            <TdsForm<TDemoModel>
-                onSubmit={onSubmit}
-                description={props.customActions ? tdsVscode.l10n.t("_Customized Food Operations") : tdsVscode.l10n.t("_Main components of a form")}
-                actions={props.customActions ? customActions : undefined}
-            >
-                <section className="tds-row-container" >
+    /*
+                    <section className="tds-row-container" >
                     <TdsTextField
                         name="name"
                         label={tdsVscode.l10n.t("_Name")}
@@ -185,6 +174,18 @@ export default function DemoForm(props: TDemoFormProps) {
                     </section>
                 </>
                 }
+                */
+    return (
+        <TdsPage title="Demo: TdsForm" showFooter={true}>
+            <TdsForm<TDemoModel>
+                onSubmit={onSubmit}
+                actions={props.customActions ? customActions : undefined}
+                onActionEvent={(action: TdsFormAction) => {
+                    console.log(action);
+                }}
+                description={props.customActions ? tdsVscode.l10n.t("_Customized Food Operations") : tdsVscode.l10n.t("_Main components of a form")}
+            >
+                <p>campos</p>
             </TdsForm>
         </TdsPage>
     );
