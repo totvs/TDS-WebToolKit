@@ -22,7 +22,8 @@ export type TdsCheckBoxFieldProps = TdsFieldProps & {
  */
 export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactElement {
 	return (
-		<VscodeFormGroup variant="vertical"
+		<VscodeFormGroup
+			variant={props.formLayout}
 			key={props.name}
 		>
 			<VscodeCheckbox name={props.name}

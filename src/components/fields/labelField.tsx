@@ -35,7 +35,7 @@ export type TdsLabelFieldProps = Omit<TdsFieldProps, "onChange" | "onInput">
 export function TdsLabelField(props: TdsLabelFieldProps): any /*React.ReactElement*/ {
 
 	return (
-		<VscodeFormGroup variant="vertical"
+		<VscodeFormGroup variant={props.formLayout}
 			key={props.name}
 		>
 			<VscodeLabel id={props.name}

@@ -139,10 +139,11 @@ function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 	if (!row) {
 		console.log("noRow");
 	}
+	const forceRefresh = 0;
 
 	//Campo DATE, TIME e DATETIME
 	if ((column.type == "date") || (column.type == "time") || (column.type == "datetime")) {
-		const text: string = tdsVscode.l10n.format(row[column.name], (column.displayType || column.type) as "date" | "time" | "datetime");
+		const text: string = tdsVscode.l10n.format(row[column.name], (column.displayType || column.type) as "date" | "time" | "datetime") || "";
 		alignClass = alignClass || "tds-text-right";
 		//readOnly={column.readOnly == undefined ? true : column.readOnly}
 		return (
@@ -183,16 +184,18 @@ function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 		)
 	}
 
-	const text: string = (column.lookup && column.lookup[row[column.name]])
+	let text: string = (column.lookup && column.lookup[row[column.name]])
 		? column.lookup[row[column.name]]
-		: tdsVscode.l10n.format(row[column.name], (column.displayType || column.type));
+		: tdsVscode.l10n.format(row[column.name], (column.displayType || column.type)) || "";
 
 	if ((column.type == "number")) {
 		alignClass = alignClass || "tds-text-right";
 	}
 
-	//	value={(text || "<error>").startsWith("Invalid") ? row[column.name] || "<error>" : text}
-	// readOnly={column.readOnly == undefined ? true : column.readOnly}
+	if (text === undefined || text === null) {
+		throw new Error(`Field Definition or field value not found. Field: ${column.name}, Value: ${row[column.name]}`);
+	}
+
 	return (
 		<VscodeTextfield
 			className={alignClass}

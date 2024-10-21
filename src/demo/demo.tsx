@@ -16,7 +16,6 @@ limitations under the License.
 
 import "./demo.css"
 import React from "react";
-import { TdsPage } from "../components/page/page";
 import { DemoPage } from "./demoPage";
 import DemoForm from "./demoForm";
 import DemoDataGrid from "./demoDatagrid";
@@ -92,11 +91,12 @@ export function Demo() {
         }}
         />}
         {demo == DemoEnum.Tree && <DemoTree />}
+
+        <div className="demo-console" id="console">
+          <>
+            Última mensagem emitida por componentes.
+          </>
+        </div>
       </div>
-      {/* <div className="demo-console" id="demo-console">
-        <>
-          Abra o console do navegador, para observar as mensagens emitidas pelos componentes
-        </>
-      </div> */}
     </React.StrictMode >)
 }

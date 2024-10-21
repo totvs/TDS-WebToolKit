@@ -3,13 +3,14 @@ import { mdToHtml } from "../mdToHtml";
 import { VscodeFormGroup, VscodeFormHelper, VscodeRadio } from "@vscode-elements/react-elements";
 
 export type TdsRadioFieldProps = TdsFieldProps & {
-	checked: boolean;
+	checked?: boolean;
+	value: string;
 };
 
 export type TdsRadioProps = {
 	name?: string;
 	label: string;
-	checked: boolean;
+	checked?: boolean;
 	rules?: TdsFieldRules;
 };
 
@@ -28,12 +29,29 @@ export type TdsRadioProps = {
  */
 export function TdsRadioField(props: TdsRadioFieldProps): React.ReactElement {
 	return (
-		<VscodeFormGroup variant="vertical"
+		<VscodeFormGroup variant={props.formLayout}
 			key={props.name}
 		>
-			<VscodeRadio name={props.name}
+			<VscodeRadio
+				name={props.name}
 				disabled={props.rules?.readOnly || false}
 				required={props.rules?.required || false}
+				value={props.value}
+				onClick={
+					(e: any) => {
+						props.onChange && props.onChange(e);
+					}
+				}
+				onBlur={
+					(e: any) => {
+						console.log(e);
+					}
+				}
+				onChange={
+					(e: any) => {
+						props.onChange && props.onChange(e);
+					}
+				}
 			>
 				{mdToHtml(props.label)}
 			</VscodeRadio>

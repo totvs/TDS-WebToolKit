@@ -1,11 +1,13 @@
 import { mdToHtml } from "../mdToHtml";
-import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeRadioGroup } from "@vscode-elements/react-elements";
+import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeRadio, VscodeRadioGroup } from "@vscode-elements/react-elements";
 import * as React from "react"
-import { TdsFieldProps } from "../form/form";
+import { TdsFieldProps, TdsFormLayout } from "../form/form";
+import { TdsRadioField, TdsRadioFieldProps, TdsRadioProps } from "./radioField";
 
 type TdsRadioGroupProps = TdsFieldProps & {
-	children: any;  //typeof TdsCheckBoxField[];
-	orientation?: "vertical" | "horizontal";
+	options?: Omit<TdsRadioFieldProps, "name">[];
+	children?: any;
+	orientation?: TdsFormLayout;
 };
 
 /**
@@ -20,17 +22,41 @@ type TdsRadioGroupProps = TdsFieldProps & {
  * @returns
  */
 export function TdsRadioGroup(props: TdsRadioGroupProps): React.ReactElement {
+
+	if (props.options && props.children) {
+		throw new Error("Use only one of the properties: Options or Children")
+	}
+
 	return (
-		<VscodeFormGroup variant="vertical">
+		<VscodeFormGroup variant={props.formLayout}
+			key={props.name}
+		>
 			<VscodeLabel
 				required={props.rules?.required || false}
 			>
 				{mdToHtml(props.label || "")}
 			</VscodeLabel>
-			<VscodeRadioGroup variant={props.orientation}>
-				{React.Children.toArray(props.children.map((e: any) => {
+			<VscodeRadioGroup variant={props.orientation}
+			>
+				{props.children && React.Children.toArray(props.children.map((e: any) => {
 					return { ...e, name: props.name, rules: e.rules }
 				}))}
+				{props.options && props.options.map((e: TdsRadioFieldProps, index: number) =>
+					<VscodeRadio
+						name={props.name}
+						disabled={props.rules?.readOnly || false}
+						required={props.rules?.required || false}
+						value={e.value}
+						checked={e.checked}
+						onClick={
+							(e: any) => {
+								props.onChange && props.onChange(e);
+							}
+						}
+					>
+						{mdToHtml(e.label)}
+					</VscodeRadio>
+				)}
 			</VscodeRadioGroup>
 			{
 				props.info &&

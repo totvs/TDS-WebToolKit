@@ -17,17 +17,13 @@ limitations under the License.
 import "./demoGroup.css";
 import React from "react";
 import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilities/common-command-webview";
-import { IFormAction, setDataModel, setErrorModel, TdsForm } from "../components/form/form";
+import { TdsForm, TdsFormLayout } from "../components/form/form";
 import { TdsPage } from "../components/page/page";
-import { TdsTextField } from "../components/fields/textField";
 import { tdsVscode } from "../utilities/vscodeWrapper";
-import { TdsNumericField } from "../components/fields/numericField";
-import { TdsCheckBox, TdsCheckBoxField } from "../components/fields/checkBoxField";
-import { TdsSelectionField } from "../components/fields/selectionField";
-import { TdsSelectionFileField, TdsSelectionFolderField } from "../components/fields/selectionResourceField";
+import { TdsCheckBox } from "../components/fields/checkBoxField";
 import { TdsCheckBoxGroup } from "../components/fields/checkBoxGroup";
 import { TdsRadioGroup } from "../components/fields/checkRadioGroup";
-import { TdsRadio, TdsRadioField } from "../components/fields/radioField";
+import { TdsRadio } from "../components/fields/radioField";
 
 enum ReceiveCommandEnum {
 }
@@ -41,7 +37,7 @@ type TDemoModel = {
 }
 
 type TDemoFormProps = {
-    orientation?: "vertical" | "horizontal";
+    orientation?: TdsFormLayout;
 }
 
 export default function DemoGroup(props: TDemoFormProps) {
@@ -80,6 +76,10 @@ export default function DemoGroup(props: TDemoFormProps) {
             <TdsForm<TDemoModel>
                 onSubmit={onSubmit}
                 description={tdsVscode.l10n.t("_Form with Groups Fields")}
+                formLayout="horizontal"
+                onActionEvent={(action: any) => {
+                    console.log("onActionEvent", action);
+                }}
             >
                 <section className="tds-row-container" >
                     <TdsCheckBoxGroup
@@ -95,6 +95,7 @@ export default function DemoGroup(props: TDemoFormProps) {
 
                 <section className="tds-row-container" >
                     <TdsRadioGroup orientation={props.orientation}
+                        key={"one-word"}
                         name="one-word"
                         label={tdsVscode.l10n.t("_Select One Word")}
                         info={tdsVscode.l10n.t("Select one word")}

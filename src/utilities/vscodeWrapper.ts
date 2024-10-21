@@ -49,6 +49,8 @@ class VSCodeAPIWrapper {
     if (this.vsCodeApi !== undefined) {
       this.vsCodeApi.postMessage(message)
     } else {
+      const consoleDiv = document.getElementById('console');
+      consoleDiv!.innerHTML += `<div>${JSON.stringify(message)}</div>`;
       console.log(message)
     }
   }

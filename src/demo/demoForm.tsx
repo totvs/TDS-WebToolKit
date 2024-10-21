@@ -19,7 +19,11 @@ import React from "react";
 import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilities/common-command-webview";
 import { TdsPage } from "../components/page/page";
 import { tdsVscode } from "../utilities/vscodeWrapper";
-import { TdsForm, TdsFormAction } from "../components/form/form";
+import { TdsForm, TdsFormAction, TdsFormLayout } from "../components/form/form";
+import { TdsTextField, TdsTypeField } from "../components/fields/textField";
+import { TdsSelectionField } from "../components/fields/selectionField";
+import { TdsRadioField } from "../components/fields/radioField";
+import { TdsRadioGroup } from "../components/fields/checkRadioGroup";
 
 enum ReceiveCommandEnum {
 }
@@ -34,9 +38,12 @@ type TDemoModel = {
 
 type TDemoFormProps = {
     customActions?: boolean;
+    formLayout?: TdsFormLayout;
 }
 
 export default function DemoForm(props: TDemoFormProps) {
+    const [variantType, setVariantType] = React.useState<TdsTypeField>("text");
+    const [layout, setLayout] = React.useState<TdsFormLayout>(props.formLayout || "horizontal");
 
     const onSubmit = (data: TDemoModel) => {
         sendSaveAndClose(data);
@@ -158,11 +165,11 @@ export default function DemoForm(props: TDemoFormProps) {
                             name="name"
                             label={tdsVscode.l10n.t("_Selection List")}
                             options={[
-                                { value: "1", text: "Option 1" },
-                                { value: "2", text: "Option 2" },
-                                { value: "3", text: "Option 3" },
-                                { value: "4", text: "Option 4" },
-                                { value: "5", text: "Option 5" },
+                                { value: "1",label: "Option 1" },
+                                { value: "2",label: "Option 2" },
+                                { value: "3",label: "Option 3" },
+                                { value: "4",label: "Option 4" },
+                                { value: "5",label: "Option 5" },
                             ]}
                         />
 
@@ -176,7 +183,24 @@ export default function DemoForm(props: TDemoFormProps) {
                 }
                 */
     return (
-        <TdsPage title="Demo: TdsForm" showFooter={true}>
+        <TdsPage title="Demo: TdsForm"
+            showFooter={true}
+            extra={<TdsRadioGroup
+                key={"formLayout"}
+                name={"formLayout"}
+                label={tdsVscode.l10n.t("_Layout")}
+                formLayout="horizontal"
+                options={[
+                    { label: tdsVscode.l10n.t("_Horizontal"), value: "horizontal", checked: true },
+                    { label: tdsVscode.l10n.t("_Vertical"), value: "vertical" }
+                ]
+                }
+                onChange={(e: any) => {
+                    setLayout(e.currentTarget.value);
+                }}
+            />
+            }
+        >
             <TdsForm<TDemoModel>
                 onSubmit={onSubmit}
                 actions={props.customActions ? customActions : undefined}
@@ -184,10 +208,55 @@ export default function DemoForm(props: TDemoFormProps) {
                     console.log(action);
                 }}
                 description={props.customActions ? tdsVscode.l10n.t("_Customized Food Operations") : tdsVscode.l10n.t("_Main components of a form")}
+                formLayout={layout}
             >
-                <p>campos</p>
+                <TdsTextField
+                    name="name"
+                    label={tdsVscode.l10n.t("_Name")}
+                    info={tdsVscode.l10n.t("_Enter a name to identify the user")}
+                    rules={{ required: true }}
+                />
+                <TdsTextField
+                    name="character"
+                    label={tdsVscode.l10n.t("_Favorite")}
+                    info={tdsVscode.l10n.t("_Favorite character among: Donald Duck or Mickey")}
+                    rules={{
+                        required: true,
+                        pattern: /Donald Duck|Mickey/i
+                    }}
+                />
+                <TdsSelectionField
+                    name="fieldType" label={tdsVscode.l10n.t("_Field Type")} options={[
+                        { value: "text", label: "text", selected: true },
+                        { value: "password", label: "password" },
+                        { value: "email", label: "e-mail" },
+                        { value: "number", label: "number" },
+                        { value: "tel", label: "tel" },
+                        { value: "url", label: "url" },
+                        { value: "date", label: "date" },
+                        { value: "time", label: "time" },
+                        { value: "datetime-local", label: "datetime-local" },
+                        { value: "month", label: "month" },
+                        { value: "week", label: "week" },
+                        { value: "color", label: "color" },
+                        { value: "search", label: "search" }
+                    ]}
+                    onChange={(e: any) => {
+                        setVariantType(e.currentTarget.value);
+                    }}
+                />
+                <TdsTextField
+                    type={variantType}
+                    name="variantField"
+                    label={tdsVscode.l10n.t("_Variant Field")}
+                    info={tdsVscode.l10n.t(`_Inform the value according to the type: ${variantType}`)}
+                    rules={{
+                        required: true,
+                    }}
+                    placeholder={`Enter a value: (${variantType})`}
+                />
             </TdsForm>
-        </TdsPage>
+        </TdsPage >
     );
 }
 

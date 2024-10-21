@@ -22,6 +22,33 @@ import TdsFooterForm from "./footer";
 import { TdsAbstractModel } from "../../model/modelData";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 
+export type TdsFormLayout = "horizontal" | "vertical";
+
+export type TdsFieldRules = {
+	readOnly?: boolean
+	required?: boolean;
+	min?: { value: number, message: string };
+	max?: { value: number, message: string };
+	pattern?: RegExp
+}
+
+/**
+ * Interface for form field components.
+ * Defines the props shape for form fields.
+ */
+export type TdsFieldProps = {
+	formLayout?: TdsFormLayout;
+	ref?: React.MutableRefObject<any>;
+	name: string;
+	label: string;
+	info?: string;
+	className?: string;
+	rules?: TdsFieldRules;
+	//https://github.com/microsoft/vscode-webview-ui-toolkit/blob/main/src/react/README.md#use-oninput-instead-of-onchange-to-handle-keystrokes
+	onInput?: React.FormEventHandler<any>; //VscodeTextfield
+	onChange?: React.FormEventHandler<any>; //VscodeTextfield
+}
+
 export type TdsFormAction = {
 	id: number | string;
 	caption: string;
@@ -33,6 +60,7 @@ export type TdsFormAction = {
 	type?: "submit" | "reset" | "button" | "link" | "checkbox";
 	appearance?: string;  //ButtonAppearance;
 	//href?: string;
+	form?: any;
 }
 
 type TdsFormProps<M extends TdsAbstractModel> = {
@@ -45,6 +73,7 @@ type TdsFormProps<M extends TdsAbstractModel> = {
 	children: any
 	isProcessRing?: boolean;
 	description?: string;
+	formLayout?: TdsFormLayout;
 };
 
 /**
@@ -59,16 +88,35 @@ export function TdsForm<M extends TdsAbstractModel>(props: TdsFormProps<M>): Rea
 
 	return (
 		<section className="tds-form">
-			{props.title && <TdsHeaderForm title={props.title} />}
+			<form className="tds-form"
+				id={props.id}
+				autoComplete="off"
+				onSubmit={(e) => {
+					e.preventDefault();
 
-			<TdsContentForm>
-				{props.children}
-			</TdsContentForm>
+					const form: HTMLFormElement = e.target as HTMLFormElement;
+					const fd: FormData = new FormData(form);
+					let out: TdsAbstractModel = {};
+					for (let [name, value] of fd) {
+						out[name] = value;
+					}
 
-			{<TdsFooterForm
-				actions={props.actions || getDefaultActionsForm()}
-				onActionEvent={props.onActionEvent}
-			/>}
+					props.onSubmit(out as M);
+				}}
+			>
+				{props.title && <TdsHeaderForm title={props.title} />}
+
+				<TdsContentForm>
+					{props.children.map((child: any) => {
+						return { ...child, props: { ...child.props, formLayout: child.props.formLayout || props.formLayout || "horizontal" } };
+					})}
+				</TdsContentForm>
+
+				<TdsFooterForm
+					actions={props.actions || getDefaultActionsForm()}
+					onActionEvent={props.onActionEvent}
+				/>
+			</form>
 		</section>
 	);
 }
@@ -152,6 +200,60 @@ export function getDefaultActionsForm(): TdsFormAction[] {
 	];
 }
 
+/**
+ * Sets form values from a data model object.
+ * Maps the data model object values to the form values by field name.
+ * Handles undefined values to avoid errors.
+ *
+ * Passing ``setValue`` is necessary, as this function
+ * is executed outside the form context.
+*/
+export function setDataModel<M extends TdsAbstractModel>
+	(setValue: any, dataModel: Partial<M>) {
+	if (dataModel) {
+		Object.keys(dataModel).forEach((fieldName: string) => {
+			if (dataModel[fieldName] !== undefined) {
+				setValue(fieldName as any, dataModel[fieldName]!);
+			} else {
+				console.error(`Erro chamar setValue no campo ${fieldName}`);
+			}
+		})
+	} else {
+		console.error("Parâmetro [DataModel] não informando (indefinido)");
+	}
+}
+
+type TFieldError = {
+	type: string;
+	message?: string
+};
+
+type TFieldErrors<M> = Partial<Record<keyof M | "root", TFieldError>>;
+
+/**
+ * Sets form field errors from an error model object.
+ * Maps the error model object to field errors by field name.
+ * Handles undefined error values to avoid errors.
+ *
+ * Passing ``setErro vc8r`` is necessary, as this function
+ * is executed outside the form context.
+*
+*/
+export function setErrorModel<M extends TdsAbstractModel>(setError: any, errorModel: TFieldErrors<M>) {
+	if (errorModel) {
+		Object.keys(errorModel).forEach((fieldName: string) => {
+			if (errorModel[fieldName] !== undefined) {
+				setError(fieldName as any, {
+					message: errorModel[fieldName]?.message,
+					type: errorModel[fieldName]?.type
+				})
+			} else {
+				console.error(`Erro ao chamar setError no campo ${fieldName}`);
+			}
+		});
+	}
+}
+
 // /**
 //  * Returns the close  actions for the form.
 //  *
@@ -179,81 +281,7 @@ export function getDefaultActionsForm(): TdsFormAction[] {
 // *   através dos métodos ``getValues()``, ``setValues()``.
 // **/
 
-// export type TdsFieldRules = {
-// 	readOnly?: boolean
-// 	required?: boolean;
-// 	min?: { value: number, message: string };
-// 	max?: { value: number, message: string };
-// 	pattern?: RegExp
-// }
-// /**
-//  * Interface for form field components.
-//  * Defines the props shape for form fields.
-//  */
-// export type TdsFieldProps = {
-// 	name: string;
-// 	label: string;
-// 	info?: string;
-// 	className?: string;
-// 	rules?: TdsFieldRules;
-// 	//https://github.com/microsoft/vscode-webview-ui-toolkit/blob/main/src/react/README.md#use-oninput-instead-of-onchange-to-handle-keystrokes
-// 	onInput?: React.FormEventHandler<any>; //VscodeTextfield
-// 	onChange?: React.FormEventHandler<any>; //VscodeTextfield
-// }
 
-// /**
-//  * Sets form values from a data model object.
-//  * Maps the data model object values to the form values by field name.
-//  * Handles undefined values to avoid errors.
-//  *
-//  * Passing ``setValue`` is necessary, as this function
-//  * is executed outside the form context.
-// */
-// export function setDataModel<M extends TdsAbstractModel>
-// 	(setValue: any, dataModel: Partial<M>) {
-// 	if (dataModel) {
-// 		Object.keys(dataModel).forEach((fieldName: string) => {
-// 			if (dataModel[fieldName] !== undefined) {
-// 				setValue(fieldName as any, dataModel[fieldName]!);
-// 			} else {
-// 				console.error(`Erro chamar setValue no campo ${fieldName}`);
-// 			}
-// 		})
-// 	} else {
-// 		console.error("Parâmetro [DataModel] não informando (indefinido)");
-// 	}
-// }
-
-// type TFieldError = {
-// 	type: string;
-// 	message?: string
-// };
-
-// type TFieldErrors<M> = Partial<Record<keyof M | "root", TFieldError>>;
-
-// /**
-//  * Sets form field errors from an error model object.
-//  * Maps the error model object to field errors by field name.
-//  * Handles undefined error values to avoid errors.
-//  *
-//  * Passing ``setErro vc8r`` is necessary, as this function
-//  * is executed outside the form context.
-// *
-// */
-// export function setErrorModel<M extends TdsAbstractModel>(setError: any, errorModel: TFieldErrors<M>) {
-// 	if (errorModel) {
-// 		Object.keys(errorModel).forEach((fieldName: string) => {
-// 			if (errorModel[fieldName] !== undefined) {
-// 				setError(fieldName as any, {
-// 					message: errorModel[fieldName]?.message,
-// 					type: errorModel[fieldName]?.type
-// 				})
-// 			} else {
-// 				console.error(`Erro ao chamar setError no campo ${fieldName}`);
-// 			}
-// 		});
-// 	}
-// }
 
 // /**
 //  *

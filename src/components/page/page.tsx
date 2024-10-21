@@ -25,6 +25,7 @@ import { VscodeScrollable } from "@vscode-elements/react-elements";
 export interface IPageView {
 	title?: string;
 	showFooter?: boolean;
+	extra?: React.ReactElement
 	children: any;
 }
 
@@ -42,7 +43,7 @@ export function TdsPage(props: IPageView): React.ReactElement {
 	return (
 		<ErrorBoundary fallback={<p>Something unexpected occurred. See navigator console log for details.</p>}>
 			<section className="tds-page">
-				{props.title && <TdsHeader title={props.title} />}
+				{props.title && <TdsHeader title={props.title} extra={props.extra} />}
 
 				<TdsContent>
 					{props.children}

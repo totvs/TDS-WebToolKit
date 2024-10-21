@@ -20,7 +20,10 @@ import { mdToHtml } from "../mdToHtml";
 import { VscodeFormGroup, VscodeTextarea, VscodeTextfield } from "@vscode-elements/react-elements";
 import { VscodeLabel, VscodeFormHelper } from "@vscode-elements/react-elements";
 
+export type TdsTypeField = "text" | "password" | "email" | "number" | "tel" | "url" | "date" | "time" | "datetime-local" | "month" | "week" | "color" | "search";
+
 type TdsTextFieldProps = TdsFieldProps & {
+    type?: TdsTypeField;
     textArea?: boolean
     placeholder?: string;
     size?: number;
@@ -45,7 +48,7 @@ export function TdsTextField(props: TdsTextFieldProps): any {
     const textValue: string = props.value !== undefined ? props.value : "currentValue"
 
     return (
-        <VscodeFormGroup variant="vertical"
+        <VscodeFormGroup variant={props.formLayout}
             key={props.name}
         >
             <VscodeLabel htmlFor={props.name}
@@ -53,10 +56,16 @@ export function TdsTextField(props: TdsTextFieldProps): any {
             >
                 {mdToHtml(props.label || props.name)}
             </VscodeLabel>
-            <VscodeTextfield name={props.name}
+            <VscodeTextfield
+                name={props.name}
+                type={props.type || "text"}
                 readonly={props.rules?.readOnly || false}
                 required={props.rules?.required || false}
                 placeholder={props.placeholder}
+                pattern={props.rules?.pattern?.source || undefined}
+                onChange={(e) => {
+                    props.onChange && props.onChange(e)
+                }}
             />
             {props.info &&
                 <VscodeFormHelper>

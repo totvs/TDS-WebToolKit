@@ -3,11 +3,16 @@ import { mdToHtml } from "../mdToHtml";
 import PopupMessage from "../popup-message/popup-message";
 import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeOption, VscodeSingleSelect } from "@vscode-elements/react-elements";
 
+export type TdsOptionsSelection = {
+	label: string;
+	value: string;
+	description?: string;
+	selected?: boolean;
+	disabled?: boolean;
+};
+
 type TdsSelectionFieldProps = TdsFieldProps & {
-	options?: {
-		value: string;
-		text: string;
-	}[]
+	options: TdsOptionsSelection[]
 }
 
 /**
@@ -38,7 +43,7 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 	// }
 
 	return (
-		<VscodeFormGroup variant="vertical"
+		<VscodeFormGroup variant={props.formLayout}
 			key={props.name}
 		>
 			<VscodeLabel htmlFor={props.name}
@@ -47,15 +52,25 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 				{mdToHtml(props.label || props.name)}
 			</VscodeLabel>
 			<VscodeSingleSelect name={props.name}
+				onClick={(e) => {
+					props.onChange && props.onChange(e);
+				}}
+				onChange={(e) => {
+					props.onChange && props.onChange(e);
+				}}
 				disabled={props.rules?.readOnly || false}
 				required={props.rules?.required || false}
 			>
-				{options.map(({ value, text }, index) => {
+				{options.map((option: TdsOptionsSelection, index: number) => {
 					return (
 						<VscodeOption
-							key={`dropdown_${props.name}_${index}`}
-							value={value}>
-							{text}
+							key={`${index}`}
+							value={option.value}
+							description={option.description}
+							selected={option.selected}
+							disabled={option.disabled}
+						>
+							{option.label}
 						</VscodeOption>
 					)
 				})}
@@ -66,34 +81,5 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 				</VscodeFormHelper>
 			}
 		</VscodeFormGroup>
-	)
-
-
-	return (
-		<section
-			className={`tds-field-container tds-selection-field ${props.className ? props.className : ''}`}
-		>
-			<VscodeLabel
-				htmlFor={props.name}
-				required={props.rules?.required || false}
-			>
-				{props.label}
-			</VscodeLabel>
-			<VscodeSingleSelect
-				key={`dropdown_${props.name}`}
-				required={props.rules?.readOnly || false}
-			>
-				{options.map(({ value, text }, index) => {
-					return (
-						<VscodeOption
-							key={`dropdown_${props.name}_${index}`}
-							value={value}>
-							{text}
-						</VscodeOption>
-					)
-				})}
-				<PopupMessage field={props} />
-			</VscodeSingleSelect>
-		</section>
 	)
 }

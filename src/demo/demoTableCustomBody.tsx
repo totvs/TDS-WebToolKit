@@ -18,7 +18,7 @@ import "./demoTableCustomBody.css";
 import React from "react";
 //import { SubmitHandler, useForm } from "react-hook-form";
 import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilities/common-command-webview";
-import { setDataModel, setErrorModel, TdsForm } from "../components/form/form";
+import { setDataModel, setErrorModel, TdsForm, TdsFormAction } from "../components/form/form";
 import { TdsPage } from "../components/page/page";
 import { tdsVscode } from "../utilities/vscodeWrapper";
 import countries from './countries.json'; // This import style requires "esModuleInterop", see "side notes"
@@ -125,7 +125,8 @@ export default function DemoTableCustomBody(props: TDemoTableCustomBodyProps) {
         <TdsPage title="Demo: TdsTable (Custom Body)">
             <TdsForm<TDemoModel>
                 actions={[]}
-                onSubmit={onSubmit}>
+                onSubmit={onSubmit}
+                onActionEvent={(action: TdsFormAction) => { }}>
 
                 <TdsTable id={"result_table"}
                     columns={columnsDef()}

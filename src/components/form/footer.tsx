@@ -19,8 +19,10 @@ import React from "react";
 import { TdsLink } from "../decorator/link";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsProgressRing } from "../decorator/progress-ring";
-import { TdsFormAction } from "./form";
+import { TdsFormAction, TdsFormActionsEnum } from "./form";
 import { Event } from "vscode";
+import { sendClose } from "../../utilities/common-command-webview";
+import { type } from './../../index';
 
 export type TdsFooter = {
 	actions: TdsFormAction[];
@@ -35,7 +37,7 @@ export type TdsFooter = {
  */
 export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
 	let isProcessRing: boolean = false;
-	let isValid: boolean = false;
+	let isValid: boolean = true;
 	let isDirty: boolean = false;
 
 	return (
@@ -56,11 +58,11 @@ export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
 					if (isProcessRing) {
 						propsField["disabled"] = true;
 					} else if (action.enabled !== undefined) {
-						if (typeof action.enabled === "function") {
-							propsField["disabled"] = !(action.enabled as Function)(isDirty, isValid);
-						} else {
-							propsField["disabled"] = !action.enabled;
-						}
+						// if (typeof action.enabled === "function") {
+						// 	propsField["disabled"] = !(action.enabled as Function)(isDirty, isValid);
+						// } else {
+						// 	propsField["disabled"] = !action.enabled;
+						// }
 					} else {
 						propsField["disabled"] = false;
 					}
@@ -88,7 +90,7 @@ export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
 							{...propsField}
 							onChange={(e: any) => {
 								e.preventDefault();
-								props.onActionEvent(action);
+								props.onActionEvent({ ...action, form: e.currentTarget.form });
 							}}
 						>
 							{action.caption}
@@ -96,13 +98,22 @@ export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
 					} else {
 						return (<VscodeButton
 							key={action.id}
+							type={action.type || "button"}
 							className={`tds-button-button ${visible}`}
 							title={action.hint}
 							appearance={action.appearance || "secondary"}
 							{...propsField}
 							onClick={(e: any) => {
-								e.preventDefault();
-								props.onActionEvent(action);
+								if (action.id == TdsFormActionsEnum.Close) {
+									sendClose();
+								} else if (action.id == TdsFormActionsEnum.Save) {
+									//e.currentTarget.form.submit();
+								} else if (action.id == TdsFormActionsEnum.Clear) {
+									e.currentTarget.form.reset();
+								} else {
+									e.preventDefault();
+									props.onActionEvent({...action, form: e.currentTarget.form});
+								}
 							}}
 						>
 							{action.caption}

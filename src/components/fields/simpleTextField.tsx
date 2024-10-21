@@ -22,7 +22,7 @@ type TdsSimpleTextFieldProps = Omit<TdsFieldProps, "label"> &
 export function TdsSimpleTextField(props: TdsSimpleTextFieldProps): React.ReactElement {
 
 	return (
-		<VscodeFormGroup variant="vertical"
+		<VscodeFormGroup variant={props.formLayout}
 			key={props.name}
 		>
 			<VscodeTextfield name={props.name}

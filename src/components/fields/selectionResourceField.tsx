@@ -49,7 +49,7 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 	}
 
 	return (
-		<VscodeFormGroup variant="vertical"
+		<VscodeFormGroup variant={props.formLayout}
 			key={props.name}
 		>
 			<VscodeLabel htmlFor={props.name}

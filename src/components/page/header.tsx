@@ -16,6 +16,7 @@ limitations under the License.
 
 export interface IHeader {
 	title: string;
+	extra?: React.ReactElement
 }
 
 /**
@@ -27,10 +28,12 @@ export interface IHeader {
 export default function TdsHeader(props: IHeader): React.ReactElement {
 	return (
 		<section className="tds-header">
-			<div className="tds-logo">
-				<img src="..\..\icons\totvs-32x32.png" alt="TOTVS S.A." />
-			</div>
 			<h1>{props.title}</h1>
+			{props.extra && <div className="tds-extra">
+				{props.extra}
+			</div>
+
+			}
 		</section>
 	);
 }

@@ -1,15 +1,11 @@
-import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from "../mdToHtml";
-import { VscodeCheckbox, VscodeCheckboxGroup, VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeTextfield } from "@vscode-elements/react-elements";
-import { TdsCheckBoxField } from "./checkBoxField"
+import { VscodeCheckboxGroup, VscodeFormGroup, VscodeFormHelper, VscodeLabel } from "@vscode-elements/react-elements";
 import * as React from "react"
+import { TdsFieldProps, TdsFormLayout } from "../form/form";
 
-type TdsCheckBoxGroupProps = {
+type TdsCheckBoxGroupProps = TdsFieldProps & {
 	children: any;  //typeof TdsCheckBoxField[];
-	orientation?: "vertical" | "horizontal";
-	name: string;
-	info?: string;
-	label?: string;
+	orientation?: TdsFormLayout;
 };
 
 //TODO: colocar labelOn, labelOff e label
@@ -27,12 +23,14 @@ type TdsCheckBoxGroupProps = {
  */
 export function TdsCheckBoxGroup(props: TdsCheckBoxGroupProps): React.ReactElement {
 	return (
-		<VscodeFormGroup variant="vertical">
+		<VscodeFormGroup variant={props.formLayout}>
 			<VscodeLabel>
 				{mdToHtml(props.label || "")}
 			</VscodeLabel>
 			<VscodeCheckboxGroup variant={props.orientation}>
-				{React.Children.toArray(props.children)}
+				{React.Children.toArray(props.children.map((e: any) => {
+					return { ...e, name: props.name, rules: e.rules, group: true }
+				}))}
 			</VscodeCheckboxGroup>
 			{
 				props.info &&

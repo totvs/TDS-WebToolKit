@@ -20,7 +20,7 @@ type TdsNumericFieldProps = TdsFieldProps & {
  */
 export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement {
 	return (
-		<VscodeFormGroup variant="vertical"
+		<VscodeFormGroup variant={props.formLayout}
 			key={props.name}
 		>
 			<VscodeLabel htmlFor={props.name}
