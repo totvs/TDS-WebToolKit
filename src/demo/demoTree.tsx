@@ -146,7 +146,9 @@ export default function DemoTree(props: TDemoTreeProps) {
         <TdsPage title="Demo: TdsTree" >
             <TdsForm<TDemoModel>
                 actions={[]}
-                onSubmit={onSubmit}>
+                onSubmit={onSubmit}
+                onActionEvent={(action) => console.log(action)}
+            >
 
                 <TdsTree id={"result_dataGrid"}
                     data={model.root}

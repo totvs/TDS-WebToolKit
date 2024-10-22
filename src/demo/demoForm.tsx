@@ -19,11 +19,12 @@ import React from "react";
 import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilities/common-command-webview";
 import { TdsPage } from "../components/page/page";
 import { tdsVscode } from "../utilities/vscodeWrapper";
-import { TdsForm, TdsFormAction, TdsFormLayout } from "../components/form/form";
+import { TdsForm, TdsFormAction } from "../components/form/form";
 import { TdsTextField, TdsTypeField } from "../components/fields/textField";
 import { TdsSelectionField } from "../components/fields/selectionField";
 import { TdsRadioField } from "../components/fields/radioField";
 import { TdsRadioGroup } from "../components/fields/checkRadioGroup";
+import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
 
 enum ReceiveCommandEnum {
 }
@@ -38,12 +39,10 @@ type TDemoModel = {
 
 type TDemoFormProps = {
     customActions?: boolean;
-    formLayout?: TdsFormLayout;
 }
 
 export default function DemoForm(props: TDemoFormProps) {
     const [variantType, setVariantType] = React.useState<TdsTypeField>("text");
-    const [layout, setLayout] = React.useState<TdsFormLayout>(props.formLayout || "horizontal");
 
     const onSubmit = (data: TDemoModel) => {
         sendSaveAndClose(data);
@@ -183,24 +182,7 @@ export default function DemoForm(props: TDemoFormProps) {
                 }
                 */
     return (
-        <TdsPage title="Demo: TdsForm"
-            showFooter={true}
-            extra={<TdsRadioGroup
-                key={"formLayout"}
-                name={"formLayout"}
-                label={tdsVscode.l10n.t("_Layout")}
-                formLayout="horizontal"
-                options={[
-                    { label: tdsVscode.l10n.t("_Horizontal"), value: "horizontal", checked: true },
-                    { label: tdsVscode.l10n.t("_Vertical"), value: "vertical" }
-                ]
-                }
-                onChange={(e: any) => {
-                    setLayout(e.currentTarget.value);
-                }}
-            />
-            }
-        >
+        <TdsPage title="Demo: TdsForm" showFooter={true} >
             <TdsForm<TDemoModel>
                 onSubmit={onSubmit}
                 actions={props.customActions ? customActions : undefined}
@@ -208,7 +190,6 @@ export default function DemoForm(props: TDemoFormProps) {
                     console.log(action);
                 }}
                 description={props.customActions ? tdsVscode.l10n.t("_Customized Food Operations") : tdsVscode.l10n.t("_Main components of a form")}
-                formLayout={layout}
             >
                 <TdsTextField
                     name="name"

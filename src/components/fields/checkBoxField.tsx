@@ -2,8 +2,10 @@ import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from "../mdToHtml";
 import { VscodeCheckbox, VscodeFormGroup, VscodeFormHelper, VscodeTextfield } from "@vscode-elements/react-elements";
+import { tdsVscode } from './../../utilities/vscodeWrapper';
 
 export type TdsCheckBoxFieldProps = TdsFieldProps & {
+	value: string;
 	checked: boolean;
 };
 
@@ -23,12 +25,13 @@ export type TdsCheckBoxFieldProps = TdsFieldProps & {
 export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactElement {
 	return (
 		<VscodeFormGroup
-			variant={props.formLayout}
+			variant={tdsVscode.layout.layoutForm}
 			key={props.name}
 		>
 			<VscodeCheckbox name={props.name}
 				disabled={props.rules?.readOnly || false}
 				required={props.rules?.required || false}
+				value={props.value}
 			>
 				{mdToHtml(props.label)}
 			</VscodeCheckbox>

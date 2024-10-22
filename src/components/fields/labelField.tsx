@@ -18,6 +18,7 @@ import { VscodeFormGroup, VscodeLabel } from "@vscode-elements/react-elements";
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from './../mdToHtml';
+import { tdsVscode } from "../../utilities/vscodeWrapper";
 
 export type TdsLabelFieldProps = Omit<TdsFieldProps, "onChange" | "onInput">
 
@@ -35,7 +36,8 @@ export type TdsLabelFieldProps = Omit<TdsFieldProps, "onChange" | "onInput">
 export function TdsLabelField(props: TdsLabelFieldProps): any /*React.ReactElement*/ {
 
 	return (
-		<VscodeFormGroup variant={props.formLayout}
+		<VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+
 			key={props.name}
 		>
 			<VscodeLabel id={props.name}

@@ -155,7 +155,9 @@ function dataGrid(props: TDemoDataGridProps) {
         <TdsPage title="Demo: TdsDataGrid" >
             <TdsForm<TDemoModel>
                 actions={[]}
-                onSubmit={onSubmit}>
+                onSubmit={onSubmit}
+                onActionEvent={(action) => console.log(action)}
+            >
 
                 <TdsDataGrid id={"result_dataGrid"}
                     columnsDef={columnsDef()}
@@ -290,8 +292,9 @@ function dataGridSelectRow(props: TDemoDataGridProps) {
         <TdsPage title="Demo: TdsDataGrid" >
             <TdsForm<TDemoModel>
                 actions={[]}
-                onSubmit={onSubmit}>
-
+                onSubmit={onSubmit}
+                onActionEvent={(action) => console.log(action)}
+            >
                 <TdsDataGrid id={"result_dataGrid"}
                     columnsDef={columnsDef()}
                     dataSource={model.dataSource}

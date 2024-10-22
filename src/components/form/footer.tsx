@@ -16,13 +16,10 @@ limitations under the License.
 
 import { VscodeButton, VscodeCheckbox, VscodeDivider } from "@vscode-elements/react-elements";
 import React from "react";
-import { TdsLink } from "../decorator/link";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsProgressRing } from "../decorator/progress-ring";
 import { TdsFormAction, TdsFormActionsEnum } from "./form";
-import { Event } from "vscode";
 import { sendClose } from "../../utilities/common-command-webview";
-import { type } from './../../index';
 
 export type TdsFooter = {
 	actions: TdsFormAction[];

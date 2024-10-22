@@ -9,6 +9,10 @@
     padding: 10px;
 }
 
+.demo-left-side #formLayout {
+    width: 100%;
+}
+
 .demo-left-side>vscode-button {
     margin-bottom: 5px;
 }
@@ -27,8 +31,9 @@
 }
 
 .demo-console {
+    color: var(--vscode-foreground);
     padding: 5hv;
-    background-color: gray;
+    background-color: var(--vscode-activityBar-inactiveForeground);
     height: 10vh;
     overflow: auto;
     margin-left: 5hv;

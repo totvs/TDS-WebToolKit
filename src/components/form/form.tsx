@@ -22,8 +22,6 @@ import TdsFooterForm from "./footer";
 import { TdsAbstractModel } from "../../model/modelData";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 
-export type TdsFormLayout = "horizontal" | "vertical";
-
 export type TdsFieldRules = {
 	readOnly?: boolean
 	required?: boolean;
@@ -37,12 +35,12 @@ export type TdsFieldRules = {
  * Defines the props shape for form fields.
  */
 export type TdsFieldProps = {
-	formLayout?: TdsFormLayout;
-	ref?: React.MutableRefObject<any>;
+	id?: string;
 	name: string;
 	label: string;
 	info?: string;
 	className?: string;
+	ref?: React.MutableRefObject<any>;
 	rules?: TdsFieldRules;
 	//https://github.com/microsoft/vscode-webview-ui-toolkit/blob/main/src/react/README.md#use-oninput-instead-of-onchange-to-handle-keystrokes
 	onInput?: React.FormEventHandler<any>; //VscodeTextfield
@@ -73,7 +71,6 @@ type TdsFormProps<M extends TdsAbstractModel> = {
 	children: any
 	isProcessRing?: boolean;
 	description?: string;
-	formLayout?: TdsFormLayout;
 };
 
 /**
@@ -108,7 +105,7 @@ export function TdsForm<M extends TdsAbstractModel>(props: TdsFormProps<M>): Rea
 
 				<TdsContentForm>
 					{props.children.map((child: any) => {
-						return { ...child, props: { ...child.props, formLayout: child.props.formLayout || props.formLayout || "horizontal" } };
+						return child;
 					})}
 				</TdsContentForm>
 
@@ -254,19 +251,19 @@ export function setErrorModel<M extends TdsAbstractModel>(setError: any, errorMo
 	}
 }
 
-// /**
-//  * Returns the close  actions for the form.
-//  *
-//  */
-// export function getCloseActionForm(): IFormAction {
-// 	return getDefaultActionsForm()
-// 		.filter(action => action.id === TdsFormActionsEnum.Close)
-// 		.map((action) => {
-// 			action.appearance = "primary";
+/**
+ * Returns the close  actions for the form.
+ *
+ */
+export function getCloseActionForm(): TdsFormAction {
+	return getDefaultActionsForm()
+		.filter(action => action.id === TdsFormActionsEnum.Close)
+		.map((action) => {
+			action.appearance = "primary";
 
-// 			return action;
-// 		})[0];
-// }
+			return action;
+		})[0];
+}
 
 // /**
 // * Notas:

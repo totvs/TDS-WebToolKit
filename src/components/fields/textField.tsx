@@ -19,6 +19,7 @@ import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from "../mdToHtml";
 import { VscodeFormGroup, VscodeTextarea, VscodeTextfield } from "@vscode-elements/react-elements";
 import { VscodeLabel, VscodeFormHelper } from "@vscode-elements/react-elements";
+import { tdsVscode } from "../../utilities/vscodeWrapper";
 
 export type TdsTypeField = "text" | "password" | "email" | "number" | "tel" | "url" | "date" | "time" | "datetime-local" | "month" | "week" | "color" | "search";
 
@@ -48,7 +49,8 @@ export function TdsTextField(props: TdsTextFieldProps): any {
     const textValue: string = props.value !== undefined ? props.value : "currentValue"
 
     return (
-        <VscodeFormGroup variant={props.formLayout}
+        <VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+
             key={props.name}
         >
             <VscodeLabel htmlFor={props.name}

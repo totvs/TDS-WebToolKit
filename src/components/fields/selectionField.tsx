@@ -1,3 +1,4 @@
+import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsFieldProps } from "../form/form";
 import { mdToHtml } from "../mdToHtml";
 import PopupMessage from "../popup-message/popup-message";
@@ -43,7 +44,8 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 	// }
 
 	return (
-		<VscodeFormGroup variant={props.formLayout}
+		<VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+
 			key={props.name}
 		>
 			<VscodeLabel htmlFor={props.name}

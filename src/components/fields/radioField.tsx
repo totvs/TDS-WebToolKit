@@ -1,3 +1,4 @@
+import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsFieldProps, TdsFieldRules } from "../form/form";
 import { mdToHtml } from "../mdToHtml";
 import { VscodeFormGroup, VscodeFormHelper, VscodeRadio } from "@vscode-elements/react-elements";
@@ -29,7 +30,7 @@ export type TdsRadioProps = {
  */
 export function TdsRadioField(props: TdsRadioFieldProps): React.ReactElement {
 	return (
-		<VscodeFormGroup variant={props.formLayout}
+		<VscodeFormGroup variant={tdsVscode.layout.layoutForm}
 			key={props.name}
 		>
 			<VscodeRadio

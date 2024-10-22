@@ -1,13 +1,15 @@
 import { mdToHtml } from "../mdToHtml";
 import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeRadio, VscodeRadioGroup } from "@vscode-elements/react-elements";
 import * as React from "react"
-import { TdsFieldProps, TdsFormLayout } from "../form/form";
-import { TdsRadioField, TdsRadioFieldProps, TdsRadioProps } from "./radioField";
+import { TdsFieldProps } from "../form/form";
+import { TdsCheckBoxFieldProps } from './checkBoxField';
+import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { TdsRadioFieldProps } from "./radioField";
 
 type TdsRadioGroupProps = TdsFieldProps & {
+	orientation?: "horizontal" | "vertical";
 	options?: Omit<TdsRadioFieldProps, "name">[];
 	children?: any;
-	orientation?: TdsFormLayout;
 };
 
 /**
@@ -28,22 +30,24 @@ export function TdsRadioGroup(props: TdsRadioGroupProps): React.ReactElement {
 	}
 
 	return (
-		<VscodeFormGroup variant={props.formLayout}
+		<VscodeFormGroup
+			variant={tdsVscode.layout.layoutForm}
 			key={props.name}
+			id={props.id}
 		>
 			<VscodeLabel
 				required={props.rules?.required || false}
 			>
 				{mdToHtml(props.label || "")}
 			</VscodeLabel>
-			<VscodeRadioGroup variant={props.orientation}
+			<VscodeRadioGroup
+				variant={props.orientation}
 			>
 				{props.children && React.Children.toArray(props.children.map((e: any) => {
 					return { ...e, name: props.name, rules: e.rules }
 				}))}
 				{props.options && props.options.map((e: TdsRadioFieldProps, index: number) =>
 					<VscodeRadio
-						name={props.name}
 						disabled={props.rules?.readOnly || false}
 						required={props.rules?.required || false}
 						value={e.value}

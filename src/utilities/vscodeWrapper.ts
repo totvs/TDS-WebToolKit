@@ -16,6 +16,7 @@ limitations under the License.
 
 import type { WebviewApi } from 'vscode-webview'
 import { L10n, l10n } from './l10n'
+import { Layout, layout } from './layout';
 
 /**
  * A utility wrapper around the acquireVsCodeApi() function, which enables
@@ -50,7 +51,7 @@ class VSCodeAPIWrapper {
       this.vsCodeApi.postMessage(message)
     } else {
       const consoleDiv = document.getElementById('console');
-      consoleDiv!.innerHTML += `<div>${JSON.stringify(message)}</div>`;
+      consoleDiv!.innerHTML = `<div><code>${JSON.stringify(message)}</code></div>`;
       console.log(message)
     }
   }
@@ -95,6 +96,11 @@ class VSCodeAPIWrapper {
   get l10n(): L10n {
     return l10n;
   }
+
+  get layout(): Layout {
+    return layout;
+  }
+
 }
 
 // Exports class singleton to prevent multiple invocations of acquireVsCodeApi.

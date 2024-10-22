@@ -2,6 +2,7 @@ import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeTextfield } from 
 import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from "../mdToHtml";
+import { tdsVscode } from "../../utilities/vscodeWrapper";
 
 type TdsNumericFieldProps = TdsFieldProps & {
 
@@ -20,7 +21,8 @@ type TdsNumericFieldProps = TdsFieldProps & {
  */
 export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement {
 	return (
-		<VscodeFormGroup variant={props.formLayout}
+		<VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+
 			key={props.name}
 		>
 			<VscodeLabel htmlFor={props.name}

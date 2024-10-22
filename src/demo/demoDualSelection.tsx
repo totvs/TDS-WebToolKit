@@ -152,7 +152,9 @@ export default function DemoDualSelection() {
             <TdsForm<TDemoModelDualSelectionModel>
                 key="x"
                 actions={[]}
-                onSubmit={onSubmit}>
+                onSubmit={onSubmit}
+                onActionEvent={(action) => console.log(action)}
+            >
 
                 <section className="tds-row-container" id="selectGrid" >
 

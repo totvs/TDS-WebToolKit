@@ -17,13 +17,14 @@ limitations under the License.
 import "./demoGroup.css";
 import React from "react";
 import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilities/common-command-webview";
-import { TdsForm, TdsFormLayout } from "../components/form/form";
+import { TdsForm } from "../components/form/form";
 import { TdsPage } from "../components/page/page";
 import { tdsVscode } from "../utilities/vscodeWrapper";
 import { TdsCheckBox } from "../components/fields/checkBoxField";
 import { TdsCheckBoxGroup } from "../components/fields/checkBoxGroup";
 import { TdsRadioGroup } from "../components/fields/checkRadioGroup";
 import { TdsRadio } from "../components/fields/radioField";
+import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
 
 enum ReceiveCommandEnum {
 }
@@ -37,7 +38,7 @@ type TDemoModel = {
 }
 
 type TDemoFormProps = {
-    orientation?: TdsFormLayout;
+    orientation?: FormGroupVariant;
 }
 
 export default function DemoGroup(props: TDemoFormProps) {
@@ -76,7 +77,6 @@ export default function DemoGroup(props: TDemoFormProps) {
             <TdsForm<TDemoModel>
                 onSubmit={onSubmit}
                 description={tdsVscode.l10n.t("_Form with Groups Fields")}
-                formLayout="horizontal"
                 onActionEvent={(action: any) => {
                     console.log("onActionEvent", action);
                 }}
@@ -84,17 +84,16 @@ export default function DemoGroup(props: TDemoFormProps) {
                 <section className="tds-row-container" >
                     <TdsCheckBoxGroup
                         name="words"
-                        orientation={props.orientation}
                         label={tdsVscode.l10n.t("_Select Words")}
                         info={tdsVscode.l10n.t("Select one or more words")} >
-                        <TdsCheckBox name={"loren"} label={"Loren"} checked={false} />
-                        <TdsCheckBox name={"ipsun"} label={"Ipsun"} checked={false} />
-                        <TdsCheckBox name={"dolor"} label={"Dolor"} checked={false} />
+                        <TdsCheckBox name="words_1" value={"loren"} label={"Loren"} checked={false} />
+                        <TdsCheckBox name="words_2" value={"ipsun"} label={"Ipsun"} checked={false} />
+                        <TdsCheckBox name="words_3" value={"dolor"} label={"Dolor"} checked={false} />
                     </TdsCheckBoxGroup>
                 </section>
 
                 <section className="tds-row-container" >
-                    <TdsRadioGroup orientation={props.orientation}
+                    <TdsRadioGroup
                         key={"one-word"}
                         name="one-word"
                         label={tdsVscode.l10n.t("_Select One Word")}

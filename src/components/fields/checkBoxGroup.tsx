@@ -1,11 +1,12 @@
 import { mdToHtml } from "../mdToHtml";
 import { VscodeCheckboxGroup, VscodeFormGroup, VscodeFormHelper, VscodeLabel } from "@vscode-elements/react-elements";
 import * as React from "react"
-import { TdsFieldProps, TdsFormLayout } from "../form/form";
+import { TdsFieldProps } from "../form/form";
+import { tdsVscode } from "../../utilities/vscodeWrapper";
 
 type TdsCheckBoxGroupProps = TdsFieldProps & {
 	children: any;  //typeof TdsCheckBoxField[];
-	orientation?: TdsFormLayout;
+	orientation?: 'horizontal' | 'vertical';
 };
 
 //TODO: colocar labelOn, labelOff e label
@@ -23,7 +24,8 @@ type TdsCheckBoxGroupProps = TdsFieldProps & {
  */
 export function TdsCheckBoxGroup(props: TdsCheckBoxGroupProps): React.ReactElement {
 	return (
-		<VscodeFormGroup variant={props.formLayout}>
+		<VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+		>
 			<VscodeLabel>
 				{mdToHtml(props.label || "")}
 			</VscodeLabel>

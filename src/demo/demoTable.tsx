@@ -123,7 +123,9 @@ export default function DemoTable(props: TDemoTableProps) {
         <TdsPage title="Demo: TdsTable" >
             <TdsForm<TDemoModel>
                 actions={[]}
-                onSubmit={onSubmit}>
+                onSubmit={onSubmit}
+                onActionEvent={(action) => console.log(action)}
+            >
 
                 <TdsTable id={"result_table"}
                     columns={columnsDef()}

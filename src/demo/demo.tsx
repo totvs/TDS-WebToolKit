@@ -21,9 +21,12 @@ import DemoForm from "./demoForm";
 import DemoDataGrid from "./demoDatagrid";
 import DemoTable from "./demoTable";
 import DemoDualSelection from "./demoDualSelection";
-import { VscodeButton } from "@vscode-elements/react-elements";
+import { VscodeButton, VscodeRadio, VscodeRadioGroup } from "@vscode-elements/react-elements";
 import DemoGroup from "./demoGroup";
 import DemoTree from "./demoTree";
+import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
+import { tdsVscode } from "../utilities/vscodeWrapper";
+import { TdsRadioGroup } from "../components/fields/checkRadioGroup";
 
 enum DemoEnum {
   None,
@@ -44,10 +47,36 @@ enum DemoEnum {
 }
 export function Demo() {
   const [demo, setDemo] = React.useState<DemoEnum>(DemoEnum.None);
+  const [layout, setLayout] = React.useState<FormGroupVariant>(tdsVscode.layout.layoutForm);
 
   return (
     <React.StrictMode>
       <div className="demo-left-side tds-column-container">
+        <VscodeRadioGroup>
+          <VscodeRadio
+            checked={layout == "horizontal"}
+            onClick={
+              (e: any) => {
+                tdsVscode.layout.layoutForm = "horizontal";
+                setLayout("horizontal");
+              }
+            }
+          >
+            Horizontal
+          </VscodeRadio>
+          <VscodeRadio
+            checked={layout == "vertical"}
+            onClick={
+              (e: any) => {
+                tdsVscode.layout.layoutForm = "vertical";
+                setLayout("vertical");
+              }
+            }
+          >
+            Vertical
+          </VscodeRadio>
+        </VscodeRadioGroup>
+
         <VscodeButton onClick={() => setDemo(DemoEnum.Page)}>TdsPage</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.Form)}>TdsForm</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.FormCustomActions)}>TdsForm (custom actions)</VscodeButton>

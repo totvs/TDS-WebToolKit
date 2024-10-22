@@ -16,7 +16,7 @@ limitations under the License.
 
 export { mdToHtml } from './components/mdToHtml'
 
-export { IFormAction, setErrorModel } from './components/form/form'
+export { TdsFormAction, setErrorModel } from './components/form/form'
 export { setDataModel, getDefaultActionsForm, getCloseActionForm } from './components/form/form'
 export { sendSave, sendReady, sendClose, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel, TCommonCommand } from './utilities/common-command-webview'
 
@@ -26,7 +26,6 @@ export { TdsNumericField } from './components/fields/numericField'
 export { TdsPage } from './components/page/page'
 export { TdsSelectionField } from './components/fields/selectionField'
 export { TdsSelectionFileField, TdsSelectionFolderField, TdsSelectionResourceField } from './components/fields/selectionResourceField'
-export { TdsSimpleCheckBoxField } from './components/fields/simpleCheckBoxField'
 export { TdsSimpleTextField } from './components/fields/simpleTextField'
 export { TdsTextField } from './components/fields/textField'
 

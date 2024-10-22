@@ -201,6 +201,9 @@ export class L10n {
 
   private loadInternalTranslations() {
     if (this._formatLocale == "pt-BR") {
+      this._translations["_Layout"] = "Leiaute";
+      this._translations["_Horizontal"] = "Horizontal";
+      this._translations["_Vertical"] = "Vertical";
       this._translations["_Filter"] = "Filtro";
       this._translations["_Filters on all columns and can accept regular expressions"] = "Filtros em todas as colunas e aceita expressões regulares";
       this._translations["_Elements/page"] = "Elementos/página";
@@ -217,24 +220,10 @@ export class L10n {
       this._translations["_[{0}] is required."] = "[{0}] é obrigatório.";
       this._translations["_[{0}] is not valid range (min value)."] = "[{0}] não é válido para faixa (valor mínimo).";
       this._translations["_[{0}] is not valid range (max value)."] = "[{0}] não é válido para faixa (valor máximo).";
-    } else if (this._formatLocale == "es") {
-      this._translations["_Filter"] = "Filtrar";
-      this._translations["_Filters on all columns and can accept regular expressions"] = "Filtros en todas las columnas y puede aceptar expresiones regulares";
-      this._translations["_Elements/page"] = "Elementos/página";
-      this._translations["_Save"] = "Guarde";
-      this._translations["_Save the information and close the page"] = "Guarde la información y cierre la página";
-      this._translations["_Close"] = "Cierra";
-      this._translations["_Closes the page without saving the information"] = "Cierra la página sin guardar la información";
-      this._translations["_Clear"] = "Clara";
-      this._translations["_Reset the fields"] = "Restablecer los campos";
-      this._translations["_Select Folder"] = "Seleccionar Carpeta";
-      this._translations["_Select File"] = "Seleccionar Archivo";
-      this._translations["_There is invalid information. See the error by hovering the mouse over the field marking."] = "Hay información inválida. Vea el error flotando el ratón sobre el marcado de campo.";
-      this._translations["_Wait please. Processing..."] = "Espera por favor. Tratamiento...";
-      this._translations["_[{0}] is required."] = "[{0}] se requiere.";
-      this._translations["_[{0}] is not valid range (min value)."] = "[{0}] no es un rango válido (valor mínimo).";
-      this._translations["_[{0}] is not valid range (max value)."] = "[{0}] no es un rango válido (valor máximo).";
     } else {
+      this._translations["_Layout"] = "Layout";
+      this._translations["_Horizontal"] = "Horizontal";
+      this._translations["_Vertical"] = "Vertical";
       this._translations["_Filter"] = "Filter";
       this._translations["_Filters on all columns and can accept regular expressions"] = "Filters on all columns and can accept regular expressions";
       this._translations["_Elements/page"] = "Elements/page";
