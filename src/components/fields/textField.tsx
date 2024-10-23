@@ -20,6 +20,8 @@ import { mdToHtml } from "../mdToHtml";
 import { VscodeFormGroup, VscodeTextarea, VscodeTextfield } from "@vscode-elements/react-elements";
 import { VscodeLabel, VscodeFormHelper } from "@vscode-elements/react-elements";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { PageContext, TStatePage } from "../page/pageContext";
+import React from "react";
 
 export type TdsTypeField = "text" | "password" | "email" | "number" | "tel" | "url" | "date" | "time" | "datetime-local" | "month" | "week" | "color" | "search";
 
@@ -46,10 +48,11 @@ type TdsTextFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsTextField(props: TdsTextFieldProps): any {
+    const pageContext: TStatePage = React.useContext(PageContext);
     const textValue: string = props.value !== undefined ? props.value : "currentValue"
 
     return (
-        <VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+        <VscodeFormGroup variant={pageContext.formOrientation}
 
             key={props.name}
         >
@@ -61,7 +64,7 @@ export function TdsTextField(props: TdsTextFieldProps): any {
             <VscodeTextfield
                 name={props.name}
                 type={props.type || "text"}
-                readonly={props.rules?.readOnly || false}
+                readonly={props.readOnly || false}
                 required={props.rules?.required || false}
                 placeholder={props.placeholder}
                 pattern={props.rules?.pattern?.source || undefined}
@@ -75,42 +78,5 @@ export function TdsTextField(props: TdsTextFieldProps): any {
                 </VscodeFormHelper>
             }
         </VscodeFormGroup>
-    )
-    return (
-        <section
-            className={`tds-field-container tds-text-field ${props.className ? props.className : ''}`}
-        >
-            <label
-                htmlFor={props.name}
-            >
-                {mdToHtml(props.label)}
-                {props.rules?.required && <span className="tds-required" />}
-            </label>
-            {props.textArea ?? false ? (
-                <VscodeTextarea
-                    placeholder={props.placeholder}
-                    resize="vertical"
-                    cols={props.cols ?? 30}
-                    rows={props.rows ?? 15}
-                    onInput={props.onInput}
-                    key={`text_area_${props.name}`}
-                    value={textValue}
-                >
-                    <PopupMessage field={props} />
-                </VscodeTextarea>
-            ) : (
-                <>
-                    <VscodeTextfield
-                        placeholder={props.placeholder}
-                        onInput={props.onInput}
-                        onChange={props.onChange}
-                        key={`text_field_${props.name}`}
-                        value={textValue}
-                    >
-                        <PopupMessage field={props} />
-                    </VscodeTextfield>
-                </>
-            )}
-        </section>
     )
 }

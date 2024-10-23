@@ -5,6 +5,7 @@ import { TdsFieldProps } from "../form/form";
 import { TdsCheckBoxFieldProps } from './checkBoxField';
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsRadioFieldProps } from "./radioField";
+import { PageContext, TStatePage } from "../page/pageContext";
 
 type TdsRadioGroupProps = TdsFieldProps & {
 	orientation?: "horizontal" | "vertical";
@@ -29,9 +30,11 @@ export function TdsRadioGroup(props: TdsRadioGroupProps): React.ReactElement {
 		throw new Error("Use only one of the properties: Options or Children")
 	}
 
+	const pageContext: TStatePage = React.useContext(PageContext);
+
 	return (
 		<VscodeFormGroup
-			variant={tdsVscode.layout.layoutForm}
+			variant={pageContext.formOrientation}
 			key={props.name}
 			id={props.id}
 		>
@@ -48,7 +51,7 @@ export function TdsRadioGroup(props: TdsRadioGroupProps): React.ReactElement {
 				}))}
 				{props.options && props.options.map((e: TdsRadioFieldProps, index: number) =>
 					<VscodeRadio
-						disabled={props.rules?.readOnly || false}
+						disabled={props.readOnly || false}
 						required={props.rules?.required || false}
 						value={e.value}
 						checked={e.checked}

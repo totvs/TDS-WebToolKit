@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "clean": "npx -y rimraf -v dist",
+    "clean-node": "npx -y rimraf -v node_modules",
     "--COMPILE--": "",
     "compile": "tsc",
     "watch": "tsc -watch",

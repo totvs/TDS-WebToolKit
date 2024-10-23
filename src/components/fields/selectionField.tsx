@@ -1,6 +1,8 @@
+import React from "react";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsFieldProps } from "../form/form";
 import { mdToHtml } from "../mdToHtml";
+import { PageContext, TStatePage } from "../page/pageContext";
 import PopupMessage from "../popup-message/popup-message";
 import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeOption, VscodeSingleSelect } from "@vscode-elements/react-elements";
 
@@ -43,8 +45,10 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 	// 	});
 	// }
 
+	const pageContext: TStatePage = React.useContext(PageContext);
+
 	return (
-		<VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+		<VscodeFormGroup variant={pageContext.formOrientation}
 
 			key={props.name}
 		>
@@ -60,7 +64,7 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 				onChange={(e) => {
 					props.onChange && props.onChange(e);
 				}}
-				disabled={props.rules?.readOnly || false}
+				disabled={props.readOnly || false}
 				required={props.rules?.required || false}
 			>
 				{options.map((option: TdsOptionsSelection, index: number) => {

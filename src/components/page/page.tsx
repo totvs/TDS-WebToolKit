@@ -20,7 +20,10 @@ import TdsHeader from "./header";
 import TdsFooter from "./footer";
 import TdsContent from "./content";
 import { ErrorBoundary } from "../error-boundary";
-import { VscodeScrollable } from "@vscode-elements/react-elements";
+import { VscodeRadio, VscodeRadioGroup, VscodeLabel, VscodeIcon } from "@vscode-elements/react-elements";
+import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
+import { PageContext } from "./pageContext";
 
 export interface IPageView {
 	title?: string;
@@ -39,14 +42,64 @@ export interface IPageView {
 
  */
 export function TdsPage(props: IPageView): React.ReactElement {
+	// const [reducer, pageDispatch] = React.useReducer(
+	// 	pageReducer,
+	// 	{
+	// 		layout: "vertical"
+	// 	}
+	// );
+	const [formOrientation, setFormOrientation] = React.useState<FormGroupVariant>(tdsVscode.pageState.formOrientation);
+
+	const orientationSelect = (
+		<VscodeRadioGroup>
+			<VscodeLabel>
+				Orientação:&nbsp;
+			</VscodeLabel>
+			<VscodeRadio
+				checked={formOrientation == "horizontal"}
+				onClick={
+					(e: any) => {
+						setFormOrientation("horizontal");
+						tdsVscode.pageState = { formOrientation: "horizontal" };
+					}
+				}
+			>
+				Horizontal
+			</VscodeRadio>
+			<VscodeRadio
+				checked={formOrientation == "vertical"}
+				onClick={
+					(e: any) => {
+						setFormOrientation("vertical");
+						tdsVscode.pageState = { formOrientation: "vertical" };
+					}
+				}
+			>
+				Vertical
+			</VscodeRadio>
+			<VscodeIcon
+				name="clear-all"
+				action-icon
+				onClick={
+					(e: any) => {
+						tdsVscode.pageStateReset();
+					}
+				}
+			></VscodeIcon>
+		</VscodeRadioGroup>
+	);
 
 	return (
 		<ErrorBoundary fallback={<p>Something unexpected occurred. See navigator console log for details.</p>}>
 			<section className="tds-page">
-				{props.title && <TdsHeader title={props.title} extra={props.extra} />}
+				{props.title && <TdsHeader title={props.title} extra={props.extra || orientationSelect} />}
 
 				<TdsContent>
-					{props.children}
+					<PageContext.Provider value={{
+						formOrientation: formOrientation
+					}}>
+						{props.children}
+					</PageContext.Provider>
 				</TdsContent>
 
 				{props.showFooter && <TdsFooter />}

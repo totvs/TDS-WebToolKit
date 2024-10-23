@@ -1,12 +1,14 @@
 import { mdToHtml } from "../mdToHtml";
-import { VscodeCheckboxGroup, VscodeFormGroup, VscodeFormHelper, VscodeLabel } from "@vscode-elements/react-elements";
+import { VscodeCheckboxGroup, VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeRadio } from "@vscode-elements/react-elements";
 import * as React from "react"
 import { TdsFieldProps } from "../form/form";
-import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { PageContext, TStatePage } from "../page/pageContext";
+import { TdsCheckBoxFieldProps } from "./checkBoxField";
 
 type TdsCheckBoxGroupProps = TdsFieldProps & {
-	children: any;  //typeof TdsCheckBoxField[];
 	orientation?: 'horizontal' | 'vertical';
+	options?: Omit<TdsCheckBoxFieldProps, "name">[];
+	children: any;  //typeof TdsCheckBoxField[];
 };
 
 //TODO: colocar labelOn, labelOff e label
@@ -23,16 +25,35 @@ type TdsCheckBoxGroupProps = TdsFieldProps & {
  * @returns
  */
 export function TdsCheckBoxGroup(props: TdsCheckBoxGroupProps): React.ReactElement {
+	if (props.options && props.children) {
+		throw new Error("Use only one of the properties: Options or Children")
+	}
+
+	const pageContext: TStatePage = React.useContext(PageContext);
+
 	return (
-		<VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+		<VscodeFormGroup
+			variant={pageContext.formOrientation}
 		>
 			<VscodeLabel>
 				{mdToHtml(props.label || "")}
 			</VscodeLabel>
 			<VscodeCheckboxGroup variant={props.orientation}>
-				{React.Children.toArray(props.children.map((e: any) => {
+				{props.children && React.Children.toArray(props.children.map((e: any) => {
 					return { ...e, name: props.name, rules: e.rules, group: true }
 				}))}
+				{props.options && props.options.map((e: TdsCheckBoxFieldProps, index: number) =>
+					<VscodeRadio
+						checked={e.checked}
+						onClick={
+							(e: any) => {
+								props.onChange && props.onChange(e);
+							}
+						}
+					>
+						{mdToHtml(e.label)}
+					</VscodeRadio>
+				)}
 			</VscodeCheckboxGroup>
 			{
 				props.info &&

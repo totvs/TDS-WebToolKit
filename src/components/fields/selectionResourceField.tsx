@@ -4,6 +4,8 @@ import PopupMessage from "../popup-message/popup-message";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { VscodeButton, VscodeFormGroup, VscodeFormHelper, VscodeIcon, VscodeLabel, VscodeTextfield } from "@vscode-elements/react-elements";
 import { mdToHtml } from "../mdToHtml";
+import { PageContext, TStatePage } from "../page/pageContext";
+import React from "react";
 
 type TdsSelectionResourceFieldProps = Omit<TdsFieldProps, "label"> & TSendSelectResourceOptions;
 type TdsSelectionFolderFieldProps = Omit<TdsSelectionResourceFieldProps, "model" | "canSelectMany" | "canSelectFiles" | "canSelectFolders" | "filters">;
@@ -48,8 +50,10 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 		} : {}
 	}
 
+	const pageContext: TStatePage = React.useContext(PageContext);
+
 	return (
-		<VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+		<VscodeFormGroup variant={pageContext.formOrientation}
 
 			key={props.name}
 		>
@@ -59,7 +63,7 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 				{mdToHtml(props.openLabel)}
 			</VscodeLabel>
 			<VscodeTextfield name={props.name}
-				readonly={props.rules?.readOnly || false}
+				readonly={props.readOnly || false}
 				required={props.rules?.required || false}
 			>
 				<VscodeIcon
@@ -75,23 +79,6 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 				</VscodeFormHelper>
 			}
 		</VscodeFormGroup>
-	)
-
-	return (
-		<section
-			className={`tds-field-container tds-selection-resource-field tds-label-field ${props.className ? props.className : ''}`}
-		>
-			<VscodeButton
-				key={`selection_resource_button_${props.name}`}
-				onClick={() => {
-					//sendSelectResource(props.name, getValues(), options);
-				}}
-				disabled={(props.rules && props.rules.readOnly)}
-			>
-				{props.openLabel}
-				<PopupMessage field={{ ...props, label: props.openLabel }} />
-			</VscodeButton>
-		</section >
 	)
 }
 

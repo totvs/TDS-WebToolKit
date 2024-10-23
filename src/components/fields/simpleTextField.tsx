@@ -3,6 +3,8 @@ import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from "../mdToHtml";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { PageContext, TStatePage } from "../page/pageContext";
+import React from "react";
 
 type TdsSimpleTextFieldProps = Omit<TdsFieldProps, "label"> &
 {
@@ -21,14 +23,15 @@ type TdsSimpleTextFieldProps = Omit<TdsFieldProps, "label"> &
  * @returns
  */
 export function TdsSimpleTextField(props: TdsSimpleTextFieldProps): React.ReactElement {
+	const pageContext: TStatePage = React.useContext(PageContext);
 
 	return (
-		<VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+		<VscodeFormGroup variant={pageContext.formOrientation}
 
 			key={props.name}
 		>
 			<VscodeTextfield name={props.name}
-				readonly={props.rules?.readOnly || false}
+				readonly={props.readOnly || false}
 				required={props.rules?.required || false}
 				placeholder={props.placeholder}
 			/>
@@ -38,17 +41,5 @@ export function TdsSimpleTextField(props: TdsSimpleTextFieldProps): React.ReactE
 				</VscodeFormHelper>
 			}
 		</VscodeFormGroup>
-	)
-	return (
-		<section
-			className={`tds-field-container tds-simple-text-field ${props.className ? props.className : ''}`}
-		>
-			<VscodeTextfield
-				key={`text_field_${props.name}`}
-				readonly={props.rules.readOnly || false}
-			>
-				<PopupMessage field={{ ...props, label: "" }} />
-			</VscodeTextfield>
-		</section>
 	)
 }

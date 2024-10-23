@@ -22,9 +22,6 @@ import { tdsVscode } from "../utilities/vscodeWrapper";
 import { TdsForm, TdsFormAction } from "../components/form/form";
 import { TdsTextField, TdsTypeField } from "../components/fields/textField";
 import { TdsSelectionField } from "../components/fields/selectionField";
-import { TdsRadioField } from "../components/fields/radioField";
-import { TdsRadioGroup } from "../components/fields/checkRadioGroup";
-import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
 
 enum ReceiveCommandEnum {
 }

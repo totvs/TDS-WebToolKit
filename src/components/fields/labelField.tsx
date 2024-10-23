@@ -19,6 +19,8 @@ import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from './../mdToHtml';
 import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { PageContext, TStatePage } from "../page/pageContext";
+import React from "react";
 
 export type TdsLabelFieldProps = Omit<TdsFieldProps, "onChange" | "onInput">
 
@@ -34,9 +36,10 @@ export type TdsLabelFieldProps = Omit<TdsFieldProps, "onChange" | "onInput">
  * @returns
  */
 export function TdsLabelField(props: TdsLabelFieldProps): any /*React.ReactElement*/ {
+	const pageContext: TStatePage = React.useContext(PageContext);
 
 	return (
-		<VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+		<VscodeFormGroup variant={pageContext.formOrientation}
 
 			key={props.name}
 		>
@@ -46,17 +49,6 @@ export function TdsLabelField(props: TdsLabelFieldProps): any /*React.ReactEleme
 				{mdToHtml(props.label)}
 			</VscodeLabel>
 		</VscodeFormGroup>
-	)
-
-	return (
-		<section
-			className={`tds-field-container tds-label-field ${props.className ? props.className : ''}`}
-		>
-			<VscodeLabel required={props.rules.required || false}>
-				{mdToHtml(props.label)}
-				<PopupMessage field={props} />
-			</VscodeLabel>
-		</section>
 	)
 }
 

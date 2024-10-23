@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
+import { PageContext } from "./pageContext";
+
 export interface IHeader {
 	title: string;
 	extra?: React.ReactElement
@@ -26,6 +29,8 @@ export interface IHeader {
  * @param props.title - Page title to display
  */
 export default function TdsHeader(props: IHeader): React.ReactElement {
+	const context = React.useContext(PageContext);
+
 	return (
 		<section className="tds-header">
 			<h1>{props.title}</h1>

@@ -23,7 +23,6 @@ import { TdsAbstractModel } from "../../model/modelData";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 
 export type TdsFieldRules = {
-	readOnly?: boolean
 	required?: boolean;
 	min?: { value: number, message: string };
 	max?: { value: number, message: string };
@@ -42,6 +41,7 @@ export type TdsFieldProps = {
 	className?: string;
 	ref?: React.MutableRefObject<any>;
 	rules?: TdsFieldRules;
+	readOnly?: boolean
 	//https://github.com/microsoft/vscode-webview-ui-toolkit/blob/main/src/react/README.md#use-oninput-instead-of-onchange-to-handle-keystrokes
 	onInput?: React.FormEventHandler<any>; //VscodeTextfield
 	onChange?: React.FormEventHandler<any>; //VscodeTextfield
@@ -63,12 +63,12 @@ export type TdsFormAction = {
 
 type TdsFormProps<M extends TdsAbstractModel> = {
 	onSubmit: (data: M) => void;
-	onActionEvent: (action: TdsFormAction) => void;
 	id?: string;
 	title?: string;
 	onManualReset?: () => void;
 	actions?: TdsFormAction[];
 	children: any
+	onActionEvent?: (action: TdsFormAction) => void;
 	isProcessRing?: boolean;
 	description?: string;
 };

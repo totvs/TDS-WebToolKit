@@ -2,6 +2,8 @@ import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsFieldProps, TdsFieldRules } from "../form/form";
 import { mdToHtml } from "../mdToHtml";
 import { VscodeFormGroup, VscodeFormHelper, VscodeRadio } from "@vscode-elements/react-elements";
+import { PageContext, TStatePage } from "../page/pageContext";
+import React from "react";
 
 export type TdsRadioFieldProps = TdsFieldProps & {
 	checked?: boolean;
@@ -13,6 +15,7 @@ export type TdsRadioProps = {
 	label: string;
 	checked?: boolean;
 	rules?: TdsFieldRules;
+	readOnly?: boolean;
 };
 
 //TODO: colocar labelOn, labelOff e label
@@ -29,13 +32,15 @@ export type TdsRadioProps = {
  * @returns
  */
 export function TdsRadioField(props: TdsRadioFieldProps): React.ReactElement {
+	const pageContext: TStatePage = React.useContext(PageContext);
+
 	return (
-		<VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+		<VscodeFormGroup variant={pageContext.formOrientation}
 			key={props.name}
 		>
 			<VscodeRadio
 				name={props.name}
-				disabled={props.rules?.readOnly || false}
+				disabled={props.readOnly || false}
 				required={props.rules?.required || false}
 				value={props.value}
 				onClick={
@@ -68,7 +73,7 @@ export function TdsRadioField(props: TdsRadioFieldProps): React.ReactElement {
 export function TdsRadio(props: TdsRadioProps): React.ReactElement {
 	return (
 		<VscodeRadio name={props.name}
-			disabled={props.rules?.readOnly || false}
+			disabled={props.readOnly || false}
 			required={props.rules?.required || false}
 		>
 			{mdToHtml(props.label)}

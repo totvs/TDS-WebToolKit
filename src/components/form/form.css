@@ -98,7 +98,7 @@ limitations under the License.
 
 
 /*--< Form Content >----------------------------------------------------------------------------*/
-.tds-field-container {
+/* .tds-field-container {
 	box-sizing: border-box;
 	display: flex;
 	flex-flow: column nowrap;
@@ -106,7 +106,7 @@ limitations under the License.
 
 .tds-field-container vscode-text-field {
 	width: 100%;
-}
+} */
 
 vscode-text-field::part(control) {
 	text-overflow: ellipsis;
@@ -130,10 +130,10 @@ vscode-text-field.tds-text-center::part(control) {
 	text-align: center;
 }
 
-.tds-field-container vscode-button {
+/* .tds-field-container vscode-button {
 	max-width: 250px;
 	text-wrap: "nowrap";
-}
+} */
 
 .tds-column-container {
 	box-sizing: border-box;
@@ -155,6 +155,7 @@ vscode-text-field.tds-text-center::part(control) {
 	/* width: 100%; */
 }
 
+/* 
 .tds-row-container .tds-field-container:nth-child(1),
 .tds-row-container .tds-field-container:nth-child(2),
 .tds-row-container .tds-field-container:nth-child(3) {
@@ -195,13 +196,13 @@ vscode-text-field.tds-text-center::part(control) {
 
 .tds-scroll {
 	overflow: scroll;
-	/* height: 400px; */
 }
 
 span.tds-required::after {
 	content: "*";
 	color: var(--vscode-editorError-foreground);
 }
+ */
 
 vscode-data-grid-cell {
 	margin: 0px;

@@ -1,4 +1,5 @@
 /*
+import { TdsCheckBoxGroup } from './components/fields/checkBoxGroup';
 Copyright 2024 TOTVS S.A
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +17,13 @@ limitations under the License.
 
 export { mdToHtml } from './components/mdToHtml'
 
-export { TdsFormAction, setErrorModel } from './components/form/form'
+export { TdsForm, TdsFormAction, setErrorModel } from './components/form/form'
 export { setDataModel, getDefaultActionsForm, getCloseActionForm } from './components/form/form'
 export { sendSave, sendReady, sendClose, sendSaveAndClose, sendSelectResource, sendUpdateModel, sendValidateModel, TCommonCommand } from './utilities/common-command-webview'
 
-export { TdsCheckBoxField } from './components/fields/checkBoxField'
-export { TdsForm, TdsFormActionsEnum } from './components/form/form'
+export { TdsCheckBoxField, TdsCheckBox } from './components/fields/checkBoxField'
+export { TdsCheckBoxGroup } from './components/fields/checkBoxGroup'
+
 export { TdsNumericField } from './components/fields/numericField'
 export { TdsPage } from './components/page/page'
 export { TdsSelectionField } from './components/fields/selectionField'

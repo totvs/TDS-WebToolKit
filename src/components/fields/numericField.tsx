@@ -3,6 +3,8 @@ import { TdsFieldProps } from "../form/form";
 import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from "../mdToHtml";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { PageContext, TStatePage } from "../page/pageContext";
+import React from "react";
 
 type TdsNumericFieldProps = TdsFieldProps & {
 
@@ -20,8 +22,10 @@ type TdsNumericFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement {
+	const pageContext: TStatePage = React.useContext(PageContext);
+
 	return (
-		<VscodeFormGroup variant={tdsVscode.layout.layoutForm}
+		<VscodeFormGroup variant={pageContext.formOrientation}
 
 			key={props.name}
 		>
@@ -33,7 +37,7 @@ export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement
 			<VscodeTextfield name={props.name}
 				type="number"
 				pattern={(props.rules?.pattern ? props.rules.pattern : /\d+/).source}
-				readonly={props.rules?.readOnly || false}
+				readonly={props.readOnly || false}
 				required={props.rules?.required || false}
 			/>
 			{props.info &&
@@ -42,39 +46,5 @@ export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement
 				</VscodeFormHelper>
 			}
 		</VscodeFormGroup>
-	)
-
-	// const { register, control, getValues, getFieldState } = useFormContext();
-	// const fieldState: ControllerFieldState = getFieldState(props.name);
-
-	const rules = {
-		...props.rules,
-		valueAsNumber: true,
-		pattern: {
-			value: /\d+/gm,
-			message: `[${props.label}] only accepts numbers`
-		},
-	};
-
-	return (
-		<section
-			className={`tds-field-container tds-numeric-field ${props.className ? props.className : ''}`}
-		>
-			<VscodeLabel
-				htmlFor={props.name}
-				required={props.rules?.required || false}
-			>
-				{props.label}
-			</VscodeLabel>
-			<VscodeTextfield
-				readonly={rules.readOnly}
-				key={`text_field_${props.name}`}
-				required={rules.required}
-				type="number"
-				pattern={rules.pattern.value.source}
-			>
-				<PopupMessage field={props} />
-			</VscodeTextfield>
-		</section>
 	)
 }

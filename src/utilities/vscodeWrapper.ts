@@ -16,7 +16,11 @@ limitations under the License.
 
 import type { WebviewApi } from 'vscode-webview'
 import { L10n, l10n } from './l10n'
-import { Layout, layout } from './layout';
+import { FormGroupVariant } from '@vscode-elements/elements/dist/vscode-form-group';
+
+export interface IPageState {
+  formOrientation: FormGroupVariant;
+}
 
 /**
  * A utility wrapper around the acquireVsCodeApi() function, which enables
@@ -38,6 +42,12 @@ class VSCodeAPIWrapper {
     }
   }
 
+  private message(text: string) {
+    const consoleDiv = document.getElementById('console');
+    consoleDiv!.innerHTML = text;
+    console.log(text)
+  }
+
   /**
    * Post a message (i.e. send arbitrary data) to the owner of the webview.
    *
@@ -50,9 +60,7 @@ class VSCodeAPIWrapper {
     if (this.vsCodeApi !== undefined) {
       this.vsCodeApi.postMessage(message)
     } else {
-      const consoleDiv = document.getElementById('console');
-      consoleDiv!.innerHTML = `<div><code>${JSON.stringify(message)}</code></div>`;
-      console.log(message)
+      this.message(`<div><code>${JSON.stringify(message)}</code></div>`);
     }
   }
 
@@ -64,13 +72,18 @@ class VSCodeAPIWrapper {
    *
    * @return The current state or `undefined` if no state has been set.
    */
-  public getState(): unknown | undefined {
+  private getState(): any | undefined {
+    let state = undefined;
+
     if (this.vsCodeApi !== undefined) {
-      return this.vsCodeApi.getState()
+      state = this.vsCodeApi.getState()
     } else {
-      const state: string | null = localStorage.getItem('vscodeState')
-      return state !== null ? JSON.parse(state) : undefined
+      const data: string | null = localStorage.getItem('vscodeState')
+      state = data !== null ? JSON.parse(data) : undefined
     }
+
+    this.message(`<div>getState: <code>${JSON.stringify(state)}</code></div>`);
+    return state;
   }
 
   /**
@@ -84,21 +97,55 @@ class VSCodeAPIWrapper {
    *
    * @return The new state.
    */
-  public setState<T extends unknown | undefined>(newState: T): T {
+  private setState<T extends unknown | undefined>(newState: T): T {
+    let state: T = undefined;
+
     if (this.vsCodeApi !== undefined) {
-      return this.vsCodeApi.setState(newState)
-    } else {
+      state = this.vsCodeApi.setState(newState)
+    } else if (newState == undefined) {
+      localStorage.removeItem("vscodeState");
+    } else {  
       localStorage.setItem('vscodeState', JSON.stringify(newState))
-      return newState
+      state = newState
     }
+
+    this.message(`<div>setState: <code>${JSON.stringify(state)}</code></div>`);
+
+    return state;
   }
 
   get l10n(): L10n {
     return l10n;
   }
 
-  get layout(): Layout {
-    return layout;
+  public pageStateReset() {
+    this.message(`<div>pageStateReset:</div>`);
+    this.setState(undefined);
+  }
+
+  public set pageState(state: Partial<IPageState>) {
+    const pageState: IPageState = this.getState();
+
+    if (pageState) {
+      this.setState({ ...pageState, ...state });
+    } else {
+      this.setState(state);
+    }
+
+  }
+
+  public get pageState(): IPageState {
+    let pageState: IPageState = this.getState();
+
+    if (!pageState) {
+      pageState = {
+        formOrientation: "vertical"
+      }
+
+      this.setState(pageState);
+    }
+
+    return pageState;
   }
 
 }

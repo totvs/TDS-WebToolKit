@@ -87,7 +87,7 @@ export type TTdsDataGridProps = {
 	id: string;
 	columnsDef: TTdsDataGridColumnDef[]
 	dataSource: any[] //Record<string, string | number | Date | boolean>[]
-	modelField: string;
+	modelField?: string;
 	options: {
 		bottomActions?: TTdsDataGridAction[];
 		topActions?: TTdsDataGridAction[];
