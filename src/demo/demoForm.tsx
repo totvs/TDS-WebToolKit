@@ -35,7 +35,7 @@ type TDemoModel = {
 }
 
 type TDemoFormProps = {
-    customActions?: boolean;
+    _customActions?: boolean;
 }
 
 export default function DemoForm(props: TDemoFormProps) {
@@ -182,11 +182,11 @@ export default function DemoForm(props: TDemoFormProps) {
         <TdsPage title="Demo: TdsForm" showFooter={true} >
             <TdsForm<TDemoModel>
                 onSubmit={onSubmit}
-                actions={props.customActions ? customActions : undefined}
+                actions={props._customActions ? customActions : undefined}
                 onActionEvent={(action: TdsFormAction) => {
                     console.log(action);
                 }}
-                description={props.customActions ? tdsVscode.l10n.t("_Customized Food Operations") : tdsVscode.l10n.t("_Main components of a form")}
+                description={props._customActions ? tdsVscode.l10n.t("_Customized Food Operations") : tdsVscode.l10n.t("_Main components of a form")}
             >
                 <TdsTextField
                     name="name"

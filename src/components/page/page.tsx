@@ -20,7 +20,7 @@ import TdsHeader from "./header";
 import TdsFooter from "./footer";
 import TdsContent from "./content";
 import { ErrorBoundary } from "../error-boundary";
-import { VscodeRadio, VscodeRadioGroup, VscodeLabel, VscodeIcon } from "@vscode-elements/react-elements";
+import { VscodeRadio, VscodeRadioGroup, VscodeLabel, VscodeIcon, VscodeCheckbox } from "@vscode-elements/react-elements";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
 import { PageContext } from "./pageContext";
@@ -49,40 +49,56 @@ export function TdsPage(props: IPageView): React.ReactElement {
 	// 	}
 	// );
 	const [formOrientation, setFormOrientation] = React.useState<FormGroupVariant>(tdsVscode.pageState.formOrientation);
+	const [compact, setCompact] = React.useState<boolean>(tdsVscode.pageState.compact);
 
 	const orientationSelect = (
 		<VscodeRadioGroup>
 			<VscodeLabel>
-				Orientação:&nbsp;
+				{tdsVscode.l10n.t("_Orientation")}:&nbsp;
 			</VscodeLabel>
-			<VscodeRadio
-				checked={formOrientation == "horizontal"}
-				onClick={
-					(e: any) => {
-						setFormOrientation("horizontal");
-						tdsVscode.pageState = { formOrientation: "horizontal" };
-					}
-				}
-			>
-				Horizontal
-			</VscodeRadio>
 			<VscodeRadio
 				checked={formOrientation == "vertical"}
 				onClick={
 					(e: any) => {
+						e.preventDefault();
 						setFormOrientation("vertical");
 						tdsVscode.pageState = { formOrientation: "vertical" };
 					}
 				}
 			>
-				Vertical
+				{tdsVscode.l10n.t("_Vertical")}
 			</VscodeRadio>
+			<VscodeRadio
+				checked={formOrientation == "horizontal"}
+				onClick={
+					(e: any) => {
+						e.preventDefault();
+						setFormOrientation("horizontal");
+						tdsVscode.pageState = { formOrientation: "horizontal" };
+					}
+				}
+			>
+				{tdsVscode.l10n.t("_Horizontal")}
+			</VscodeRadio>
+			<VscodeCheckbox
+				label={tdsVscode.l10n.t("_Compact")}
+				value="compact"
+				checked={compact}
+				onClick={
+					(e: any) => {
+						e.preventDefault();
+						setCompact(!compact);
+						tdsVscode.pageState = { compact: !compact };
+					}
+				}
+			/>
 			<VscodeIcon
 				name="clear-all"
 				action-icon
 				onClick={
 					(e: any) => {
 						tdsVscode.pageStateReset();
+						setFormOrientation(tdsVscode.pageState.formOrientation);
 					}
 				}
 			></VscodeIcon>
@@ -96,7 +112,8 @@ export function TdsPage(props: IPageView): React.ReactElement {
 
 				<TdsContent>
 					<PageContext.Provider value={{
-						formOrientation: formOrientation
+						formOrientation: formOrientation,
+						compact: compact
 					}}>
 						{props.children}
 					</PageContext.Provider>

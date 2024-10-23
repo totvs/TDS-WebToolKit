@@ -61,7 +61,7 @@ export function TdsRadioField(props: TdsRadioFieldProps): React.ReactElement {
 			>
 				{mdToHtml(props.label)}
 			</VscodeRadio>
-			{props.info &&
+			{props.info && !pageContext.compact &&
 				<VscodeFormHelper>
 					{mdToHtml(props.info)}
 				</VscodeFormHelper>

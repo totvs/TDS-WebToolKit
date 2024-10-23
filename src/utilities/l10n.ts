@@ -201,7 +201,8 @@ export class L10n {
 
   private loadInternalTranslations() {
     if (this._formatLocale == "pt-BR") {
-      this._translations["_Layout"] = "Leiaute";
+      this._translations["_Compact"] = "Compacto";
+      this._translations["_Orientation"] = "Orientação";
       this._translations["_Horizontal"] = "Horizontal";
       this._translations["_Vertical"] = "Vertical";
       this._translations["_Filter"] = "Filtro";
@@ -221,7 +222,8 @@ export class L10n {
       this._translations["_[{0}] is not valid range (min value)."] = "[{0}] não é válido para faixa (valor mínimo).";
       this._translations["_[{0}] is not valid range (max value)."] = "[{0}] não é válido para faixa (valor máximo).";
     } else {
-      this._translations["_Layout"] = "Layout";
+      this._translations["_Orientation"] = "Orientation";
+      this._translations["_Compact"] = "Compact";
       this._translations["_Horizontal"] = "Horizontal";
       this._translations["_Vertical"] = "Vertical";
       this._translations["_Filter"] = "Filter";

@@ -75,7 +75,7 @@ export function Demo() {
         </>}
         {demo == DemoEnum.Page && <DemoPage />}
         {demo == DemoEnum.Form && <DemoForm />}
-        {demo == DemoEnum.FormCustomActions && <DemoForm customActions={true} />}
+        {demo == DemoEnum.FormCustomActions && <DemoForm _customActions={true} />}
         {demo == DemoEnum.FormGroups && <DemoGroup />}
         {demo == DemoEnum.FormVerticalGroups && <DemoGroup orientation="vertical" />}
         {demo == DemoEnum.DataGrid && <DemoDataGrid />}

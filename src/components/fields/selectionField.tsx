@@ -81,7 +81,7 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 					)
 				})}
 			</VscodeSingleSelect>
-			{props.info &&
+			{props.info && !pageContext.compact &&
 				<VscodeFormHelper>
 					{mdToHtml(props.info)}
 				</VscodeFormHelper>

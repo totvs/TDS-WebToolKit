@@ -73,7 +73,7 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 					action-icon
 				/>
 			</VscodeTextfield>
-			{props.info &&
+			{props.info && !pageContext.compact &&
 				<VscodeFormHelper>
 					{mdToHtml(props.info)}
 				</VscodeFormHelper>

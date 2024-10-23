@@ -35,7 +35,7 @@ export function TdsSimpleTextField(props: TdsSimpleTextFieldProps): React.ReactE
 				required={props.rules?.required || false}
 				placeholder={props.placeholder}
 			/>
-			{props.info &&
+			{props.info && !pageContext.compact &&
 				<VscodeFormHelper>
 					{mdToHtml(props.info)}
 				</VscodeFormHelper>

@@ -20,7 +20,11 @@ import { FormGroupVariant } from '@vscode-elements/elements/dist/vscode-form-gro
 
 export interface IPageState {
   formOrientation: FormGroupVariant;
+  compact: boolean;
 }
+
+var NODE_MODE = false;
+var DEV_MODE = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 /**
  * A utility wrapper around the acquireVsCodeApi() function, which enables
@@ -43,8 +47,11 @@ class VSCodeAPIWrapper {
   }
 
   private message(text: string) {
-    const consoleDiv = document.getElementById('console');
-    consoleDiv!.innerHTML = text;
+    if (DEV_MODE && !NODE_MODE) {
+      const consoleDiv = document.getElementById('console');
+      consoleDiv!.innerHTML = text;
+    }
+
     console.log(text)
   }
 
@@ -104,7 +111,7 @@ class VSCodeAPIWrapper {
       state = this.vsCodeApi.setState(newState)
     } else if (newState == undefined) {
       localStorage.removeItem("vscodeState");
-    } else {  
+    } else {
       localStorage.setItem('vscodeState', JSON.stringify(newState))
       state = newState
     }
@@ -139,7 +146,8 @@ class VSCodeAPIWrapper {
 
     if (!pageState) {
       pageState = {
-        formOrientation: "vertical"
+        formOrientation: "vertical",
+        compact: true
       }
 
       this.setState(pageState);

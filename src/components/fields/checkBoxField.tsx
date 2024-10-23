@@ -39,7 +39,7 @@ export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactEleme
 			>
 				{mdToHtml(props.label)}
 			</VscodeCheckbox>
-			{props.info &&
+			{props.info && !pageContext.compact &&
 				<VscodeFormHelper>
 					{mdToHtml(props.info)}
 				</VscodeFormHelper>

@@ -26,28 +26,6 @@ limitations under the License.
 	--tds-indent-group: calc(var(--design-unit)*6px);
 }
 
-.tds-error {
-	background-color: var(--vscode-inputValidation-errorBackground);
-	border-color: var(--vscode-inputValidation-errorBorder);
-	color: var(--vscode-editorError-foreground);
-}
-
-.tds-warning {
-	background-color: var(--vscode-inputValidation-warningBackground);
-	border-color: var(--vscode-inputValidation-warningBorder);
-	color: var(--vscode-editorWarning-foreground);
-}
-
-.tds-info {
-	background-color: var(--vscode-inputValidation-infoBackground);
-	border-color: var(--vscode-inputValidation-infoBorder);
-	color: var(--vscode-descriptionForeground);
-}
-
-.codicon[class*='codicon-'] {
-	background-color: transparent;
-}
-
 /*
  ---------------------------------------------------------------------------------------------------
  Page
@@ -78,7 +56,7 @@ limitations under the License.
 }
 
 .tds-header h1 {
-	/* margin: 3px; */
+	margin: 3px;
 	flex-grow: 1;
 }
 

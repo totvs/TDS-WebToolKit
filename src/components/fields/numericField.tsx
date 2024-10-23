@@ -40,7 +40,7 @@ export function TdsNumericField(props: TdsNumericFieldProps): React.ReactElement
 				readonly={props.readOnly || false}
 				required={props.rules?.required || false}
 			/>
-			{props.info &&
+			{props.info && !pageContext.compact &&
 				<VscodeFormHelper>
 					{mdToHtml(props.info)}
 				</VscodeFormHelper>

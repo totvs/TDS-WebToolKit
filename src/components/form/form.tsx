@@ -38,6 +38,7 @@ export type TdsFieldProps = {
 	name: string;
 	label: string;
 	info?: string;
+	error?: string;
 	className?: string;
 	ref?: React.MutableRefObject<any>;
 	rules?: TdsFieldRules;
