@@ -22,6 +22,7 @@ import { tdsVscode } from "../utilities/vscodeWrapper";
 import { TdsForm, TdsFormAction } from "../components/form/form";
 import { TdsTextField, TdsTypeField } from "../components/fields/textField";
 import { TdsSelectionField } from "../components/fields/selectionField";
+import { useForm, UseFormReturn } from "react-hook-form";
 
 enum ReceiveCommandEnum {
 }
@@ -29,16 +30,27 @@ enum ReceiveCommandEnum {
 type ReceiveCommand = ReceiveMessage<CommonCommandEnum & ReceiveCommandEnum, TDemoModel>
 
 type TDemoModel = {
+    variantField: string;
+    fieldType: string;
     name: string;
-    age: number;
-
+    character: string;
 }
 
 type TDemoFormProps = {
-    _customActions?: boolean;
+    layoutControl?: boolean;
+    customActions?: boolean;
 }
 
 export default function DemoForm(props: TDemoFormProps) {
+    const methods: UseFormReturn<TDemoModel> = useForm<TDemoModel>({
+        defaultValues: {
+            variantField: "",
+            fieldType: "",
+            name: "",
+            character: ""
+        },
+        mode: "all"
+    })
     const [variantType, setVariantType] = React.useState<TdsTypeField>("text");
 
     const onSubmit = (data: TDemoModel) => {
@@ -179,14 +191,14 @@ export default function DemoForm(props: TDemoFormProps) {
                 }
                 */
     return (
-        <TdsPage title="Demo: TdsForm" showFooter={true} >
+        <TdsPage title="Demo: TdsForm" showFooter={true} layoutControl={props.layoutControl} >
             <TdsForm<TDemoModel>
                 onSubmit={onSubmit}
-                actions={props._customActions ? customActions : undefined}
+                actions={props.customActions ? customActions : undefined}
                 onActionEvent={(action: TdsFormAction) => {
                     console.log(action);
                 }}
-                description={props._customActions ? tdsVscode.l10n.t("_Customized Food Operations") : tdsVscode.l10n.t("_Main components of a form")}
+                description={props.customActions ? tdsVscode.l10n.t("_Customized Food Operations") : tdsVscode.l10n.t("_Main components of a form")}
             >
                 <TdsTextField
                     name="name"
@@ -204,7 +216,8 @@ export default function DemoForm(props: TDemoFormProps) {
                     }}
                 />
                 <TdsSelectionField
-                    name="fieldType" label={tdsVscode.l10n.t("_Field Type")} options={[
+                    name="fieldType"
+                    label={tdsVscode.l10n.t("_Field Type")} options={[
                         { value: "text", label: "text", selected: true },
                         { value: "password", label: "password" },
                         { value: "email", label: "e-mail" },

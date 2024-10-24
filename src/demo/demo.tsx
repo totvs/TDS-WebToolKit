@@ -24,14 +24,12 @@ import DemoDualSelection from "./demoDualSelection";
 import { VscodeButton, VscodeRadio, VscodeRadioGroup } from "@vscode-elements/react-elements";
 import DemoGroup from "./demoGroup";
 import DemoTree from "./demoTree";
-import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
-import { tdsVscode } from "../utilities/vscodeWrapper";
-import { TdsRadioGroup } from "../components/fields/checkRadioGroup";
 
 enum DemoEnum {
   None,
   Page,
   Form,
+  FormWithoutLayoutControl,
   FormCustomActions,
   FormGroups,
   FormVerticalGroups,
@@ -53,6 +51,7 @@ export function Demo() {
       <div className="demo-left-side tds-column-container">
         <VscodeButton onClick={() => setDemo(DemoEnum.Page)}>TdsPage</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.Form)}>TdsForm</VscodeButton>
+        <VscodeButton onClick={() => setDemo(DemoEnum.FormWithoutLayoutControl)}>TdsForm (WithoutLayoutControl)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.FormCustomActions)}>TdsForm (custom actions)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.FormGroups)}>TdsForm with Groups</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.FormVerticalGroups)}>TdsForm with Vertical Groups</VscodeButton>
@@ -75,7 +74,8 @@ export function Demo() {
         </>}
         {demo == DemoEnum.Page && <DemoPage />}
         {demo == DemoEnum.Form && <DemoForm />}
-        {demo == DemoEnum.FormCustomActions && <DemoForm _customActions={true} />}
+        {demo == DemoEnum.FormWithoutLayoutControl && <DemoForm layoutControl={false} />}
+        {demo == DemoEnum.FormCustomActions && <DemoForm customActions={true} />}
         {demo == DemoEnum.FormGroups && <DemoGroup />}
         {demo == DemoEnum.FormVerticalGroups && <DemoGroup orientation="vertical" />}
         {demo == DemoEnum.DataGrid && <DemoDataGrid />}
