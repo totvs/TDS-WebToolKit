@@ -22,7 +22,7 @@ import { tdsVscode } from "../utilities/vscodeWrapper";
 import { TdsForm, TdsFormAction } from "../components/form/form";
 import { TdsTextField, TdsTypeField } from "../components/fields/textField";
 import { TdsSelectionField } from "../components/fields/selectionField";
-import { useForm, UseFormReturn } from "react-hook-form";
+import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
 
 enum ReceiveCommandEnum {
 }
@@ -192,61 +192,64 @@ export default function DemoForm(props: TDemoFormProps) {
                 */
     return (
         <TdsPage title="Demo: TdsForm" showFooter={true} layoutControl={props.layoutControl} >
-            <TdsForm<TDemoModel>
-                onSubmit={onSubmit}
-                actions={props.customActions ? customActions : undefined}
-                onActionEvent={(action: TdsFormAction) => {
-                    console.log(action);
-                }}
-                description={props.customActions ? tdsVscode.l10n.t("_Customized Food Operations") : tdsVscode.l10n.t("_Main components of a form")}
-            >
-                <TdsTextField
-                    name="name"
-                    label={tdsVscode.l10n.t("_Name")}
-                    info={tdsVscode.l10n.t("_Enter a name to identify the user")}
-                    rules={{ required: true }}
-                />
-                <TdsTextField
-                    name="character"
-                    label={tdsVscode.l10n.t("_Favorite")}
-                    info={tdsVscode.l10n.t("_Favorite character among: Donald Duck or Mickey")}
-                    rules={{
-                        required: true,
-                        pattern: /Donald Duck|Mickey/i
+            <FormProvider {...methods}>
+                <TdsForm<TDemoModel>
+                    onSubmit={methods.handleSubmit(onSubmit)}
+                    actions={props.customActions ? customActions : undefined}
+                    onActionEvent={(action: TdsFormAction) => {
+                        console.log(action);
                     }}
-                />
-                <TdsSelectionField
-                    name="fieldType"
-                    label={tdsVscode.l10n.t("_Field Type")} options={[
-                        { value: "text", label: "text", selected: true },
-                        { value: "password", label: "password" },
-                        { value: "email", label: "e-mail" },
-                        { value: "number", label: "number" },
-                        { value: "tel", label: "tel" },
-                        { value: "url", label: "url" },
-                        { value: "date", label: "date" },
-                        { value: "time", label: "time" },
-                        { value: "datetime-local", label: "datetime-local" },
-                        { value: "month", label: "month" },
-                        { value: "week", label: "week" },
-                        { value: "color", label: "color" },
-                        { value: "search", label: "search" }
-                    ]}
-                    onChange={(e: any) => {
-                        setVariantType(e.currentTarget.value);
-                    }}
-                />
-                <TdsTextField
-                    type={variantType}
-                    name="variantField"
-                    label={tdsVscode.l10n.t("_Variant Field")}
-                    info={tdsVscode.l10n.t(`_Inform the value according to the type: ${variantType}`)}
-                    rules={{
-                        required: true,
-                    }}
-                    placeholder={`Enter a value: (${variantType})`}
-                />
-            </TdsForm>
+                    description={props.customActions ? tdsVscode.l10n.t("_Customized Food Operations") : tdsVscode.l10n.t("_Main components of a form")}
+                >
+                    <TdsTextField
+                        name="name"
+                        label={tdsVscode.l10n.t("_Name")}
+                        info={tdsVscode.l10n.t("_Enter a name to identify the user")}
+                        rules={{ required: true }}
+                        readOnly={false}
+                    />
+                    <TdsTextField
+                        name="character"
+                        label={tdsVscode.l10n.t("_Favorite")}
+                        info={tdsVscode.l10n.t("_Favorite character among: Donald Duck or Mickey")}
+                        rules={{
+                            required: true,
+                            pattern: /Donald Duck|Mickey/i
+                        }}
+                    />
+                    <TdsSelectionField
+                        name="fieldType"
+                        label={tdsVscode.l10n.t("_Field Type")} options={[
+                            { value: "text", label: "text", selected: true },
+                            { value: "password", label: "password" },
+                            { value: "email", label: "e-mail" },
+                            { value: "number", label: "number" },
+                            { value: "tel", label: "tel" },
+                            { value: "url", label: "url" },
+                            { value: "date", label: "date" },
+                            { value: "time", label: "time" },
+                            { value: "datetime-local", label: "datetime-local" },
+                            { value: "month", label: "month" },
+                            { value: "week", label: "week" },
+                            { value: "color", label: "color" },
+                            { value: "search", label: "search" }
+                        ]}
+                        onChange={(e: any) => {
+                            setVariantType(e.currentTarget.value);
+                        }}
+                    />
+                    <TdsTextField
+                        type={variantType}
+                        name="variantField"
+                        label={tdsVscode.l10n.t("_Variant Field")}
+                        info={tdsVscode.l10n.t(`_Inform the value according to the type: ${variantType}`)}
+                        rules={{
+                            required: true,
+                        }}
+                        placeholder={`Enter a value: (${variantType})`}
+                    />
+                </TdsForm>
+            </FormProvider>
         </TdsPage >
     );
 }

@@ -49,7 +49,7 @@ limitations under the License.
 
 .tds-table-content .tds-table-row-highlight {
 	background: var(--list-active-selection-background);
-	border: solid calc(var(--border-width) * 1px) var(--focus-border);
+	border: solid calc(var(--tds-border-width) * 1px) var(--focus-border);
 	color: var(--list-active-selection-foreground);
 	outline: none;
 }

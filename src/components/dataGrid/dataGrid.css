@@ -93,7 +93,7 @@ limitations under the License.
 .tds-data-grid-pagination div.tds-data-grid-pagination-label {
 	align-items: flex-end;
 	display: flex;
-	margin-bottom: 3px;
+	margin-bottom: 3;
 }
 
 .tds-data-grid-pagination vscode-button svg+svg {

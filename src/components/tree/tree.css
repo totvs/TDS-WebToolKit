@@ -25,11 +25,11 @@ limitations under the License.
 .tds-tree-view fast-tree-item::part(positioning-region) {
     background-color: transparent;
     border: none;
-    height: calc(((8 + var(--density)) * var(--design-unit) + 1) * 1px);
+    height: calc(((8 + var(--density)) * var(--tds-design-unit) + 1) * 1px);
 }
 
 .tds-tree-view fast-tree-item::part(content-region) {
-    margin-top: calc(var(--design-unit) * -1px);
+    margin-top: calc(var(--tds-design-unit) * -1px);
     color: var(--vscode-editor-foreground);
 }
 

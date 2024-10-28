@@ -26,6 +26,7 @@ export type TdsFieldRules = {
 	required?: boolean;
 	min?: { value: number, message: string };
 	max?: { value: number, message: string };
+	maxLength?: number;
 	pattern?: RegExp
 }
 
@@ -40,7 +41,7 @@ export type TdsFieldProps = {
 	info?: string;
 	error?: string;
 	className?: string;
-	ref?: React.MutableRefObject<any>;
+	//ref?: React.MutableRefObject<any>;
 	rules?: TdsFieldRules;
 	readOnly?: boolean
 	//https://github.com/microsoft/vscode-webview-ui-toolkit/blob/main/src/react/README.md#use-oninput-instead-of-onchange-to-handle-keystrokes
@@ -58,12 +59,12 @@ export type TdsFormAction = {
 	isProcessRing?: boolean
 	type?: "submit" | "reset" | "button" | "link" | "checkbox";
 	appearance?: string;  //ButtonAppearance;
-	//href?: string;
+	href?: string;
 	form?: any;
 }
 
 type TdsFormProps<M extends TdsAbstractModel> = {
-	onSubmit: (data: M) => void;
+	onSubmit: React.FormEventHandler<HTMLFormElement>;
 	id?: string;
 	title?: string;
 	onManualReset?: () => void;
@@ -83,29 +84,40 @@ type TdsFormProps<M extends TdsAbstractModel> = {
  * @param [props.showFooter] - Show footer page
  */
 export function TdsForm<M extends TdsAbstractModel>(props: TdsFormProps<M>): React.ReactElement {
-
 	return (
 		<section className="tds-form">
 			<form className="tds-form"
 				id={props.id}
 				autoComplete="off"
-				onSubmit={(e) => {
-					e.preventDefault();
+				//noValidate
+				// onError={(e) => {
+				// 	console.error(e)
+				// }}
+				// onInvalid={(e) => {
+				// 	console.error(e);
+				// }}
+				// onInput={(e) => {
+				// 	console.error(e);
+				// }}
+				onSubmit={props.onSubmit}
 
-					const form: HTMLFormElement = e.target as HTMLFormElement;
-					const fd: FormData = new FormData(form);
-					let out: TdsAbstractModel = {};
-					for (let [name, value] of fd) {
-						out[name] = value;
-					}
+			// onSubmit={(e) => {
+			// 	e.preventDefault();
 
-					props.onSubmit(out as M);
-				}}
+			// 	const form: HTMLFormElement = e.target as HTMLFormElement;
+			// 	const fd: FormData = new FormData(form);
+			// 	let out: TdsAbstractModel = {};
+			// 	for (let [name, value] of fd) {
+			// 		out[name] = value;
+			// 	}
+
+			// 	props.onSubmit(out as M);
+			// }}
 			>
 				{props.title && <TdsHeaderForm title={props.title} />}
 
 				<TdsContentForm>
-					{props.children.map((child: any) => {
+					{React.Children.toArray(props.children).map((child: any) => {
 						return child;
 					})}
 				</TdsContentForm>

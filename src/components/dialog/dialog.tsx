@@ -18,6 +18,7 @@ import "./dialog.css";
 import "../page/page.css";
 import React from 'react';
 import { ErrorBoundary } from "../error-boundary";
+import { VscodeIcon } from "@vscode-elements/react-elements";
 import TdsHeader from "../page/header";
 import TdsContent from "../page/content";
 
@@ -38,16 +39,44 @@ export function TdsDialog(props: ITdsDialog): React.ReactElement {
 
 	return (
 		<ErrorBoundary fallback={<p>Something unexpected occurred. See navigator console log for details.</p>}>
-			<section className="tds-dialog-overlay">
-				<section className="tds-dialog">
-					{props.title && <TdsHeader title={props.title} />}
+			<div
+				className="tds-dialog-overlay"
+				onClick={
+					(e: any) => {
+						if (e.target == e.currentTarget) {
+							e.preventDefault();
+							e.stopPropagation();
+							props.onClose(false, {});
+						}
+					}
+				}
+				onKeyUp={(e: any) => {
+					console.log("onKeyUp", e);
+				}}
+			>
+				<div className="tds-dialog">
+					{props.title &&
+						<TdsHeader title={props.title}
+							extra={<>
+								<VscodeIcon
+									name="close"
+									action-icon
+									onClick={
+										(e: any) => {
+											props.onClose(false, {});
+										}
+									}
+								></VscodeIcon>
+
+							</>}
+						/>}
 
 					<TdsContent>
 						{props.children}
 					</TdsContent>
 
-				</section>
-			</section>
+				</div>
+			</div>
 		</ErrorBoundary>
 	);
 }

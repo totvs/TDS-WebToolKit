@@ -6,6 +6,7 @@ import { TdsCheckBoxFieldProps } from './checkBoxField';
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsRadioFieldProps } from "./radioField";
 import { PageContext, TStatePage } from "../page/pageContext";
+import { useFormContext } from "react-hook-form";
 
 type TdsRadioGroupProps = TdsFieldProps & {
 	orientation?: "horizontal" | "vertical";
@@ -25,12 +26,12 @@ type TdsRadioGroupProps = TdsFieldProps & {
  * @returns
  */
 export function TdsRadioGroup(props: TdsRadioGroupProps): React.ReactElement {
+	const pageContext: TStatePage = React.useContext(PageContext);
+	const { register, formState: { errors }, getFieldState } = useFormContext();
 
 	if (props.options && props.children) {
 		throw new Error("Use only one of the properties: Options or Children")
 	}
-
-	const pageContext: TStatePage = React.useContext(PageContext);
 
 	return (
 		<VscodeFormGroup
@@ -43,34 +44,65 @@ export function TdsRadioGroup(props: TdsRadioGroupProps): React.ReactElement {
 			>
 				{mdToHtml(props.label || "")}
 			</VscodeLabel>
-			<VscodeRadioGroup
-				variant={props.orientation}
-			>
-				{props.children && React.Children.toArray(props.children.map((e: any) => {
-					return { ...e, name: props.name, rules: e.rules }
-				}))}
-				{props.options && props.options.map((e: TdsRadioFieldProps, index: number) =>
-					<VscodeRadio
-						disabled={props.readOnly || false}
-						required={props.rules?.required || false}
-						value={e.value}
-						checked={e.checked}
-						onClick={
-							(e: any) => {
-								props.onChange && props.onChange(e);
+			{register ?
+				<VscodeRadioGroup
+					variant={props.orientation}
+				>
+					{props.children && React.Children.toArray(props.children.map((e: any) => {
+						return { ...e, name: props.name, rules: e.rules }
+					}))}
+					{props.options && props.options.map((radioProps: TdsRadioFieldProps, index: number) =>
+						<VscodeRadio
+							{...register(`${props.name}`,
+								{
+									disabled: props.readOnly,
+									required: props.rules?.required,
+								}) as any}
+							name={props.name}
+							value={radioProps.value}
+							checked={radioProps.checked}
+							onClick={
+								(e: any) => {
+									console.log("onCLick", radioProps.value)
+									e.preventDefault();
+									props.onChange && props.onChange(e);
+								}
 							}
-						}
-					>
-						{mdToHtml(e.label)}
-					</VscodeRadio>
-				)}
-			</VscodeRadioGroup>
+						>
+							{mdToHtml(radioProps.label)}
+						</VscodeRadio>
+					)}
+				</VscodeRadioGroup>
+				:
+				<VscodeRadioGroup
+					variant={props.orientation}
+				>
+					{props.children && React.Children.toArray(props.children.map((e: any) => {
+						return { ...e, name: props.name, rules: e.rules }
+					}))}
+					{props.options && props.options.map((e: TdsRadioFieldProps, index: number) =>
+						<VscodeRadio
+							disabled={props.readOnly || false}
+							required={props.rules?.required || false}
+							value={e.value}
+							checked={e.checked}
+							onClick={
+								(e: any) => {
+									props.onChange && props.onChange(e);
+								}
+							}
+						>
+							{mdToHtml(e.label)}
+						</VscodeRadio>
+					)}
+				</VscodeRadioGroup>
+			}
 			{
 				props.info &&
 				<VscodeFormHelper>
 					{mdToHtml(props.info)}
 				</VscodeFormHelper>
 			}
-		</VscodeFormGroup>
+		</VscodeFormGroup >
 	)
 }

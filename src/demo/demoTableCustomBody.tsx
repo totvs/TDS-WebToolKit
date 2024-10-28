@@ -25,6 +25,7 @@ import countries from './countries.json'; // This import style requires "esModul
 import { TdsTable } from "../components/table";
 import { TTdsTableColumn } from "../components/table/table.type";
 import { VscodeTableCell, VscodeTableRow } from "@vscode-elements/react-elements";
+import { useForm } from "react-hook-form";
 
 enum ReceiveCommandEnum {
 }
@@ -49,18 +50,19 @@ type TDemoTableCustomBodyProps = {
 }
 
 export default function DemoTableCustomBody(props: TDemoTableCustomBodyProps) {
-    // const methods = useForm<TDemoModel>({
-    //     defaultValues: {
-    //         datasource: countries.map((country: any) => {
-    //             return {
-    //                 ...country,
-    //                 independenceDate: new Date(country.independenceDate),
-    //                 area: Number.parseInt(country.area)
-    //             } as TCountry
-    //         })
-    //     },
-    //     mode: "all"
-    // })
+    const methods = useForm<TDemoModel>({
+        defaultValues: {
+            dataSource: []
+            // datasource: countries.map((country: any) => {
+            //     return {
+            //         ...country,
+            //         independenceDate: new Date(country.independenceDate),
+            //         area: Number.parseInt(country.area)
+            //     } as TCountry
+            // })
+        },
+        mode: "all"
+    })
 
     const onSubmit = (data: TDemoModel) => {
         sendSaveAndClose(data);
@@ -125,7 +127,7 @@ export default function DemoTableCustomBody(props: TDemoTableCustomBodyProps) {
         <TdsPage title="Demo: TdsTable (Custom Body)">
             <TdsForm<TDemoModel>
                 actions={[]}
-                onSubmit={onSubmit}
+                onSubmit={methods.handleSubmit(onSubmit)}
                 onActionEvent={(action: TdsFormAction) => { }}>
 
                 <TdsTable id={"result_table"}

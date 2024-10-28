@@ -5,6 +5,7 @@ import { mdToHtml } from "../mdToHtml";
 import { PageContext, TStatePage } from "../page/pageContext";
 import PopupMessage from "../popup-message/popup-message";
 import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeOption, VscodeSingleSelect } from "@vscode-elements/react-elements";
+import { useFormContext } from "react-hook-form";
 
 export type TdsOptionsSelection = {
 	label: string;
@@ -30,7 +31,6 @@ type TdsSelectionFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactElement {
-	// const { register, control, getValues, getFieldState } = useFormContext();
 	// const fieldState: ControllerFieldState = getFieldState(props.name);
 	const options = props.options || [];
 	const currentValue: string = "currentValue";  //getValues(props.name) as string;
@@ -58,12 +58,13 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 				{mdToHtml(props.label || props.name)}
 			</VscodeLabel>
 			<VscodeSingleSelect name={props.name}
+				combobox
 				onClick={(e) => {
 					props.onChange && props.onChange(e);
 				}}
-				onChange={(e) => {
-					props.onChange && props.onChange(e);
-				}}
+				// onChange={(e) => {
+				// 	props.onChange && props.onChange(e);
+				// }}
 				disabled={props.readOnly || false}
 				required={props.rules?.required || false}
 			>

@@ -201,10 +201,17 @@ export class L10n {
 
   private loadInternalTranslations() {
     if (this._formatLocale == "pt-BR") {
-      this._translations["_Compact"] = "Compacto";
+      this._translations["_Settings"] = "Configuração";
+      this._translations["__Compact mode"] = "Modo compacto";
       this._translations["_Orientation"] = "Orientação";
       this._translations["_Horizontal"] = "Horizontal";
       this._translations["_Vertical"] = "Vertical";
+      this._translations["_Apply"] = "Aplicar";
+      this._translations["_Close and apply changes"] = "Fechar e aplicar alterações";
+      this._translations["_Cancel"] = "Cancelar";
+      this._translations["_Close without changes"] = "Fechar sem alterações";
+      this._translations["_Restore"] = "Restaurar";
+      this._translations["_Restore default settings"] = "Restaura valores padrões";
       this._translations["_Filter"] = "Filtro";
       this._translations["_Filters on all columns and can accept regular expressions"] = "Filtros em todas as colunas e aceita expressões regulares";
       this._translations["_Elements/page"] = "Elementos/página";
@@ -216,16 +223,24 @@ export class L10n {
       this._translations["_Reset the fields"] = "Restaura valores padrões";
       this._translations["_Select Folder"] = "Selecionar Pasta";
       this._translations["_Select File"] = "Selecionar Arquivo";
-      this._translations["_There is invalid information. See the error by hovering the mouse over the field marking."] = "Há informações inválidas. Veja o erro passando o mouse sobre a marcação do campo.";
+      this._translations["_There is invalid information."] = "Há informações inválidas.";
+      this._translations["_See the error by hovering the mouse over the field marking."] = "Veja o erro passando o mouse sobre a marcação do campo.";
       this._translations["_Wait please. Processing..."] = "Espere, por favor. Processando...";
       this._translations["_[{0}] is required."] = "[{0}] é obrigatório.";
       this._translations["_[{0}] is not valid range (min value)."] = "[{0}] não é válido para faixa (valor mínimo).";
       this._translations["_[{0}] is not valid range (max value)."] = "[{0}] não é válido para faixa (valor máximo).";
     } else {
+      this._translations["_Settings"] = "Settings";
       this._translations["_Orientation"] = "Orientation";
-      this._translations["_Compact"] = "Compact";
+      this._translations["__Compact mode"] = "Compact mode";
       this._translations["_Horizontal"] = "Horizontal";
       this._translations["_Vertical"] = "Vertical";
+      this._translations["_Apply"] = "Apply";
+      this._translations["_Close and apply changes"] = "Close and apply changes";
+      this._translations["_Cancel"] = "Cancel";
+      this._translations["_Close without changes"] = "Fechar sem alterações";
+      this._translations["_Restore"] = "Restore";
+      this._translations["_Restore default settings"] = "_Restore default settings";
       this._translations["_Filter"] = "Filter";
       this._translations["_Filters on all columns and can accept regular expressions"] = "Filters on all columns and can accept regular expressions";
       this._translations["_Elements/page"] = "Elements/page";
@@ -237,7 +252,8 @@ export class L10n {
       this._translations["_Reset the fields"] = "Reset the fields";
       this._translations["_Select Folder"] = "Select Folder";
       this._translations["_Select File"] = "Select File";
-      this._translations["_There is invalid information. See the error by hovering the mouse over the field marking."] = "There is invalid information. See the error by hovering the mouse over the field marking.";
+      this._translations["_There is invalid information."] = "There is invalid information.";
+      this._translations["_See the error by hovering the mouse over the field marking."] = "See the error by hovering the mouse over the field marking.";
       this._translations["_Wait please. Processing..."] = "Wait please. Processing...";
       this._translations["_[{0}] is required."] = "[{0}] is required.";
       this._translations["_[{0}] is not valid range (min value)."] = "[{0}] is not valid range (min value).";

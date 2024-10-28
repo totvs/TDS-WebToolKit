@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
 import { TdsFieldProps } from "../form/form";
-import PopupMessage from "../popup-message/popup-message";
 import { mdToHtml } from "../mdToHtml";
 import { VscodeFormGroup, VscodeIcon, VscodeTextarea, VscodeTextfield } from "@vscode-elements/react-elements";
 import { VscodeLabel, VscodeFormHelper } from "@vscode-elements/react-elements";
-import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { PageContext, TStatePage } from "../page/pageContext";
-import React from "react";
+import { FieldError, GlobalError, useFormContext } from "react-hook-form";
+import { tdsVscode } from "../../utilities/vscodeWrapper";
 
 export type TdsTypeField = "text" | "password" | "email" | "number" | "tel" | "url" | "date" | "time" | "datetime-local" | "month" | "week" | "color" | "search";
 
@@ -47,13 +47,42 @@ type TdsTextFieldProps = TdsFieldProps & {
  *
  * @returns
  */
-function formHelper(props: TdsTextFieldProps & { tooltipVisible: any, mousePosition: any }) {
+function buildMessage(props: TdsFieldProps & { fieldError: FieldError }): string {
+    const { label, info, error: errorText } = props;
+    let message: string = info || "";
+
+    if (props.fieldError) {
+        const error = props.fieldError;
+
+        if (error.type == "required") {
+            message = error.message || tdsVscode.l10n.t(`_[{0}] is required.`, label);
+        } else if (error.type == "min") {
+            message = error.message || tdsVscode.l10n.t(`_[{0}] is not valid range (min value).`, label);
+        } else if (error.type == "max") {
+            message = error.message || tdsVscode.l10n.t(`_[{0}] is not valid range (max value).`, label);
+        } else {
+            message = error.message || error.message || `${error.type}<Unknown>`
+        }
+    }
+
+    return message;
+}
+
+function formHelper(props: TdsTextFieldProps & {
+    fieldError: FieldError;
+    tooltipVisible: any,
+    mousePosition: any
+}) {
     const pageContext: TStatePage = React.useContext(PageContext);
+
+    if (props.fieldError) {
+        console.log("Error", props.fieldError);
+    }
 
     if (!pageContext.compact) {
         return (
             <VscodeFormHelper >
-                {mdToHtml(props.info)}
+                {buildMessage({ ...props, fieldError: props.fieldError })}
             </VscodeFormHelper>
         );
     } else if (props.tooltipVisible) {
@@ -70,7 +99,7 @@ function formHelper(props: TdsTextFieldProps & { tooltipVisible: any, mousePosit
                     pointerEvents: 'none',
                 }}
             >
-                {mdToHtml(props.info)}
+                {buildMessage({ ...props, fieldError: props.fieldError })}
             </div>
         );
     }
@@ -80,8 +109,7 @@ function formHelper(props: TdsTextFieldProps & { tooltipVisible: any, mousePosit
 
 export function TdsTextField(props: TdsTextFieldProps): any {
     const pageContext: TStatePage = React.useContext(PageContext);
-    const textValue: string = props.value !== undefined ? props.value : "currentValue"
-
+    const { register, formState: { errors }, getFieldState } = useFormContext();
     const [tooltipVisible, setTooltipVisible] = React.useState(false);
     const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
 
@@ -115,39 +143,69 @@ export function TdsTextField(props: TdsTextFieldProps): any {
         setTooltipVisible(false);
     };
 
+    const fieldError: FieldError = getFieldState(props.name).error;
+
     return (
         <VscodeFormGroup variant={pageContext.formOrientation}
             key={props.name}
         >
             <VscodeLabel htmlFor={props.name}
-                required={props.rules?.required || false}
+                required={props.rules?.required}
             >
                 {mdToHtml(props.label || props.name)}
             </VscodeLabel>
 
-            <VscodeTextfield
-                name={props.name}
-                type={props.type || "text"}
-                readonly={props.readOnly || false}
-                required={props.rules?.required || false}
-                placeholder={props.placeholder}
-                pattern={props.rules?.pattern?.source || undefined}
-                onChange={(e) => {
-                    props.onChange && props.onChange(e)
-                }}
-            >
-                {pageContext.compact &&
-                    <VscodeIcon
-                        slot="content-after"
-                        name={props.error ? "error" : "info"}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseMove={handleMouseMove}
-                        onMouseLeave={handleMouseLeave}
-                    />
-                }
-            </VscodeTextfield>
+            {
+                register ?
+                    <VscodeTextfield
+                        {...register(`${props.name}`,
+                            {
+                                disabled: props.readOnly,
+                                required: props.rules?.required,
+                                maxLength: props.rules?.maxLength,
+                                pattern: props.rules?.pattern || undefined
+                            }) as any}
+                        name={props.name}
+                        type={props.type || "text"}
+                        placeholder={props.placeholder}
+                    >
+                        {pageContext.compact &&
+                            <VscodeIcon
+                                slot="content-after"
+                                name={fieldError ? "error" : "info"}
+                                onMouseEnter={handleMouseEnter}
+                                onMouseMove={handleMouseMove}
+                                onMouseLeave={handleMouseLeave}
+                            />
+                        }
+                    </VscodeTextfield>
+                    :
+                    <VscodeTextfield
+                        name={props.name}
+                        type={props.type || "text"}
+                        readonly={props.readOnly || false}
+                        required={props.rules?.required || false}
+                        placeholder={props.placeholder}
+                        pattern={props.rules?.pattern?.source || undefined}
+                    >
+                        {pageContext.compact &&
+                            <VscodeIcon
+                                slot="content-after"
+                                name={props.error ? "error" : "info"}
+                                onMouseEnter={handleMouseEnter}
+                                onMouseMove={handleMouseMove}
+                                onMouseLeave={handleMouseLeave}
+                            />
+                        }
+                    </VscodeTextfield>
+            }
 
-            {formHelper({ ...props, tooltipVisible: tooltipVisible, mousePosition: mousePosition })}
+            {formHelper({
+                ...props,
+                fieldError: fieldError,
+                tooltipVisible: tooltipVisible,
+                mousePosition: mousePosition
+            })}
         </VscodeFormGroup>
     )
 }

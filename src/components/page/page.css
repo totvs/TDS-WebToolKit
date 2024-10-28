@@ -20,10 +20,13 @@ limitations under the License.
 ---------------------------------------------------------------------------------------------------
 */
 :root {
-	--tds-hor-spacing: calc(var(--design-unit)*3px);
-	--tds-ver-spacing: calc(var(--design-unit)*3px);
-	--tds-padding: calc(var(--design-unit)*3px);
-	--tds-indent-group: calc(var(--design-unit)*6px);
+	--tds-design-unit: 1px;
+	--tds-hor-spacing: calc(var(--tds-design-unit)*3);
+	--tds-ver-spacing: calc(var(--tds-design-unit)*3);
+	--tds-padding: calc(var(--tds-design-unit)*3);
+	--tds-indent-group: calc(var(--tds-design-unit)*6);
+	--tds-border-width: var(--tds-design-unit)*3;
+	--tds-corner-radius-round: calc(var(--tds-design-unit)*3);
 }
 
 /*

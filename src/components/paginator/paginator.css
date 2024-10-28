@@ -26,7 +26,7 @@ limitations under the License.
 .tds-paginator div.tds-paginator-label {
 	align-items: flex-end;
 	display: flex;
-	margin-bottom: 3px;
+	margin-bottom: 3;
 }
 
 .tds-paginator vscode-button svg+svg {

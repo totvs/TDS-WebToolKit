@@ -15,10 +15,6 @@ limitations under the License.
 */
 
 import React from "react";
-import { TdsTypeField } from "../fields/textField";
-import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
-import { tdsVscode } from "../../utilities/vscodeWrapper";
-import { VscodeRadio, VscodeRadioGroup } from "@vscode-elements/react-elements";
 
 export interface IHeader {
 	title: string;

@@ -25,6 +25,7 @@ import { TdsCheckBoxGroup } from "../components/fields/checkBoxGroup";
 import { TdsRadioGroup } from "../components/fields/checkRadioGroup";
 import { TdsRadio } from "../components/fields/radioField";
 import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
+import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
 
 enum ReceiveCommandEnum {
 }
@@ -38,10 +39,16 @@ type TDemoModel = {
 }
 
 type TDemoFormProps = {
-    orientation?: FormGroupVariant;
 }
 
 export default function DemoGroup(props: TDemoFormProps) {
+    const methods: UseFormReturn<TDemoModel> = useForm<TDemoModel>({
+        defaultValues: {
+            name: "",
+            age: 0,
+        },
+        mode: "all"
+    })
 
     const onSubmit = (data: TDemoModel) => {
         sendSaveAndClose(data);
@@ -74,38 +81,39 @@ export default function DemoGroup(props: TDemoFormProps) {
 
     return (
         <TdsPage title="Demo: TdsForm with Groups" showFooter={true}>
-            <TdsForm<TDemoModel>
-                onSubmit={onSubmit}
-                description={tdsVscode.l10n.t("_Form with Groups Fields")}
-                onActionEvent={(action: any) => {
-                    console.log("onActionEvent", action);
-                }}
-            >
-                <section className="tds-row-container" >
-                    <TdsCheckBoxGroup
-                        name="words"
-                        label={tdsVscode.l10n.t("_Select Words")}
-                        info={tdsVscode.l10n.t("Select one or more words")} >
-                        <TdsCheckBox name="words_1" value={"loren"} label={"Loren"} checked={false} />
-                        <TdsCheckBox name="words_2" value={"ipsun"} label={"Ipsun"} checked={false} />
-                        <TdsCheckBox name="words_3" value={"dolor"} label={"Dolor"} checked={false} />
-                    </TdsCheckBoxGroup>
-                </section>
+            <FormProvider {...methods}>
+                <TdsForm<TDemoModel>
+                    onSubmit={methods.handleSubmit(onSubmit)}
+                    description={tdsVscode.l10n.t("_Form with Groups Fields")}
+                    onActionEvent={(action: any) => {
+                        console.log("onActionEvent", action);
+                    }}
+                >
+                    <section className="tds-row-container" >
+                        <TdsCheckBoxGroup
+                            name="words"
+                            label={tdsVscode.l10n.t("_Select Words")}
+                            info={tdsVscode.l10n.t("Select one or more words")} >
+                            <TdsCheckBox name="words_1" value={"loren"} label={"Loren"} checked={false} />
+                            <TdsCheckBox name="words_2" value={"ipsun"} label={"Ipsun"} checked={false} />
+                            <TdsCheckBox name="words_3" value={"dolor"} label={"Dolor"} checked={false} />
+                        </TdsCheckBoxGroup>
+                    </section>
 
-                <section className="tds-row-container" >
-                    <TdsRadioGroup
-                        key={"one-word"}
-                        name="one-word"
-                        label={tdsVscode.l10n.t("_Select One Word")}
-                        info={tdsVscode.l10n.t("Select one word")}
-                        rules={{ required: true }}>
-                        <TdsRadio label={"Loren"} checked={false} />
-                        <TdsRadio label={"Ipsun"} checked={false} />
-                        <TdsRadio label={"Dolor"} checked={false} />
-                    </TdsRadioGroup>
-                </section>
-
-            </TdsForm>
+                    <section className="tds-row-container" >
+                        <TdsRadioGroup
+                            key={"one-word"}
+                            name="one-word"
+                            label={tdsVscode.l10n.t("_Select One Word")}
+                            info={tdsVscode.l10n.t("Select one word")}
+                            rules={{ required: true }}>
+                            <TdsRadio label={"Loren"} checked={false} />
+                            <TdsRadio label={"Ipsun"} checked={false} />
+                            <TdsRadio label={"Dolor"} checked={false} />
+                        </TdsRadioGroup>
+                    </section>
+                </TdsForm>
+            </FormProvider>
         </TdsPage >
     );
 }

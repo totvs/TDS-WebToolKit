@@ -24,12 +24,19 @@ import { VscodeRadio, VscodeRadioGroup, VscodeLabel, VscodeIcon, VscodeCheckbox 
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
 import { PageContext } from "./pageContext";
+import { TdsDialog } from "../dialog";
+import { TdsForm, TdsFormAction } from "../form/form";
+import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
+import { TdsRadioGroup } from "../fields/checkRadioGroup";
+import { TdsCheckBoxField } from "../fields/checkBoxField";
+import { TdsTextField } from "../fields/textField";
 
 export interface IPageView {
+	children: any;
 	title?: string;
 	showFooter?: boolean;
 	extra?: React.ReactElement
-	children: any;
+	layoutControl?: boolean;
 }
 
 /**
@@ -42,73 +49,51 @@ export interface IPageView {
 
  */
 export function TdsPage(props: IPageView): React.ReactElement {
-	// const [reducer, pageDispatch] = React.useReducer(
-	// 	pageReducer,
-	// 	{
-	// 		layout: "vertical"
-	// 	}
-	// );
+	const [configDialog, setConfigDialog] = React.useState<boolean>(false);
 	const [formOrientation, setFormOrientation] = React.useState<FormGroupVariant>(tdsVscode.pageState.formOrientation);
 	const [compact, setCompact] = React.useState<boolean>(tdsVscode.pageState.compact);
+	const closeSettings = (ok: boolean, data: any) => {
+		console.log("close");
+		
+		if (ok) {
+			tdsVscode.pageState = {
+				formOrientation: data.formOrientation,
+				compact: data.compact
+			}
+		} else if (data.reset) {
+			tdsVscode.pageStateReset();
+			ok = true;
+		}
+		
+		if (ok) {
+			setFormOrientation(tdsVscode.pageState.formOrientation);
+			setCompact(tdsVscode.pageState.compact);
+		}
+		
+		setConfigDialog(false);
+	};
 
-	const orientationSelect = (
-		<VscodeRadioGroup>
-			<VscodeLabel>
-				{tdsVscode.l10n.t("_Orientation")}:&nbsp;
-			</VscodeLabel>
-			<VscodeRadio
-				checked={formOrientation == "vertical"}
-				onClick={
-					(e: any) => {
-						e.preventDefault();
-						setFormOrientation("vertical");
-						tdsVscode.pageState = { formOrientation: "vertical" };
-					}
-				}
-			>
-				{tdsVscode.l10n.t("_Vertical")}
-			</VscodeRadio>
-			<VscodeRadio
-				checked={formOrientation == "horizontal"}
-				onClick={
-					(e: any) => {
-						e.preventDefault();
-						setFormOrientation("horizontal");
-						tdsVscode.pageState = { formOrientation: "horizontal" };
-					}
-				}
-			>
-				{tdsVscode.l10n.t("_Horizontal")}
-			</VscodeRadio>
-			<VscodeCheckbox
-				label={tdsVscode.l10n.t("_Compact")}
-				value="compact"
-				checked={compact}
-				onClick={
-					(e: any) => {
-						e.preventDefault();
-						setCompact(!compact);
-						tdsVscode.pageState = { compact: !compact };
-					}
-				}
-			/>
+	const extra: React.ReactElement = <>
+		{props.extra}
+		{((props.layoutControl == undefined) || props.layoutControl) &&
 			<VscodeIcon
-				name="clear-all"
+				name="settings"
 				action-icon
 				onClick={
 					(e: any) => {
-						tdsVscode.pageStateReset();
-						setFormOrientation(tdsVscode.pageState.formOrientation);
+						setConfigDialog(true);
 					}
 				}
 			></VscodeIcon>
-		</VscodeRadioGroup>
-	);
+		}
+	</>
 
 	return (
 		<ErrorBoundary fallback={<p>Something unexpected occurred. See navigator console log for details.</p>}>
 			<section className="tds-page">
-				{props.title && <TdsHeader title={props.title} extra={props.extra || orientationSelect} />}
+				{props.title &&
+					<TdsHeader title={props.title} extra={extra} />
+				}
 
 				<TdsContent>
 					<PageContext.Provider value={{
@@ -121,6 +106,108 @@ export function TdsPage(props: IPageView): React.ReactElement {
 
 				{props.showFooter && <TdsFooter />}
 			</section>
+
+			{configDialog && <ConfigDialog onClose={closeSettings} />}
 		</ErrorBoundary>
+	);
+}
+
+type TSettingsModel = {
+	formOrientation: FormGroupVariant;
+	compact: boolean;
+	text: string;
+}
+
+function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
+	// const [formOrientation, setFormOrientation] = React.useState<FormGroupVariant>(tdsVscode.pageState.formOrientation);
+	// const [compact, setCompact] = React.useState<boolean>(tdsVscode.pageState.compact);
+
+	const methods: UseFormReturn<TSettingsModel> = useForm<TSettingsModel>({
+		defaultValues: {
+			formOrientation: tdsVscode.pageState.formOrientation,
+			compact: tdsVscode.pageState.compact,
+			text: "XXXXXXXXXXXXXXX"
+		},
+		mode: "all"
+	})
+
+	const customActions: TdsFormAction[] = [
+		{
+			id: 0,
+			caption: tdsVscode.l10n.t("_Apply"),
+			hint: tdsVscode.l10n.t("_Close and apply changes"),
+		},
+		{
+			id: 1,
+			caption: tdsVscode.l10n.t("_Cancel"),
+			hint: tdsVscode.l10n.t("_Close without changes"),
+		},
+		{
+			id: 2,
+			caption: tdsVscode.l10n.t("_Restore"),
+			hint: tdsVscode.l10n.t("_Restore default settings"),
+		}
+	];
+
+	const model: TSettingsModel = methods.getValues();
+
+	return (
+		<PageContext.Provider value={{
+			formOrientation: "vertical",
+			compact: false
+		}}>
+			<TdsDialog title={tdsVscode.l10n.t("_Settings")} onClose={props.onClose} >
+				<FormProvider {...methods}>
+					<TdsForm<TSettingsModel>
+						onSubmit={(e) => {
+							//methods.handleSubmit(onSubmit)
+						}}
+						actions={customActions}
+						onActionEvent={(action: TdsFormAction) => {
+							if (action.id == 0) {
+								props.onClose(true, methods.getValues());
+							} else if (action.id == 1) {
+								props.onClose(false, undefined);
+							} else if (action.id == 2) {
+								props.onClose(false, { reset: true });
+							}
+						}}
+						description={tdsVscode.l10n.t("_Settings")}
+					>
+						<TdsRadioGroup
+							orientation="horizontal"
+							name={"formOrientation"}
+							label={tdsVscode.l10n.t("_Orientation")}
+							options={
+								[
+									{
+										value: "vertical",
+										label: tdsVscode.l10n.t("_Vertical"),
+										checked: model.formOrientation == "vertical"
+									},
+									{
+										value: "horizontal",
+										label: tdsVscode.l10n.t("_Horizontal"),
+										checked: model.formOrientation == "horizontal"
+									}
+								]
+							}
+						/>
+
+						<TdsCheckBoxField
+							name="compact"
+							label={tdsVscode.l10n.t("_Compact mode")}
+							value={"true"}
+							checked={model.compact}
+						/>
+
+						<TdsTextField
+							name={"text"}
+							label={"text"}
+						/>
+					</TdsForm>
+				</FormProvider>
+			</TdsDialog >
+		</PageContext.Provider>
 	);
 }

@@ -23,6 +23,7 @@ import { tdsVscode } from "../utilities/vscodeWrapper";
 import countries from './countries.json'; // This import style requires "esModuleInterop", see "side notes"
 import { TdsTree, TdsTreeItem, TdsTreeItemAction } from "../components/tree/tree";
 import { TreeItemDecoration } from "@vscode-elements/elements/dist/vscode-tree/vscode-tree";
+import { useForm, UseFormReturn } from "react-hook-form";
 
 enum ReceiveCommandEnum {
 }
@@ -46,6 +47,13 @@ type TDemoTreeProps = {
 }
 
 export default function DemoTree(props: TDemoTreeProps) {
+    const methods: UseFormReturn<TDemoModel> = useForm<TDemoModel>({
+        defaultValues: {
+            root: []
+        },
+        mode: "all"
+    })
+
     const onSubmit = (data: TDemoModel) => {
         sendSaveAndClose(data);
     }
@@ -146,7 +154,7 @@ export default function DemoTree(props: TDemoTreeProps) {
         <TdsPage title="Demo: TdsTree" >
             <TdsForm<TDemoModel>
                 actions={[]}
-                onSubmit={onSubmit}
+                onSubmit={methods.handleSubmit(onSubmit)}
                 onActionEvent={(action) => console.log(action)}
             >
 

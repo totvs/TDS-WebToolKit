@@ -23,6 +23,7 @@ import { tdsVscode } from "../utilities/vscodeWrapper";
 import { TdsDataGrid, TTdsDataGridColumnDef } from "../components/dataGrid";
 import countries from './countries.json'; // This import style requires "esModuleInterop", see "side notes"
 import { VscodeButton } from "@vscode-elements/react-elements";
+import { useForm, UseFormReturn } from "react-hook-form";
 
 enum ReceiveCommandEnum {
 }
@@ -45,6 +46,14 @@ type TDemoModelDualSelectionModel = {
 }
 
 export default function DemoDualSelection() {
+    const methods: UseFormReturn<TDemoModelDualSelectionModel> = useForm<TDemoModelDualSelectionModel>({
+        defaultValues: {
+            left: [],
+            right: [],
+        },
+        mode: "all"
+    })
+
     const loadData = () => {
         return countries.map((country) => {
             return {
@@ -152,7 +161,7 @@ export default function DemoDualSelection() {
             <TdsForm<TDemoModelDualSelectionModel>
                 key="x"
                 actions={[]}
-                onSubmit={onSubmit}
+                onSubmit={methods.handleSubmit(onSubmit)}
                 onActionEvent={(action) => console.log(action)}
             >
 

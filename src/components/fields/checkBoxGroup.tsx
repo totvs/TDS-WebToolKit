@@ -1,9 +1,10 @@
 import { mdToHtml } from "../mdToHtml";
-import { VscodeCheckboxGroup, VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeRadio } from "@vscode-elements/react-elements";
+import { VscodeCheckboxGroup, VscodeCheckbox, VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeRadio } from "@vscode-elements/react-elements";
 import * as React from "react"
 import { TdsFieldProps } from "../form/form";
 import { PageContext, TStatePage } from "../page/pageContext";
 import { TdsCheckBoxFieldProps } from "./checkBoxField";
+import { useFormContext } from "react-hook-form";
 
 type TdsCheckBoxGroupProps = TdsFieldProps & {
 	orientation?: 'horizontal' | 'vertical';
@@ -25,11 +26,12 @@ type TdsCheckBoxGroupProps = TdsFieldProps & {
  * @returns
  */
 export function TdsCheckBoxGroup(props: TdsCheckBoxGroupProps): React.ReactElement {
+	const { register, formState: { errors }, getFieldState } = useFormContext();
+	const pageContext: TStatePage = React.useContext(PageContext);
+
 	if (props.options && props.children) {
 		throw new Error("Use only one of the properties: Options or Children")
 	}
-
-	const pageContext: TStatePage = React.useContext(PageContext);
 
 	return (
 		<VscodeFormGroup
@@ -38,23 +40,47 @@ export function TdsCheckBoxGroup(props: TdsCheckBoxGroupProps): React.ReactEleme
 			<VscodeLabel>
 				{mdToHtml(props.label || "")}
 			</VscodeLabel>
-			<VscodeCheckboxGroup variant={props.orientation}>
-				{props.children && React.Children.toArray(props.children.map((e: any) => {
-					return { ...e, name: props.name, rules: e.rules, group: true }
-				}))}
-				{props.options && props.options.map((e: TdsCheckBoxFieldProps, index: number) =>
-					<VscodeRadio
-						checked={e.checked}
-						onClick={
-							(e: any) => {
-								props.onChange && props.onChange(e);
+			{register ?
+				<VscodeCheckboxGroup variant={props.orientation}>
+					{props.children && React.Children.toArray(props.children.map((e: any) => {
+						return { ...e, name: props.name, rules: e.rules, group: true }
+					}))}
+					{props.options && props.options.map((e: TdsCheckBoxFieldProps, index: number) =>
+						<VscodeCheckbox
+							{...register(`${props.name}`,
+								{
+									disabled: props.readOnly,
+									required: props.rules?.required,
+								}) as any}
+							name={props.name}
+							checked={e.checked}
+							onClick={
+								(e: any) => {
+									props.onChange && props.onChange(e);
+								}
 							}
-						}
-					>
-						{mdToHtml(e.label)}
-					</VscodeRadio>
-				)}
-			</VscodeCheckboxGroup>
+						>
+							{mdToHtml(e.label)}
+						</VscodeCheckbox>
+					)}
+				</VscodeCheckboxGroup>
+				:
+				<VscodeCheckboxGroup variant={props.orientation}>
+					{props.children && React.Children.toArray(props.children.map((e: any) => {
+						return { ...e, name: props.name, rules: e.rules, group: true }
+					}))}
+					{props.options && props.options.map((checkBoxProps: TdsCheckBoxFieldProps, index: number) =>
+						<VscodeCheckbox name={props.name}
+							disabled={props.readOnly || false}
+							required={props.rules?.required || false}
+							value={checkBoxProps.value}
+						>
+							{mdToHtml(props.label)}
+						</VscodeCheckbox>
+					)
+					}
+				</VscodeCheckboxGroup>
+			}
 			{
 				props.info &&
 				<VscodeFormHelper>

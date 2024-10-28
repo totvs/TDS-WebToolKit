@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 :root {
-    --tds-progress-ring-small: calc(var(--design-unit) * 7px);
+    --tds-progress-ring-small: calc(var(--tds-design-unit) * 7px);
     --tds-progress-ring-medium: calc(var(--tds-progress-ring-small) * 1.50);
     --tds-progress-ring-larger: calc(var(--tds-progress-ring-small) * 2);
     --tds-progress-ring-full: calc(var(--tds-progress-ring-small) * 3);

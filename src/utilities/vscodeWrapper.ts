@@ -50,9 +50,9 @@ class VSCodeAPIWrapper {
     if (DEV_MODE && !NODE_MODE) {
       const consoleDiv = document.getElementById('console');
       consoleDiv!.innerHTML = text;
+    } else {
+      console.log(text)
     }
-
-    console.log(text)
   }
 
   /**

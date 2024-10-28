@@ -28,7 +28,7 @@ limitations under the License.
 	padding: 8px;
 	position: absolute;
 	z-index: 1000;
-	padding-left: 13px;
+	padding-left: 13;
 }
 
 /* Toggle this class when clicking on the popup container (hide and show the popup) */

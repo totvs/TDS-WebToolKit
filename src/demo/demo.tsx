@@ -24,6 +24,7 @@ import DemoDualSelection from "./demoDualSelection";
 import { VscodeButton, VscodeRadio, VscodeRadioGroup } from "@vscode-elements/react-elements";
 import DemoGroup from "./demoGroup";
 import DemoTree from "./demoTree";
+import DemoReactForm from "./demoReactForm";
 
 enum DemoEnum {
   None,
@@ -32,7 +33,6 @@ enum DemoEnum {
   FormWithoutLayoutControl,
   FormCustomActions,
   FormGroups,
-  FormVerticalGroups,
   DataGrid,
   DataGridMultiRow,
   DataGridLocale,
@@ -41,7 +41,8 @@ enum DemoEnum {
   TableHighlightRows,
   TableHighlightGroup,
   TableZebra,
-  Tree
+  Tree,
+  ReactForm
 }
 export function Demo() {
   const [demo, setDemo] = React.useState<DemoEnum>(DemoEnum.None);
@@ -54,7 +55,6 @@ export function Demo() {
         <VscodeButton onClick={() => setDemo(DemoEnum.FormWithoutLayoutControl)}>TdsForm (WithoutLayoutControl)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.FormCustomActions)}>TdsForm (custom actions)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.FormGroups)}>TdsForm with Groups</VscodeButton>
-        <VscodeButton onClick={() => setDemo(DemoEnum.FormVerticalGroups)}>TdsForm with Vertical Groups</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.DataGrid)}>TdsDataGrid</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.DataGridMultiRow)}>TdsDataGrid (MultiRow)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.DataGridLocale)}>TdsDataGrid (pt-BR)</VscodeButton>
@@ -64,6 +64,7 @@ export function Demo() {
         <VscodeButton onClick={() => setDemo(DemoEnum.TableZebra)}>TdsTable (zebra)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.DualSelection)}>Dual Selection List</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.Tree)}>Tree</VscodeButton>
+        <VscodeButton onClick={() => setDemo(DemoEnum.ReactForm)}>React Form</VscodeButton>
       </div>
       <div className="demo-right-side" id="root">
         {demo == 0 && <>
@@ -77,7 +78,6 @@ export function Demo() {
         {demo == DemoEnum.FormWithoutLayoutControl && <DemoForm layoutControl={false} />}
         {demo == DemoEnum.FormCustomActions && <DemoForm customActions={true} />}
         {demo == DemoEnum.FormGroups && <DemoGroup />}
-        {demo == DemoEnum.FormVerticalGroups && <DemoGroup orientation="vertical" />}
         {demo == DemoEnum.DataGrid && <DemoDataGrid />}
         {demo == DemoEnum.DataGridMultiRow && <DemoDataGrid multiRow={true} />}
         {demo == DemoEnum.DataGridLocale && <DemoDataGrid locale="pt-BR" />}
@@ -94,6 +94,7 @@ export function Demo() {
         }}
         />}
         {demo == DemoEnum.Tree && <DemoTree />}
+        {demo == DemoEnum.ReactForm && <DemoReactForm />}
 
         <div className="demo-console" id="console">
           <>

@@ -32,10 +32,9 @@
 
 .demo-console {
     color: var(--vscode-foreground);
-    padding: 5hv;
+    padding: 5px;
     background-color: var(--vscode-activityBar-inactiveForeground);
     height: 10vh;
     overflow: auto;
-    margin-left: 5hv;
-    margin-right: 5hv;
+    margin-left: 20px;
 }

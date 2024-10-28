@@ -23,6 +23,7 @@ import { tdsVscode } from "../utilities/vscodeWrapper";
 import countries from './countries.json'; // This import style requires "esModuleInterop", see "side notes"
 import { TdsTable } from "../components/table";
 import { TTdsTableColumn } from "../components/table/table.type";
+import { useForm } from "react-hook-form";
 
 enum ReceiveCommandEnum {
 }
@@ -45,18 +46,18 @@ type TDemoTableProps = {
 }
 
 export default function DemoTable(props: TDemoTableProps) {
-    // const methods = useForm<TDemoModel>({
-    //     defaultValues: {
-    //         dataSource: countries.map((country: any) => {
-    //             return {
-    //                 country: country.name,
-    //                 capital: country.capital,
-    //                 area: Number.parseInt(country.area)
-    //             }
-    //         })
-    //     },
-    //     mode: "all"
-    // })
+    const methods = useForm<TDemoModel>({
+        defaultValues: {
+            dataSource: countries.map((country: any) => {
+                return {
+                    country: country.name,
+                    capital: country.capital,
+                    area: Number.parseInt(country.area)
+                }
+            })
+        },
+        mode: "all"
+    })
 
     const onSubmit = (data: TDemoModel) => {
         sendSaveAndClose(data);
@@ -123,7 +124,7 @@ export default function DemoTable(props: TDemoTableProps) {
         <TdsPage title="Demo: TdsTable" >
             <TdsForm<TDemoModel>
                 actions={[]}
-                onSubmit={onSubmit}
+                onSubmit={methods.handleSubmit(onSubmit)}
                 onActionEvent={(action) => console.log(action)}
             >
 

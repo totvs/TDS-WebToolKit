@@ -5,6 +5,7 @@ import { VscodeCheckbox, VscodeFormGroup, VscodeFormHelper, VscodeTextfield } fr
 import { tdsVscode } from './../../utilities/vscodeWrapper';
 import React from "react";
 import { PageContext, TStatePage } from "../page/pageContext";
+import { useFormContext } from "react-hook-form";
 
 export type TdsCheckBoxFieldProps = TdsFieldProps & {
 	value: string;
@@ -26,19 +27,36 @@ export type TdsCheckBoxFieldProps = TdsFieldProps & {
  */
 export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactElement {
 	const pageContext: TStatePage = React.useContext(PageContext);
+	const { register, formState: { errors }, getFieldState } = useFormContext();
 
 	return (
 		<VscodeFormGroup
 			variant={pageContext.formOrientation}
 			key={props.name}
 		>
-			<VscodeCheckbox name={props.name}
-				disabled={props.readOnly || false}
-				required={props.rules?.required || false}
-				value={props.value}
-			>
-				{mdToHtml(props.label)}
-			</VscodeCheckbox>
+			{
+				register ?
+					<VscodeCheckbox
+						{...register(`${props.name}`,
+							{
+								disabled: props.readOnly,
+								required: props.rules?.required,
+							}) as any}
+						name={props.name}
+						value={props.value}
+					>
+						{mdToHtml(props.label)}
+					</VscodeCheckbox>
+					:
+					<VscodeCheckbox
+						name={props.name}
+						disabled={props.readOnly || false}
+						required={props.rules?.required || false}
+						value={props.value}
+					>
+						{mdToHtml(props.label)}
+					</VscodeCheckbox>
+			}
 			{props.info && !pageContext.compact &&
 				<VscodeFormHelper>
 					{mdToHtml(props.info)}

@@ -15,31 +15,75 @@ limitations under the License.
 */
 
 .tds-dialog-overlay {
-	display: block;
+	display: flex;
 	position: fixed;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: var(--neutral-layer-4);
+	top: 0%;
+	left: 0%;
+	right: 0%;
+	bottom: 0%;
+	background-color: var(--vscode-editorCommentsWidget-resolvedBorder);
 	z-index: 1000;
-	opacity: 0.95;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+	flex-wrap: wrap;
 }
 
 .tds-dialog {
 	display: flex;
 	flex-direction: column;
+	flex-grow: 0;
+	flex-shrink: 0;
 	overflow: hidden;
-	z-index: 1300;
+	z-index: 1001;
 	position: absolute;
-	width: 80%;
-	height: 80%;
-	top: 10%;
-	margin-left: 10%;
-	background: var(--neutral-layer-4);
-	border-radius: calc(var(--corner-radius-round) * 3px);
-	border: calc(var(--border-width) * 1px) solid var(--vscode-inputOption-activeBorder);
-	padding: var(--tds-padding);
+	width: 50%;
+	height: 50%;
+	/* top: 10%;
+	margin-left: 10%; */
+	border-radius: calc(var(--tds-corner-radius-round) * 1);
+	border: calc(var(--tds-border-width) * 1) solid;
+	padding: calc(var(--tds-padding) * 3);
+	background-color: var(--vscode-editor-background);
+}
+
+/*--< Header Dialog >-------------------------------------------------------------------------------*/
+.tds-dialog .tds-header {
+	display: flex;
+	flex-grow: 0;
+	flex-shrink: 1;
+	flex-basis: auto;
+	align-self: auto;
+	order: 0;
+	flex-direction: row;
+	align-items: flex-end;
+	margin-bottom: var(--tds-hor-spacing);
+}
+
+/*--< Content Dialog >-------------------------------------------------------------------------------*/
+.tds-dialog .tds-content {
+	flex-grow: 1;
+	flex-shrink: 1;
+	flex-basis: auto;
+	order: 0;
+	padding: calc(var(--tds-hor-spacing)*2);
+	padding-left: calc(var(--tds-hor-spacing)*10);
+}
+
+.tds-dialog vscode-scrollable {
+	overflow: auto;
+}
+
+/*--< Footer Dialog >-------------------------------------------------------------------------------*/
+.tds-dialog .tds-footer {
+	display: flex;
+	flex-grow: 0;
+	flex-shrink: 1;
+	flex-basis: auto;
+	align-self: auto;
+	order: 0;
+	flex-direction: column;
+	align-items: flex-end;
+	margin-top: calc(var(--tds-hor-spacing)/2);
 }

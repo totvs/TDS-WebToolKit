@@ -20,6 +20,8 @@ import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsProgressRing } from "../decorator/progress-ring";
 import { TdsFormAction, TdsFormActionsEnum } from "./form";
 import { sendClose } from "../../utilities/common-command-webview";
+import { useFormContext } from "react-hook-form";
+import { PageContext } from "../page/pageContext";
 
 export type TdsFooter = {
 	actions: TdsFormAction[];
@@ -33,16 +35,46 @@ export type TdsFooter = {
  * @param props.children - The content to render within the footer.
  */
 export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
+	const { formState } = useFormContext();
+	const pageContext = React.useContext(PageContext);
+	const isSubmitting: boolean = formState.isSubmitting
+	const isLoading: boolean = formState.isLoading
+	const isValid: boolean = formState.isValid;
+	const isDirty: boolean = formState.isDirty;
 	let isProcessRing: boolean = false;
-	let isValid: boolean = true;
-	let isDirty: boolean = false;
+
+	if (isSubmitting && (props.actions.length > 0)) {
+		isProcessRing = true;
+	} else if (!isValid) {
+		isProcessRing = false;
+	}
+
+	props.actions.forEach((action: TdsFormAction) => {
+		action.isProcessRing = (action.isProcessRing !== undefined ? action.isProcessRing && isProcessRing : undefined)
+	});
+
+	console.log(
+		"isProcessRing", isProcessRing,
+		"isSubmitting", isSubmitting,
+		"isLoading", isLoading,
+		"isValid", isValid,
+		"isDirty", isDirty
+	);
+	console.log(formState.errors);
 
 	return (
 		<section className="tds-footer-form">
 			<VscodeDivider role="presentation" />
 			<div className="tds-message">
-				!isValid && <span className={"tds-error"}>{tdsVscode.l10n.t("_There is invalid information. See the error by hovering the mouse over the field marking.")}</span>
-				isProcessRing && isSubmitting && <><TdsProgressRing /><span>{tdsVscode.l10n.t("_Wait please. Processing...")}</span></>
+				{!isValid &&
+					<>
+						<span className={"tds-error"}>{tdsVscode.l10n.t("_There is invalid information.")}</span>
+						{pageContext.compact &&
+							<span className={"tds-error"}>&nbsp;{tdsVscode.l10n.t("_See the error by hovering the mouse over the field marking.")}</span>
+						}
+					</>
+				}
+				{isProcessRing && isSubmitting && <><TdsProgressRing /><span>{tdsVscode.l10n.t("_Wait please. Processing...")}</span></>}
 			</div>
 			<div className="tds-actions">
 				{props.actions.map((action: TdsFormAction) => {
@@ -55,11 +87,11 @@ export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
 					if (isProcessRing) {
 						propsField["disabled"] = true;
 					} else if (action.enabled !== undefined) {
-						// if (typeof action.enabled === "function") {
-						// 	propsField["disabled"] = !(action.enabled as Function)(isDirty, isValid);
-						// } else {
-						// 	propsField["disabled"] = !action.enabled;
-						// }
+						if (typeof action.enabled === "function") {
+							propsField["disabled"] = !(action.enabled as Function)(isDirty, isValid);
+						} else {
+							propsField["disabled"] = !action.enabled;
+						}
 					} else {
 						propsField["disabled"] = false;
 					}
@@ -84,7 +116,6 @@ export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
 						return (<VscodeCheckbox
 							key={action.id}
 							className={`tds-button-button ${visible}`}
-							{...propsField}
 							onChange={(e: any) => {
 								e.preventDefault();
 								props.onActionEvent({ ...action, form: e.currentTarget.form });
@@ -109,7 +140,7 @@ export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
 									e.currentTarget.form.reset();
 								} else {
 									e.preventDefault();
-									props.onActionEvent({...action, form: e.currentTarget.form});
+									props.onActionEvent({ ...action, form: e.currentTarget.form });
 								}
 							}}
 						>
