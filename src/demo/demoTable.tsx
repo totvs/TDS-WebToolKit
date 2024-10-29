@@ -41,6 +41,7 @@ type TDemoModel = {
 }
 
 type TDemoTableProps = {
+    zebra?: boolean;
     highlightRows?: number[];
     highlightGroups?: Record<string, number[]> | Record<string, (row: any[], index: number) => boolean>;
 }
@@ -122,19 +123,13 @@ export default function DemoTable(props: TDemoTableProps) {
     //    actions={formActions}
     return (
         <TdsPage title="Demo: TdsTable" >
-            <TdsForm<TDemoModel>
-                actions={[]}
-                onSubmit={methods.handleSubmit(onSubmit)}
-                onActionEvent={(action) => console.log(action)}
-            >
-
-                <TdsTable id={"result_table"}
-                    columns={columnsDef()}
-                    dataSource={model.dataSource}
-                    highlightRows={props.highlightRows}
-                    highlightGroups={props.highlightGroups}
-                />
-            </TdsForm>
+            <TdsTable id={"result_table"}
+                columns={columnsDef()}
+                dataSource={model.dataSource}
+                highlightRows={props.highlightRows}
+                highlightGroups={props.highlightGroups}
+                zebra
+            />
         </TdsPage>
     );
 }

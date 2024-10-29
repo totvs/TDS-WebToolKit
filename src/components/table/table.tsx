@@ -18,7 +18,8 @@ import "./table.css";
 import React from "react";
 import { TTdsTableColumn, TTdsOnClickTableCell, TTdsTableProps } from "./table.type";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
-import { VscodeCheckbox, VscodeTable, VscodeTableCell, VscodeTableRow, VscodeTextfield } from "@vscode-elements/react-elements";
+import { VscodeCheckbox, VscodeTable, VscodeTableBody, VscodeTableCell, VscodeTableHeader, VscodeTableHeaderCell, VscodeTableRow, VscodeTextfield } from "@vscode-elements/react-elements";
+import { TdsTextField2 } from "../fields/textField";
 
 type TBuildRowsProps = {
 	id: string;  //ID tabela 
@@ -35,11 +36,8 @@ function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColu
 	const column: TTdsTableColumn = headerColumn;
 	let alignClass: string | undefined = column.align !== undefined ? `tds-text-${column.align}` : undefined;
 
-	//Campo BOOLEAN
 	if (column.type == "boolean") {
 		alignClass = alignClass || "tds-text-center";
-		//readOnly={true}
-
 		return (
 			<VscodeCheckbox
 				className={alignClass}
@@ -49,27 +47,30 @@ function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColu
 		)
 	}
 
+	let originalValue: any = value;
+	let title: string = "";
+
 	//Campo DATE, TIME e DATETIME
 	if ((column.type == "date") || (column.type == "time") || (column.type == "datetime")) {
+		value = tdsVscode.l10n.format(value, (column.displayType || column.type) as "date" | "time" | "datetime") || "";
+		title = value.startsWith("Invalid") ? originalValue : value;
+	} else if ((column.type == "number")) {
 		alignClass = alignClass || "tds-text-right";
+		value = tdsVscode.l10n.formatNumber(value, (column.displayType || column.type) as "int" | "float" | "hex" | "HEX" | "number") || "";
+		title = value.startsWith("Invalid") ? originalValue : value;
+	} else { // string
+		title = value;
 	}
 
-	//Campo Number
-	if ((column.type == "number")) {
-		alignClass = alignClass || "tds-text-right";
-	}
-
-	const text: string = tdsVscode.l10n.format(value, (column.displayType || column.type));
-
-	//readOnly={false}
 	return (
-		<VscodeTextfield
-			className={alignClass}
-			title={text}
+		<TdsTextField2
 			data-type={column.type}
 			key={`${rowKey}_${colIndex}`}
-			value={text}
-		></VscodeTextfield>
+			name={""}
+			className={alignClass}
+			title={title}
+			value={value}
+		/>
 	)
 }
 
@@ -97,7 +98,7 @@ function BuildRow(props: TBuildRowsProps) {
 		reactElements.push(
 			<VscodeTableCell
 				key={`${props.id}_cell_${props.rowIndex}_${index}`}
-				grid-column={index + 1}>
+			>
 				{fieldData(
 					`${props.id}_cell_${props.rowIndex}_${index}`,
 					index,
@@ -110,7 +111,6 @@ function BuildRow(props: TBuildRowsProps) {
 
 	return (
 		<VscodeTableRow
-			row-type="default"
 			className={rowClassName}
 			key={`${props.id}_row_${props.rowIndex}`}
 		>
@@ -134,9 +134,10 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 	const widthColumns: string[] = props.columns
 		.map((headerColumn: TTdsTableColumn) =>
 			typeof (headerColumn) == "string"
-				? "1fr"
-				: typeof (headerColumn.width) == "string" ? `${headerColumn.width}` : `1fr` //TODO: revisar
+				? ""
+				: typeof (headerColumn._width) == "string" ? `${headerColumn._width}px` : ""
 		);
+
 	const headerColumns: string[] = props.columns
 		.map((headerColumn: TTdsTableColumn) =>
 			typeof (headerColumn) == "string"
@@ -144,8 +145,6 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 				: `${headerColumn.label}`
 		);
 
-
-	//	ref={props._ref}
 	return (
 		<section className="tds-table" id={`${props.id}`}>
 			<div className="tds-table-content"
@@ -157,50 +156,54 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 					<VscodeTable
 						id={`${props.id}_table`}
 						key={`${props.id}_table`}
-						generate-header="sticky"
-						grid-template-columns={widthColumns}
+						bordered-columns
+						resizable={true}
+						columns={widthColumns}
+					//zebra={props.zebra}
 					>
 						{widthColumns.length > 0 &&
-							<VscodeTableRow
-								id={`${props.id}_header`}
-								key={`${props.id}_header`}
-							>
+							<VscodeTableHeader slot="header">
 								{headerColumns.map((header: string, index: number) =>
-									<VscodeTableCell
+									<VscodeTableHeaderCell
 										key={`${props.id}_header_${index}`}
-										grid-column={index + 1}
 									>
 										{header}
-									</VscodeTableCell>)}
-							</VscodeTableRow>
+									</VscodeTableHeaderCell>)}
+							</VscodeTableHeader>
 						}
-						{props.onCustomBody && props.onCustomBody(props.dataSource)}
-						{!props.onCustomBody && props.dataSource.map((row: any, index: number) =>
-							<BuildRow
-								id={`${props.id}_table`}
-								key={`${props.id}_row_${index}`}
-								row={row}
-								rowIndex={index}
-								highlightRow={(props.highlightRows || []).includes(index)}
-								onClick={props.onClick}
-								headerColumn={props.columns}
-								extraClassName={
-									Object.keys(props.highlightGroups || []).map((key: string) => {
-										if (typeof props.highlightGroups[key] === "function") {
-											const highlightGroups: Record<NamedCurve, Function> = props.highlightGroups as Record<NamedCurve, Function>
-											if (highlightGroups[key](row, index)) {
-												return key;
+
+						<VscodeTableBody
+							key={`${props.id}_body`}
+							slot="body"
+						>
+							{props.onCustomBody && props.onCustomBody(props.dataSource)}
+							{!props.onCustomBody && props.dataSource.map((row: any, index: number) =>
+								<BuildRow
+									id={`${props.id}_table`}
+									key={`${props.id}_row_${index}`}
+									row={row}
+									rowIndex={index}
+									highlightRow={(props.highlightRows || []).includes(index)}
+									onClick={props.onClick}
+									headerColumn={props.columns}
+									extraClassName={
+										Object.keys(props.highlightGroups || []).map((key: string) => {
+											if (typeof props.highlightGroups[key] === "function") {
+												const highlightGroups: Record<NamedCurve, Function> = props.highlightGroups as Record<NamedCurve, Function>
+												if (highlightGroups[key](row, index)) {
+													return key;
+												}
+											} else {
+												const highlightGroups: Record<NamedCurve, number[]> = props.highlightGroups as Record<NamedCurve, number[]>
+												if (highlightGroups[key].includes(index)) {
+													return key;
+												}
 											}
-										} else {
-											const highlightGroups: Record<NamedCurve, number[]> = props.highlightGroups as Record<NamedCurve, number[]>
-											if (highlightGroups[key].includes(index)) {
-												return key;
-											}
-										}
-										return ""
-									})}
-							/>
-						)}
+											return ""
+										})}
+								/>
+							)}
+						</VscodeTableBody>
 					</VscodeTable>
 				}
 			</div>

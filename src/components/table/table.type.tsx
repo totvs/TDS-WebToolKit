@@ -20,7 +20,7 @@ export type TTdsTableColumn = (
 		label?: string;
 		type?: "string" | "number" | "boolean" | "date" | "time" | "datetime";
 		displayType?: "date" | "time" | "datetime" | "int" | "float" | "hex" | "HEX";
-		width?: string | number;
+		_width?: string | number;
 		align?: "left" | "center" | "right";
 	});
 
@@ -50,6 +50,7 @@ export type TTdsTableProps = {
 	columns?: TTdsTableColumn[],
 	highlightRows?: number[];
 	highlightGroups?: Record<string, number[]> | Record<string, (row: any[], index: number) => boolean>;
+	zebra?: boolean;
 	onCustomBody?: (dataSource: any[]) => React.ReactElement;
 	onClick?: TTdsOnClickTableCell;
 	//onKeyCapture?: TTdsOnCaptureKey;

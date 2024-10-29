@@ -89,10 +89,7 @@ export function Demo() {
           "demo-table-g2": [6, 7, 8],
         }}
         />}
-        {demo == DemoEnum.TableZebra && <DemoTable highlightGroups={{
-          "demo-table-g1": (row, index) => index % 2 == 0,
-        }}
-        />}
+        {demo == DemoEnum.TableZebra && <DemoTable zebra />}
         {demo == DemoEnum.Tree && <DemoTree />}
         {demo == DemoEnum.ReactForm && <DemoReactForm />}
 
