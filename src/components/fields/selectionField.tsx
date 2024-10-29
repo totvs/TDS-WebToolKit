@@ -33,7 +33,7 @@ type TdsSelectionFieldProps = TdsFieldProps & {
 export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactElement {
 	// const fieldState: ControllerFieldState = getFieldState(props.name);
 	const options = props.options || [];
-	const currentValue: string = "currentValue";  //getValues(props.name) as string;
+	//const currentValue: string = "currentValue";  //getValues(props.name) as string;
 
 	// registerField.onChange = (e) => {
 	// 	return new Promise(() => {
@@ -48,8 +48,7 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 	const pageContext: TStatePage = React.useContext(PageContext);
 
 	return (
-		<VscodeFormGroup variant={pageContext.formOrientation}
-
+		<VscodeFormGroup variant={props.orientation || pageContext.formOrientation}
 			key={props.name}
 		>
 			<VscodeLabel htmlFor={props.name}
@@ -62,9 +61,6 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 				onClick={(e) => {
 					props.onChange && props.onChange(e);
 				}}
-				// onChange={(e) => {
-				// 	props.onChange && props.onChange(e);
-				// }}
 				disabled={props.readOnly || false}
 				required={props.rules?.required || false}
 			>

@@ -22,7 +22,7 @@ import TdsPaginator from "./paginator";
 import { BuildRowFilter, FilterBlock } from "./fieldFilter";
 import { DataSourceProvider, useDataSourceContext } from "./dataSourceContext";
 import { GroupingPanel } from "./groupingPanel";
-import { VscodeButton, VscodeCheckbox, VscodeDivider, VscodeTable, VscodeTableCell, VscodeTableHeader, VscodeTableRow, VscodeTextfield } from "@vscode-elements/react-elements";
+import { VscodeButton, VscodeCheckbox, VscodeDivider, VscodeIcon, VscodeTable, VscodeTableCell, VscodeTableHeader, VscodeTableRow, VscodeTextfield } from "@vscode-elements/react-elements";
 import { VscodeTableBody } from "@vscode-elements/react-elements";
 import { TdsLink } from './../decorator/link';
 
@@ -366,12 +366,9 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 	const handleSortClick = (columnSort: TTdsDataGridColumnDef) => {
 		columnSort.sortDirection = columnSort.sortDirection === "asc" ? "desc"
 			: columnSort.sortDirection === "desc" ? "" : "asc";
-		//}
 
-		//dispatch({ type: "set_columns_def", columnsDef: props.columnsDef });
 		setSortedColumn(columnSort);
 		setSortedDirection(columnSort.sortDirection);
-		//dispatch({ type: "set_sorted_column", columnIndex: indexColumn, direction: newColumnDef.sortDirection });
 	}
 
 	const handleGroupingClick = (columnDef: TTdsDataGridColumnDef | undefined) => {
@@ -456,27 +453,27 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 									grid-column={_index + 1}
 									key={`${props.id}_header_column_${rowNumber}_${_index}`}
 								>
-									{column.label || column.name}
+									{column.label || column.name}&nbsp;
 									{props.options.sortable && column.sortable &&
-										<VscodeButton
+										<VscodeIcon
+											name={
+												column.sortDirection == "asc" ? "arrow-down"
+													: column.sortDirection == "desc" ? "arrow-up"
+														: "sort-precedence"
+											}
+											actionIcon
 											onClick={() => {
 												handleSortClick(column);
-											}}
-										>
-											{column.sortDirection == "asc" && <span className="codicon codicon-arrow-small-down"></span>}
-											{column.sortDirection == "desc" && <span className="codicon codicon-arrow-small-up"></span>}
-											{column.sortDirection == "" && <span className="codicon codicon-sort-precedence"></span>}
-										</VscodeButton>
+											}} />
 									}
 									{((props.options.grouping && column.grouping) || false) &&
-										<VscodeButton
-											aria-label={`Grouping by ${column.label || column.name}`}
+										<VscodeIcon
+											actionIcon
+											name="group-by-ref-type"
 											onClick={() => {
 												handleGroupingClick(column);
 											}}
-										>
-											<span className="codicon codicon-group-by-ref-type"></span>
-										</VscodeButton>
+										/>
 									}
 								</VscodeTableCell>
 							))

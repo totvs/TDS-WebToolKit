@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { TdsAbstractModel } from "../../model/modelData";
 import { ButtonAppearance } from "../vscode-elements";
 
 /**
@@ -83,6 +84,7 @@ export type TTdsDataGridAction = {
  * @property dataSource - The data source for the data grid, which can be an array of objects.
  * @property options - Additional options for configuring the data grid, including bottom actions, top actions, filtering, pagination, and grouping.
  */
+//export type TTdsDataGridProps<M extends TdsAbstractModel> = {
 export type TTdsDataGridProps = {
 	id: string;
 	columnsDef: TTdsDataGridColumnDef[]

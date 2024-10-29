@@ -20,7 +20,7 @@ import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilitie
 import { setDataModel, setErrorModel, TdsForm } from "../components/form/form";
 import { TdsPage } from "../components/page/page";
 import { tdsVscode } from "../utilities/vscodeWrapper";
-import { TdsDataGrid, TTdsDataGridColumnDef } from "../components/dataGrid";
+import { TdsDataGrid, TTdsDataGridAction, TTdsDataGridColumnDef } from "../components/dataGrid";
 import countries from './countries.json'; // This import style requires "esModuleInterop", see "side notes"
 import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
 
@@ -58,13 +58,6 @@ export default function DemoDataGrid(props: TDemoDataGridProps) {
 }
 
 function dataGrid(props: TDemoDataGridProps) {
-    const methods: UseFormReturn<TDemoModel> = useForm<TDemoModel>({
-        defaultValues: {
-            dataSource: []
-        },
-        mode: "all"
-    })
-
     if (props.locale) {
         tdsVscode.l10n.translations = { formatLocale: props.locale };
     }
@@ -156,53 +149,70 @@ function dataGrid(props: TDemoDataGridProps) {
             }
         })
     }
-    //const indexFirstPathFree: number = model.includePaths.findIndex((row: TIncludePath) => row.path == "");
 
-    //    actions={formActions}
+    const topActions: TTdsDataGridAction[] = [
+        {
+            id: "btnAction1",
+            caption: "Action 1",
+            hint: "Action 1",
+            type: "button",
+            onClick: (e: any) => {
+                console.log("TdsDataGridAction: ", e);
+            }
+        },
+        {
+            id: "btnAction2",
+            caption: "Action 2",
+            hint: "Another Action",
+            type: "button",
+            onClick: (e: any) => {
+                console.log("TdsDataGridAction: ", e);
+            }
+        }
+    ];
+
+    const bottomActions: TTdsDataGridAction[] = [
+        {
+            id: "btnAction1",
+            caption: "Action 1",
+            hint: "Action 1",
+            type: "button",
+            onClick: (e: any) => {
+                console.log("TdsDataGridAction: ", e);
+            }
+        },
+        {
+            id: "btnAction2",
+            caption: "Action 2",
+            hint: "Another Action",
+            type: "button",
+            onClick: (e: any) => {
+                console.log("TdsDataGridAction: ", e);
+            }
+        }
+    ];
+
     return (
         <TdsPage title="Demo: TdsDataGrid" >
-            <FormProvider {...methods}>
-                <TdsForm<TDemoModel>
-                    actions={[]}
-                    onSubmit={methods.handleSubmit(onSubmit)}
-                    onActionEvent={(action) => console.log(action)}
-                >
-
-                    <TdsDataGrid id={"result_dataGrid"}
-                        columnsDef={columnsDef()}
-                        dataSource={model.dataSource}
-                        modelField=""
-                        options={{
-                            grouping: true,
-                            pageSize: 10,
-                            pageSizeOptions: [5, 10, 15, 20, 25, 50, 100],
-                            rowSeparator: props.multiRow
-                        }} />
-                </TdsForm>
-            </FormProvider>
+            <TdsDataGrid
+                id={"result_dataGrid"}
+                columnsDef={columnsDef()}
+                dataSource={model.dataSource}
+                modelField=""
+                options={{
+                    grouping: true,
+                    pageSize: 10,
+                    pageSizeOptions: [5, 10, 15, 20, 25, 50, 100],
+                    rowSeparator: props.multiRow,
+                    topActions: topActions,
+                    bottomActions: bottomActions
+                }} />
         </TdsPage>
     );
 }
 
 
 function dataGridSelectRow(props: TDemoDataGridProps) {
-    const methods = useForm<TDemoModel>({
-        defaultValues: {
-            dataSource: countries.map((country) => {
-                return {
-                    ...country,
-                    independenceDate: new Date(`${country.independenceDate}T00:00:00`),
-                    mark: true
-                }
-            })
-        },
-        mode: "all"
-    })
-
-    const onSubmit = (data: TDemoModel) => {
-        sendSaveAndClose(data);
-    }
-
     React.useEffect(() => {
         const listener = (event: any) => {
             const command: ReceiveCommand = event.data as ReceiveCommand;
@@ -300,22 +310,17 @@ function dataGridSelectRow(props: TDemoDataGridProps) {
     //    actions={formActions}
     return (
         <TdsPage title="Demo: TdsDataGrid" >
-            <TdsForm<TDemoModel>
-                actions={[]}
-                onSubmit={methods.handleSubmit(onSubmit)}
-                onActionEvent={(action) => console.log(action)}
-            >
-                <TdsDataGrid id={"result_dataGrid"}
-                    columnsDef={columnsDef()}
-                    dataSource={model.dataSource}
-                    modelField=""
-                    options={{
-                        grouping: true,
-                        pageSize: 10,
-                        pageSizeOptions: [5, 10, 15, 20, 25, 50, 100],
-                        rowSeparator: props.multiRow
-                    }} />
-            </TdsForm>
+            <TdsDataGrid
+                id={"result_dataGrid"}
+                columnsDef={columnsDef()}
+                dataSource={model.dataSource}
+                modelField=""
+                options={{
+                    grouping: true,
+                    pageSize: 10,
+                    pageSizeOptions: [5, 10, 15, 20, 25, 50, 100],
+                    rowSeparator: props.multiRow
+                }} />
         </TdsPage>
     );
 }

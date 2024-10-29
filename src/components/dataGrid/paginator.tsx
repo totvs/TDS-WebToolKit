@@ -16,63 +16,7 @@ limitations under the License.
 
 import React, { useState } from "react";
 import { tdsVscode } from './../../utilities/vscodeWrapper';
-import { VscodeButton, VscodeSingleSelect, VscodeTextfield } from "@vscode-elements/react-elements";
-
-const FirstPage = () => {
-	return (
-		<svg
-			viewBox="0 0 24 24"
-			fill="currentColor"
-			height="1em"
-			width="1em"
-		>
-			<path d="M18 6h2v12h-2zm-2 5H7.414l4.293-4.293-1.414-1.414L3.586 12l6.707 6.707 1.414-1.414L7.414 13H16z" />
-		</svg>
-	);
-}
-
-
-const LastPage = () => {
-
-	return (
-		<svg
-			viewBox="0 0 24 24"
-			fill="currentColor"
-			height="1em"
-			width="1em"
-		>
-			<path d="M4 6h2v12H4zm4 7h8.586l-4.293 4.293 1.414 1.414L20.414 12l-6.707-6.707-1.414 1.414L16.586 11H8z" />
-		</svg>
-	);
-}
-
-const LeftPage = () => {
-
-	return (
-		<svg
-			viewBox="0 0 24 24"
-			fill="currentColor"
-			height="1em"
-			width="1em"
-		>
-			<path d="M21 11H6.414l5.293-5.293-1.414-1.414L2.586 12l7.707 7.707 1.414-1.414L6.414 13H21z" />
-		</svg>
-	);
-}
-
-const RightPage = () => {
-	return (
-		<svg
-			viewBox="0 0 24 24"
-			fill="currentColor"
-			height="1em"
-			width="1em"
-			transform="matrix(-1,0,0,1,0,0)"
-		>
-			<path d="M21 11H6.414l5.293-5.293-1.414-1.414L2.586 12l7.707 7.707 1.414-1.414L6.414 13H21z" />
-		</svg>
-	);
-}
+import { VscodeIcon, VscodeOption, VscodeSingleSelect, VscodeTextfield } from "@vscode-elements/react-elements";
 
 export interface ITdsPaginatorProps {
 	currentPage: number;
@@ -117,7 +61,7 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 	}, [props.totalItems, props.pageSize]);
 
 	return (
-		<div className="tds-data-grid-pagination">
+		<div className="tds-data-grid-paginator">
 			{(props.pageSizeOptions.length > 0) &&
 				<>
 					<span>{tdsVscode.l10n.t("_Elements/page")}</span>
@@ -131,57 +75,54 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 						}}
 					>
 						{props.pageSizeOptions.map((size: number, index: number) => (
-							<>VscodeOption
-								key={`dropdown_elements_page_${index}`}
+							<VscodeOption
+								key={`${index}`}
 								value={`${size}`}
-								checked={props.pageSize === size}
-
+								selected={props.pageSize === size}
+							>
 								{size}
-								VscodeOption
-							</>
+							</VscodeOption>
 						))}
 					</VscodeSingleSelect>
 				</>
 			}
 
-			<VscodeButton icon=""
-				aria-label="First page"
-				title="First page"
+			<VscodeIcon
+				className="mirrorX"
+				name="export"
+				title={tdsVscode.l10n.t("_First Page")}
+				actionIcon
 				onClick={() => {
 					changePage(0);
 				}}
-			>
-				<FirstPage />
-			</VscodeButton>
+			/>
 
-			<VscodeButton icon=""
-				aria-label="Previous 10 pages"
-				title="Previous 10 pages"
+			<VscodeIcon
+				className="rotate025"
+				name="fold-down"
+				title={tdsVscode.l10n.t("_Previous 10 pages")}
 				onClick={() => {
 					changePage(currentPage - 10);
 				}}
-				disabled={(totalPages - currentPage) < 10}
-			>
-				<LeftPage />
-				<LeftPage />
-			</VscodeButton>
+				actionIcon={(totalPages - currentPage) < 10}
+			/>
 
-			<VscodeButton icon=""
-				aria-label="Previous page"
-				title="Previous page"
+			<VscodeIcon
+				name="chevron-left"
+				title={tdsVscode.l10n.t("_Previous page")}
 				onClick={() => {
 					changePage(currentPage - 1);
 				}}
-			>
-				<LeftPage />
-			</VscodeButton>
+			/>
 
-			<div className="tds-data-grid-pagination-label">
-				{tdsVscode.l10n.formatNumber(currentItem + 1)}-{tdsVscode.l10n.formatNumber(lastItem)} of {tdsVscode.l10n.formatNumber(totalItems)} (Page:
-				<VscodeTextfield
-					key="current-page"
-					value={`${currentPage + 1}`}
-					onChange={(e: any) => {
+			{tdsVscode.l10n.formatNumber(currentItem + 1)}-{tdsVscode.l10n.formatNumber(lastItem)} of {tdsVscode.l10n.formatNumber(totalItems)}
+			&nbsp;(Page:&nbsp;
+
+			<VscodeTextfield
+				key="current-page"
+				value={`${currentPage + 1}`}
+				onChange={
+					(e: any) => {
 						let page = parseInt(e.target.value);
 
 						if (page < 1) {
@@ -192,40 +133,36 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 
 						changePage(page - 1);
 					}
-					}
-				/>
-				of {tdsVscode.l10n.formatNumber(totalPages)})
-			</div>
+				}
+			/>
+			&nbsp;of {tdsVscode.l10n.formatNumber(totalPages)})
 
-			<VscodeButton icon=""
-				aria-label="Next page"
-				title="Next page"
+			<VscodeIcon
+				name="chevron-right"
+				title={tdsVscode.l10n.t("_Next page")}
 				onClick={() => {
 					changePage(currentPage + 1);
 				}}
-			>
-				<RightPage />
-			</VscodeButton>
+			/>
 
-			<VscodeButton icon=""
-				aria-label="Next 10 page"
-				title="Next 10 page"
+			<VscodeIcon
+				className="rotate025"
+				name="fold-up"
+				title={tdsVscode.l10n.t("_Next 10 pages")}
 				onClick={() => {
 					changePage(currentPage + 10);
 				}}
-				disabled={totalPages < 10}
-			>
-				<RightPage />
-				<RightPage />
-			</VscodeButton>
+				actionIcon={totalPages < 10}
+			/>
 
-			<VscodeButton icon="" aria-label="Last page"
+			<VscodeIcon
+				name="export"
+				title={tdsVscode.l10n.t("_Last Page")}
+				actionIcon
 				onClick={() => {
 					changePage(totalPages + 1);
 				}}
-			>
-				<LastPage />
-			</VscodeButton>
+			/>
 		</div >
 	);
 }

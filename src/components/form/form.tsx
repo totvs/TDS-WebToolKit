@@ -21,6 +21,7 @@ import TdsContentForm from "./content";
 import TdsFooterForm from "./footer";
 import { TdsAbstractModel } from "../../model/modelData";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
 
 export type TdsFieldRules = {
 	required?: boolean;
@@ -47,6 +48,7 @@ export type TdsFieldProps = {
 	//https://github.com/microsoft/vscode-webview-ui-toolkit/blob/main/src/react/README.md#use-oninput-instead-of-onchange-to-handle-keystrokes
 	onInput?: React.FormEventHandler<any>; //VscodeTextfield
 	onChange?: React.FormEventHandler<any>; //VscodeTextfield
+	orientation?: FormGroupVariant;
 }
 
 export type TdsFormAction = {
@@ -89,30 +91,7 @@ export function TdsForm<M extends TdsAbstractModel>(props: TdsFormProps<M>): Rea
 			<form className="tds-form"
 				id={props.id}
 				autoComplete="off"
-				//noValidate
-				// onError={(e) => {
-				// 	console.error(e)
-				// }}
-				// onInvalid={(e) => {
-				// 	console.error(e);
-				// }}
-				// onInput={(e) => {
-				// 	console.error(e);
-				// }}
 				onSubmit={props.onSubmit}
-
-			// onSubmit={(e) => {
-			// 	e.preventDefault();
-
-			// 	const form: HTMLFormElement = e.target as HTMLFormElement;
-			// 	const fd: FormData = new FormData(form);
-			// 	let out: TdsAbstractModel = {};
-			// 	for (let [name, value] of fd) {
-			// 		out[name] = value;
-			// 	}
-
-			// 	props.onSubmit(out as M);
-			// }}
 			>
 				{props.title && <TdsHeaderForm title={props.title} />}
 

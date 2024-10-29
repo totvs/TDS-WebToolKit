@@ -33,7 +33,20 @@ limitations under the License.
 	order: 0;
 	flex-direction: column;
 	margin-bottom: var(--tds-ver-spacing);
+	gap: calc(var(--tds-hor-spacing)*2);
 }
+
+.tds-data-grid-header .tds-row-container {
+	align-items: center;
+}
+
+
+
+
+
+
+
+
 
 .tds-data-grid .tds-data-grid-content {
 	flex-grow: 1;
@@ -73,7 +86,7 @@ limitations under the License.
 	width: 100%;
 }
 
-.tds-data-grid .tds-data-grid-footer {
+.tds-data-grid-footer {
 	display: flex;
 	flex-grow: 0;
 	flex-shrink: 1;
@@ -82,48 +95,50 @@ limitations under the License.
 	margin-top: var(--tds-hor-spacing);
 }
 
-.tds-data-grid-footer .tds-data-grid-pagination {
+.tds-data-grid-paginator {
 	display: flex;
 	flex-direction: row;
-	align-items: flex-end;
+	align-items: center;
 	flex-grow: 1;
 	flex-shrink: 0;
 }
 
-.tds-data-grid-pagination div.tds-data-grid-pagination-label {
+.tds-data-grid-paginator div.tds-data-grid-paginator-label {
 	align-items: flex-end;
 	display: flex;
 	margin-bottom: 3;
 }
 
-.tds-data-grid-pagination vscode-button svg+svg {
-	margin-left: -9px;
+.tds-data-grid-paginator vscode-single-select {
+	width: 100px;
 }
 
-.tds-data-grid-pagination span {
-	margin-right: calc(var(--tds-hor-spacing) * 0.8);
-}
-
-div.tds-data-grid-pagination-label vscode-text-field {
-	margin-left: var(--tds-hor-spacing);
-	margin-right: var(--tds-hor-spacing);
-}
-
-div.tds-data-grid-pagination-label vscode-text-field,
-div.tds-data-grid-pagination-label vscode-text-field::part(root),
-div.tds-data-grid-pagination-label vscode-text-field::part(control) {
+.tds-data-grid-paginator vscode-textfield {
 	width: 5rem;
-	min-width: 5rem;
 }
 
-.tds-data-grid-footer .tds-data-grid-actions {
+.tds-data-grid-actions {
 	display: flex;
 	flex-direction: row;
-	max-width: max-content;
-	min-width: min-content;
 	align-items: flex-end;
-	align-self: self-end;
 	gap: 10px;
 	flex-grow: 0;
 	flex-shrink: 0;
+	margin-right: var(--tds-hor-spacing);
+}
+
+.tds-data-grid-header vscode-form-group {
+	flex-grow: 1;
+}
+
+.tds-data-grid-header vscode-textfield[name="filter"] {
+	width: 100%;
+}
+
+vscode-icon.mirrorX {
+	transform: scaleX(-1);
+}
+
+vscode-icon.rotate025 {
+	transform: rotate(0.25turn) scale(0.7);
 }

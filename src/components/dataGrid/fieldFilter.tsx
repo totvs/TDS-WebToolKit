@@ -22,6 +22,9 @@ import { TdsTextField } from "../fields/textField";
 import { useDataSourceContext } from "./dataSourceContext";
 import { VscodeButton, VscodeDivider, VscodeSingleSelect, VscodeTableCell, VscodeTableRow, VscodeTextfield } from "@vscode-elements/react-elements";
 import { TdsLink } from './../decorator/link';
+import { VscodeIcon } from "@vscode-elements/react-elements";
+import { PageContext } from "../page/pageContext";
+import { useFormContext } from "react-hook-form";
 
 /**
  * Renders the data grid component.
@@ -86,7 +89,11 @@ function FieldFilter(props: TFieldFilterProps) {
 			}}
 			value={currentValue}
 		>
-			<span slot="end" className="codicon codicon-list-filter"></span>
+			<VscodeIcon
+				slot="content-after"
+				name={"filter"}
+				title={tdsVscode.l10n.t("_Filter using this column and can accept regular expressions")}
+			/>
 		</VscodeTextfield>
 	)
 }
@@ -101,25 +108,36 @@ export function FilterBlock(props: TFilterBlockProps) {
 	return (
 		<section className="tds-row-container">
 			<TdsTextField
-				name="filter"
 				key={`all_filter`}
+				name="filter"
 				label={tdsVscode.l10n.t("_Filter")}
 				info={tdsVscode.l10n.t("_Filters on all columns and can accept regular expressions")}
 				value={filter}
 				onInput={(e: any) => {
 					e.preventDefault();
-
 					setFilter(e.target.value.trim());
 				}}
-			/>
-
-			<VscodeButton icon="list-filter" aria-label="Filter"
-				onClick={() => {
-					setShowFieldsFilter(!showFieldsFilter);
-					//props.onShowFieldsFilter(!showFieldsFilter); //ainda não deu tempo de atualizar useState
-				}}
 			>
-			</VscodeButton>
+				<VscodeIcon
+					slot="content-after"
+					name={"clear-all"}
+					actionIcon
+					onClick={(e: any) => {
+						e.preventDefault();
+						setFilter("")
+					}}
+				/>
+			</TdsTextField>
+
+			<VscodeIcon
+				name={"list-filter"}
+				title="Show filter by column"
+				action-icon
+				onClick={(e: any) => {
+					e.preventDefault();
+					setShowFieldsFilter(!showFieldsFilter);
+				}}
+			/>
 
 			{props.actions &&
 				<div className="tds-data-grid-actions">
@@ -168,6 +186,7 @@ export function FilterBlock(props: TFilterBlockProps) {
 							</TdsLink>
 							: <VscodeButton
 								key={action.id}
+								title={action.hint}
 								className={`tds-button-button ${visible}`}
 								{...propsField} >
 								{action.caption}

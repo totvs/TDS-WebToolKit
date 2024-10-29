@@ -21,7 +21,7 @@ import TdsFooter from "./footer";
 import TdsContent from "./content";
 import { ErrorBoundary } from "../error-boundary";
 import { VscodeRadio, VscodeRadioGroup, VscodeLabel, VscodeIcon, VscodeCheckbox } from "@vscode-elements/react-elements";
-import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { DEFAULT_PAGE_STATE, tdsVscode } from "../../utilities/vscodeWrapper";
 import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
 import { PageContext } from "./pageContext";
 import { TdsDialog } from "../dialog";
@@ -54,22 +54,19 @@ export function TdsPage(props: IPageView): React.ReactElement {
 	const [compact, setCompact] = React.useState<boolean>(tdsVscode.pageState.compact);
 	const closeSettings = (ok: boolean, data: any) => {
 		console.log("close");
-		
+
 		if (ok) {
 			tdsVscode.pageState = {
 				formOrientation: data.formOrientation,
 				compact: data.compact
 			}
-		} else if (data.reset) {
-			tdsVscode.pageStateReset();
-			ok = true;
 		}
-		
+
 		if (ok) {
 			setFormOrientation(tdsVscode.pageState.formOrientation);
 			setCompact(tdsVscode.pageState.compact);
 		}
-		
+
 		setConfigDialog(false);
 	};
 
@@ -115,18 +112,13 @@ export function TdsPage(props: IPageView): React.ReactElement {
 type TSettingsModel = {
 	formOrientation: FormGroupVariant;
 	compact: boolean;
-	text: string;
 }
 
 function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
-	// const [formOrientation, setFormOrientation] = React.useState<FormGroupVariant>(tdsVscode.pageState.formOrientation);
-	// const [compact, setCompact] = React.useState<boolean>(tdsVscode.pageState.compact);
-
 	const methods: UseFormReturn<TSettingsModel> = useForm<TSettingsModel>({
 		defaultValues: {
 			formOrientation: tdsVscode.pageState.formOrientation,
 			compact: tdsVscode.pageState.compact,
-			text: "XXXXXXXXXXXXXXX"
 		},
 		mode: "all"
 	})
@@ -169,7 +161,8 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 							} else if (action.id == 1) {
 								props.onClose(false, undefined);
 							} else if (action.id == 2) {
-								props.onClose(false, { reset: true });
+								methods.setValue("formOrientation", DEFAULT_PAGE_STATE.formOrientation)
+								methods.setValue("compact", DEFAULT_PAGE_STATE.compact)
 							}
 						}}
 						description={tdsVscode.l10n.t("_Settings")}
@@ -199,11 +192,6 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 							label={tdsVscode.l10n.t("_Compact mode")}
 							value={"true"}
 							checked={model.compact}
-						/>
-
-						<TdsTextField
-							name={"text"}
-							label={"text"}
 						/>
 					</TdsForm>
 				</FormProvider>

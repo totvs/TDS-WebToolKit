@@ -23,6 +23,11 @@ export interface IPageState {
   compact: boolean;
 }
 
+export const DEFAULT_PAGE_STATE: IPageState = {
+  formOrientation: "vertical",
+  compact: false
+}
+
 var NODE_MODE = false;
 var DEV_MODE = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
@@ -146,8 +151,8 @@ class VSCodeAPIWrapper {
 
     if (!pageState) {
       pageState = {
-        formOrientation: "vertical",
-        compact: true
+        formOrientation: DEFAULT_PAGE_STATE.formOrientation,
+        compact: DEFAULT_PAGE_STATE.compact
       }
 
       this.setState(pageState);
