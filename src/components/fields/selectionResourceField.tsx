@@ -6,6 +6,7 @@ import { VscodeButton, VscodeFormGroup, VscodeFormHelper, VscodeIcon, VscodeLabe
 import { mdToHtml } from "../mdToHtml";
 import { PageContext, TStatePage } from "../page/pageContext";
 import React from "react";
+import { useFormContext } from "react-hook-form";
 
 type TdsSelectionResourceFieldProps = Omit<TdsFieldProps, "label"> & TSendSelectResourceOptions;
 type TdsSelectionFolderFieldProps = Omit<TdsSelectionResourceFieldProps, "model" | "canSelectMany" | "canSelectFiles" | "canSelectFolders" | "filters">;
@@ -51,6 +52,9 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 	}
 
 	const pageContext: TStatePage = React.useContext(PageContext);
+	const methods = useFormContext();
+	const { register, formState, getFieldState } = methods ? methods :
+		{ register: null, formState: null, getFieldState: null };
 
 	return (
 		<VscodeFormGroup variant={pageContext.formOrientation}
@@ -62,17 +66,37 @@ export function TdsSelectionResourceField(props: TdsSelectionResourceFieldProps)
 			>
 				{mdToHtml(props.openLabel)}
 			</VscodeLabel>
-			<VscodeTextfield name={props.name}
-				readonly={props.readOnly || false}
-				required={props.rules?.required || false}
-			>
-				<VscodeIcon
-					slot="content-after"
-					name={options.canSelectFolders ? "folder" : "file"}
-					title="Select resource"
-					action-icon
-				/>
-			</VscodeTextfield>
+			{register ?
+				<VscodeTextfield
+					{...register(`${props.name}`,
+						{
+							disabled: props.readOnly,
+							required: props.rules?.required,
+							maxLength: props.rules?.maxLength,
+							pattern: props.rules?.pattern || undefined
+						}) as any}
+					name={props.name}
+				>
+					<VscodeIcon
+						slot="content-after"
+						name={options.canSelectFolders ? "folder" : "file"}
+						title="Select resource"
+						action-icon
+					/>
+				</VscodeTextfield>
+				:
+				<VscodeTextfield name={props.name}
+					readonly={props.readOnly || false}
+					required={props.rules?.required || false}
+				>
+					<VscodeIcon
+						slot="content-after"
+						name={options.canSelectFolders ? "folder" : "file"}
+						title="Select resource"
+						action-icon
+					/>
+				</VscodeTextfield>
+			}
 			{props.info && !pageContext.compact &&
 				<VscodeFormHelper>
 					{mdToHtml(props.info)}

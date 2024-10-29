@@ -27,7 +27,9 @@ export type TdsCheckBoxFieldProps = TdsFieldProps & {
  */
 export function TdsCheckBoxField(props: TdsCheckBoxFieldProps): React.ReactElement {
 	const pageContext: TStatePage = React.useContext(PageContext);
-	const { register, formState: { errors }, getFieldState } = useFormContext();
+	const methods = useFormContext();
+	const { register, formState, getFieldState } = methods ? methods :
+		{ register: null, formState: null, getFieldState: null };
 
 	return (
 		<VscodeFormGroup

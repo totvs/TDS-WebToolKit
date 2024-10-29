@@ -26,7 +26,9 @@ type TdsCheckBoxGroupProps = TdsFieldProps & {
  * @returns
  */
 export function TdsCheckBoxGroup(props: TdsCheckBoxGroupProps): React.ReactElement {
-	const { register, formState: { errors }, getFieldState } = useFormContext();
+	const methods = useFormContext();
+	const { register, formState, getFieldState } = methods ? methods :
+		{ register: null, formState: null, getFieldState: null };
 	const pageContext: TStatePage = React.useContext(PageContext);
 
 	if (props.options && props.children) {

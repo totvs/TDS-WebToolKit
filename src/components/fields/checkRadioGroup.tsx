@@ -2,8 +2,6 @@ import { mdToHtml } from "../mdToHtml";
 import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeRadio, VscodeRadioGroup } from "@vscode-elements/react-elements";
 import * as React from "react"
 import { TdsFieldProps } from "../form/form";
-import { TdsCheckBoxFieldProps } from './checkBoxField';
-import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsRadioFieldProps } from "./radioField";
 import { PageContext, TStatePage } from "../page/pageContext";
 import { useFormContext } from "react-hook-form";
@@ -27,7 +25,9 @@ type TdsRadioGroupProps = TdsFieldProps & {
  */
 export function TdsRadioGroup(props: TdsRadioGroupProps): React.ReactElement {
 	const pageContext: TStatePage = React.useContext(PageContext);
-	const { register, formState: { errors }, getFieldState } = useFormContext();
+	const methods = useFormContext();
+	const { register, formState, getFieldState } = methods ? methods :
+		{ register: null, formState: null, getFieldState: null };
 
 	if (props.options && props.children) {
 		throw new Error("Use only one of the properties: Options or Children")

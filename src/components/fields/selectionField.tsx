@@ -31,21 +31,11 @@ type TdsSelectionFieldProps = TdsFieldProps & {
  * @returns
  */
 export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactElement {
-	// const fieldState: ControllerFieldState = getFieldState(props.name);
 	const options = props.options || [];
-	//const currentValue: string = "currentValue";  //getValues(props.name) as string;
-
-	// registerField.onChange = (e) => {
-	// 	return new Promise(() => {
-	// 		if (props.onInput) {
-	// 			props.onInput(e)
-	// 		};
-
-	// 		return true;
-	// 	});
-	// }
-
 	const pageContext: TStatePage = React.useContext(PageContext);
+	const methods = useFormContext();
+	const { register, formState, getFieldState } = methods ? methods :
+		{ register: null, formState: null, getFieldState: null };
 
 	return (
 		<VscodeFormGroup variant={props.orientation || pageContext.formOrientation}
@@ -56,28 +46,57 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 			>
 				{mdToHtml(props.label || props.name)}
 			</VscodeLabel>
-			<VscodeSingleSelect name={props.name}
-				combobox
-				onClick={(e) => {
-					props.onChange && props.onChange(e);
-				}}
-				disabled={props.readOnly || false}
-				required={props.rules?.required || false}
-			>
-				{options.map((option: TdsOptionsSelection, index: number) => {
-					return (
-						<VscodeOption
-							key={`${index}`}
-							value={option.value}
-							description={option.description}
-							selected={option.selected}
-							disabled={option.disabled}
-						>
-							{option.label}
-						</VscodeOption>
-					)
-				})}
-			</VscodeSingleSelect>
+			{register ?
+				<VscodeSingleSelect
+					{...register(`${props.name}`,
+						{
+							disabled: props.readOnly,
+							required: props.rules?.required,
+						}) as any}
+					name={props.name}
+					combobox
+					onClick={(e) => {
+						props.onChange && props.onChange(e);
+					}}
+				>
+					{options.map((option: TdsOptionsSelection, index: number) => {
+						return (
+							<VscodeOption
+								key={`${index}`}
+								value={option.value}
+								description={option.description}
+								selected={option.selected}
+								disabled={option.disabled}
+							>
+								{option.label}
+							</VscodeOption>
+						)
+					})}
+				</VscodeSingleSelect>
+				:
+				<VscodeSingleSelect name={props.name}
+					combobox
+					onClick={(e) => {
+						props.onChange && props.onChange(e);
+					}}
+					disabled={props.readOnly || false}
+					required={props.rules?.required || false}
+				>
+					{options.map((option: TdsOptionsSelection, index: number) => {
+						return (
+							<VscodeOption
+								key={`${index}`}
+								value={option.value}
+								description={option.description}
+								selected={option.selected}
+								disabled={option.disabled}
+							>
+								{option.label}
+							</VscodeOption>
+						)
+					})}
+				</VscodeSingleSelect>
+			}
 			{props.info && !pageContext.compact &&
 				<VscodeFormHelper>
 					{mdToHtml(props.info)}

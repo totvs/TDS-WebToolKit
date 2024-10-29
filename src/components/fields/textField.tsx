@@ -22,6 +22,7 @@ import { VscodeLabel, VscodeFormHelper } from "@vscode-elements/react-elements";
 import { PageContext, TStatePage } from "../page/pageContext";
 import { FieldError, GlobalError, useFormContext } from "react-hook-form";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
+import { Children } from 'react';
 
 export type TdsTypeField = "text" | "password" | "email" | "number" | "tel" | "url" | "date" | "time" | "datetime-local" | "month" | "week" | "color" | "search";
 
@@ -34,6 +35,7 @@ type TdsTextFieldProps = TdsFieldProps & {
     rows?: number;
     value?: string;
     format?: (value: string) => string;
+    children?: any
 };
 
 /**
@@ -109,7 +111,9 @@ function formHelper(props: TdsTextFieldProps & {
 
 export function TdsTextField(props: TdsTextFieldProps): any {
     const pageContext: TStatePage = React.useContext(PageContext);
-    const { register, formState: { errors }, getFieldState } = useFormContext();
+    const methods = useFormContext();
+    const { register, formState, getFieldState } = methods ? methods :
+        { register: null, formState: null, getFieldState: null };
     const [tooltipVisible, setTooltipVisible] = React.useState(false);
     const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
 
@@ -143,18 +147,21 @@ export function TdsTextField(props: TdsTextFieldProps): any {
         setTooltipVisible(false);
     };
 
-    const fieldError: FieldError = getFieldState(props.name).error;
+    const fieldError: FieldError | undefined = getFieldState ? getFieldState(props.name).error : undefined;
 
     return (
         <VscodeFormGroup variant={pageContext.formOrientation}
             key={props.name}
         >
-            <VscodeLabel htmlFor={props.name}
-                required={props.rules?.required}
-            >
-                {mdToHtml(props.label || props.name)}
-            </VscodeLabel>
-
+            {
+                props.label &&
+                <VscodeLabel
+                    htmlFor={props.name}
+                    required={props.rules?.required}
+                >
+                    {mdToHtml(props.label || props.name)}
+                </VscodeLabel>
+            }
             {
                 register ?
                     <VscodeTextfield
@@ -169,6 +176,7 @@ export function TdsTextField(props: TdsTextFieldProps): any {
                         type={props.type || "text"}
                         placeholder={props.placeholder}
                     >
+                        {...React.Children.toArray(props.children)}
                         {pageContext.compact &&
                             <VscodeIcon
                                 slot="content-after"
@@ -187,7 +195,14 @@ export function TdsTextField(props: TdsTextFieldProps): any {
                         required={props.rules?.required || false}
                         placeholder={props.placeholder}
                         pattern={props.rules?.pattern?.source || undefined}
+                        onInput={(e: any) => {
+                            if (props.onInput) {
+                                e.preventDefault();
+                                props.onInput(e);
+                            }
+                        }}
                     >
+                        {...React.Children.toArray(props.children)}
                         {pageContext.compact &&
                             <VscodeIcon
                                 slot="content-after"
