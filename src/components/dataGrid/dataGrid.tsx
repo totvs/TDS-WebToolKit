@@ -67,8 +67,8 @@ function BuildRows(props: TBuildRowsProps) {
 
 			reactElements.push(
 				<VscodeTableRow row-type="default"
+					key={`${props.id}_row_${rowNumber}_${index + itemOffset}`}
 					id={`${props.id}_row_${rowNumber}_${index + itemOffset}`}
-					key={`${row.id}`}
 				>
 					{
 						//gridTemplateColumns = { gridTemplate }
@@ -500,10 +500,10 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 
 			<div className="tds-data-grid-content" key={`${props.id}_content`}>
 				<VscodeTable
-					bordered-columns
-					resizable={true}
 					id={`${props.id}_grid`}
 					key={`${props.id}_grid`}
+					bordered-columns
+					resizable={true}
 				>
 					<VscodeTableHeader slot="header">
 						{buildRowHeader(props.columnsDef)}
