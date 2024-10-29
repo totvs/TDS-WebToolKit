@@ -6,6 +6,7 @@ import { PageContext, TStatePage } from "../page/pageContext";
 import PopupMessage from "../popup-message/popup-message";
 import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeOption, VscodeSingleSelect } from "@vscode-elements/react-elements";
 import { useFormContext } from "react-hook-form";
+import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
 
 export type TdsOptionsSelection = {
 	label: string;
@@ -16,7 +17,8 @@ export type TdsOptionsSelection = {
 };
 
 type TdsSelectionFieldProps = TdsFieldProps & {
-	options: TdsOptionsSelection[]
+	options: TdsOptionsSelection[];
+	orientation?: FormGroupVariant;
 }
 
 /**

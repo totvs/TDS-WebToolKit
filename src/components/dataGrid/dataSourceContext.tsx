@@ -4,8 +4,8 @@ import { TGroupingInfo, TTdsDataGridColumnDef } from "./dataGrid.type";
 interface DataSourceContextInterface {
     modelField: string;
     setModelField: (fieldName: string) => void;
-    dataSource: any[];
-    setDataSource: (dataSource: any[]) => void;
+    rows: any[];
+    setRows: (dataSource: any[]) => void;
     setFilter: (filter: string) => void;
     filter: string;
     showFieldsFilter: boolean;
@@ -57,12 +57,12 @@ export function DataSourceProvider(props: DataSourceProviderProps) {
     const [groupingInfo, setGroupingInfo] = React.useState<TGroupingInfo | undefined>(undefined);
     const [groupingFilter, setGroupingFilter] = React.useState<string[]>([]);
     const [modelField, setModelField] = React.useState<string>(props.modelField);
-    const [dataSource, setDataSource] = React.useState<any[]>(undefined);
+    const [rows, setRows] = React.useState<any[]>(undefined);
 
     return (
         <DataSourceContext.Provider value={{
-            dataSource: dataSource,
-            setDataSource: setDataSource,
+            rows: rows,
+            setRows: setRows,
             setFilter: setFilter,
             filter: filter,
             showFieldsFilter: showFieldsFilter,

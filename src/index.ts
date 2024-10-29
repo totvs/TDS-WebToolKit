@@ -28,7 +28,6 @@ export { TdsNumericField } from './components/fields/numericField'
 export { TdsPage } from './components/page/page'
 export { TdsSelectionField } from './components/fields/selectionField'
 export { TdsSelectionFileField, TdsSelectionFolderField, TdsSelectionResourceField } from './components/fields/selectionResourceField'
-export { TdsSimpleTextField } from './components/fields/simpleTextField'
 export { TdsTextField } from './components/fields/textField'
 
 export { TdsAbstractModel } from './model/modelData'

@@ -40,14 +40,6 @@ limitations under the License.
 	align-items: center;
 }
 
-
-
-
-
-
-
-
-
 .tds-data-grid .tds-data-grid-content {
 	flex-grow: 1;
 	flex-shrink: 1;
@@ -63,7 +55,6 @@ limitations under the License.
 	order: 0;
 	flex-direction: row;
 	gap: 5px;
-	/* background-color: var(--vscode-editor-selectionBackground); */
 	width: 100%;
 	padding-left: 1em;
 	flex-wrap: wrap;
@@ -73,10 +64,6 @@ limitations under the License.
 .tds-data-grid-grouping span.label {
 	margin-right: calc(var(--tds-hor-spacing) / 4);
 }
-
-/* .tds-data-grid-grouping span.field_name {
-	font-weight: bold;
-} */
 
 .tds-data-grid-grouping vscode-button vscode-badge {
 	margin-left: calc(var(--tds-hor-spacing) * 1);
@@ -141,4 +128,8 @@ vscode-icon.mirrorX {
 
 vscode-icon.rotate025 {
 	transform: rotate(0.25turn) scale(0.7);
+}
+
+vscode-icon.scale070 {
+	transform: scale(0.7);
 }

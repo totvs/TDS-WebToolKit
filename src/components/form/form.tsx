@@ -48,7 +48,6 @@ export type TdsFieldProps = {
 	//https://github.com/microsoft/vscode-webview-ui-toolkit/blob/main/src/react/README.md#use-oninput-instead-of-onchange-to-handle-keystrokes
 	onInput?: React.FormEventHandler<any>; //VscodeTextfield
 	onChange?: React.FormEventHandler<any>; //VscodeTextfield
-	orientation?: FormGroupVariant;
 }
 
 export type TdsFormAction = {

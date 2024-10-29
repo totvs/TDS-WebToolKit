@@ -201,7 +201,7 @@ export function FilterBlock(props: TFilterBlockProps) {
 type BuildRowFilterProps = {
 	id: string;
 	columnDefs: TTdsDataGridColumnDef[];
-	dataSource: any[];
+	rows: any[];
 }
 
 export function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[] {
@@ -257,7 +257,7 @@ export function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[]
 										setFilterByField(filters);
 									}
 								}
-								dataSource={props.dataSource}
+								dataSource={props.rows}
 							/>
 						</VscodeTableCell>
 					))}

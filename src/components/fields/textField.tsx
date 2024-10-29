@@ -35,6 +35,16 @@ type TdsTextFieldProps = TdsFieldProps & {
     rows?: number;
     value?: string;
     format?: (value: string) => string;
+    title?: string;
+    children?: any
+};
+
+type TdsTextFieldProps2 = Omit<TdsFieldProps, "label"> & {
+    type?: TdsTypeField;
+    placeholder?: string;
+    value?: string;
+    format?: (value: string) => string;
+    title?: string;
     children?: any
 };
 
@@ -175,6 +185,7 @@ export function TdsTextField(props: TdsTextFieldProps): any {
                         name={props.name}
                         type={props.type || "text"}
                         placeholder={props.placeholder}
+                        title={props.title}
                     >
                         {...React.Children.toArray(props.children)}
                         {pageContext.compact &&
@@ -191,6 +202,7 @@ export function TdsTextField(props: TdsTextFieldProps): any {
                     <VscodeTextfield
                         name={props.name}
                         type={props.type || "text"}
+                        title={props.title}
                         readonly={props.readOnly || false}
                         required={props.rules?.required || false}
                         placeholder={props.placeholder}
@@ -222,5 +234,68 @@ export function TdsTextField(props: TdsTextFieldProps): any {
                 mousePosition: mousePosition
             })}
         </VscodeFormGroup>
+    )
+}
+
+export function TdsTextField2(props: TdsTextFieldProps2): any {
+    const pageContext: TStatePage = React.useContext(PageContext);
+    const methods = useFormContext();
+    const { register, formState, getFieldState } = methods ? methods :
+        { register: null, formState: null, getFieldState: null };
+
+    return (
+        register ?
+            <VscodeTextfield
+                {...register(`${props.name}`,
+                    {
+                        disabled: props.readOnly,
+                        required: props.rules?.required,
+                        maxLength: props.rules?.maxLength,
+                        pattern: props.rules?.pattern || undefined
+                    }) as any}
+                name={props.name}
+                type={props.type || "text"}
+                placeholder={props.placeholder}
+                title={props.title}
+            >
+                {...React.Children.toArray(props.children)}
+                {pageContext.compact &&
+                    <VscodeIcon
+                        slot="content-after"
+                        name={"info"}
+                    // onMouseEnter={handleMouseEnter}
+                    // onMouseMove={handleMouseMove}
+                    // onMouseLeave={handleMouseLeave}
+                    />
+                }
+            </VscodeTextfield>
+            :
+            <VscodeTextfield
+                name={props.name}
+                type={props.type || "text"}
+                title={props.title}
+                readonly={props.readOnly || false}
+                required={props.rules?.required || false}
+                placeholder={props.placeholder}
+                pattern={props.rules?.pattern?.source || undefined}
+                value={props.value}
+                onInput={(e: any) => {
+                    if (props.onInput) {
+                        e.preventDefault();
+                        props.onInput(e);
+                    }
+                }}
+            >
+                {...React.Children.toArray(props.children)}
+                {pageContext.compact &&
+                    <VscodeIcon
+                        slot="content-after"
+                        name={props.error ? "error" : "info"}
+                    // onMouseEnter={handleMouseEnter}
+                    // onMouseMove={handleMouseMove}
+                    // onMouseLeave={handleMouseLeave}
+                    />
+                }
+            </VscodeTextfield>
     )
 }

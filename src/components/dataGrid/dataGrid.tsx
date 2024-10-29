@@ -22,9 +22,11 @@ import TdsPaginator from "./paginator";
 import { BuildRowFilter, FilterBlock } from "./fieldFilter";
 import { DataSourceProvider, useDataSourceContext } from "./dataSourceContext";
 import { GroupingPanel } from "./groupingPanel";
-import { VscodeButton, VscodeCheckbox, VscodeDivider, VscodeIcon, VscodeTable, VscodeTableCell, VscodeTableHeader, VscodeTableRow, VscodeTextfield } from "@vscode-elements/react-elements";
+import { VscodeButton, VscodeCheckbox, VscodeDivider, VscodeIcon, VscodeTable, VscodeTableCell, VscodeTableHeader, VscodeTableHeaderCell, VscodeTableRow, VscodeTextfield } from "@vscode-elements/react-elements";
 import { VscodeTableBody } from "@vscode-elements/react-elements";
 import { TdsLink } from './../decorator/link';
+import { useFormContext } from "react-hook-form";
+import { TdsTextField, TdsTextField2 } from "../fields/textField";
 
 /**
  * Renders the data grid component.
@@ -32,7 +34,7 @@ import { TdsLink } from './../decorator/link';
  * @param props - The data grid component props.
  */
 type TFieldDataProps = {
-	dataSource: any[];
+	rows: any[];
 	fieldDef: TTdsDataGridColumnDef;
 	row: any;
 	fieldName?: string;
@@ -47,7 +49,7 @@ type TBuildRowsProps = {
 }
 
 function BuildRows(props: TBuildRowsProps) {
-	const { dataSource, itemOffset, modelField } = useDataSourceContext();
+	const { rows, itemOffset, modelField } = useDataSourceContext();
 
 	const buildRow = (row: any, index: number, itemOffset: number): React.ReactElement[] => {
 		let reactElements: React.ReactElement[] = [];
@@ -78,13 +80,14 @@ function BuildRows(props: TBuildRowsProps) {
 								id={`${props.id}_cell_${rowNumber}_${index + itemOffset}${indexCol + 1}`}
 								key={`${props.id}_cell__${rowNumber}_${index + itemOffset}${indexCol + 1}`}
 								grid-column={indexCol + 1}>
-								{fieldData(
-									{
-										dataSource: dataSource,
-										fieldDef: column,
-										row: row,
-										fieldName: `${modelField || "dataSource"}.${index + itemOffset}.${column.name}`
-									})
+								{
+									fieldData(
+										{
+											rows: rows,
+											fieldDef: column,
+											row: row,
+											fieldName: `${modelField || "dataSource"}.${index + itemOffset}.${column.name}`
+										})
 								}
 							</VscodeTableCell>
 						))}
@@ -119,7 +122,7 @@ function BuildRows(props: TBuildRowsProps) {
 		return reactElements;
 	}
 
-	return dataSource
+	return rows
 		.slice(itemOffset, itemOffset + 10)
 		.map((row: any, index: number) => {
 			if (row.index_) {
@@ -131,49 +134,12 @@ function BuildRows(props: TBuildRowsProps) {
 }
 
 function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
-	//const methods = useFormContext();
 	const column = props.fieldDef;
 	const row = props.row;
 	let alignClass: string | undefined = column.align ? `tds-text-${column.align}` : undefined;
 
-	if (!row) {
-		console.log("noRow");
-	}
-	const forceRefresh = 0;
-
-	//Campo DATE, TIME e DATETIME
-	if ((column.type == "date") || (column.type == "time") || (column.type == "datetime")) {
-		const text: string = tdsVscode.l10n.format(row[column.name], (column.displayType || column.type) as "date" | "time" | "datetime") || "";
-		alignClass = alignClass || "tds-text-right";
-		//readOnly={column.readOnly == undefined ? true : column.readOnly}
-		return (
-			<VscodeTextfield
-				className={alignClass}
-				data-type={column.type}
-				key={`${props.fieldName}}`}
-				value={text}
-				title={text.startsWith("Invalid") ? row[column.name] : text}
-			></VscodeTextfield>
-		)
-	}
-
-	//Campo BOOLEAN
 	if (column.type == "boolean") {
 		alignClass = alignClass || "tds-text-center";
-		// 	onChange = {(e) => {
-		// 		e.preventDefault();
-		// 		e.stopPropagation();
-		// 		const target = e.target as HTMLInputElement;
-		// 		const parts = props.fieldName.split(".");
-		// 		//props.dataSource[parseInt(parts[1])] = target.checked ? true : false;
-		// 		//methods.setValue(props.fieldName, target.checked ? true : false);
-		// 		if (column.onChange) {
-		// 			column.onChange(e, props.fieldName, row);
-		// 		}
-		// 	}
-		// }
-
-		//readOnly={column.readOnly == undefined ? true : column.readOnly}
 		return (
 			<VscodeCheckbox
 				className={alignClass}
@@ -184,26 +150,34 @@ function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 		)
 	}
 
-	let text: string = (column.lookup && column.lookup[row[column.name]])
-		? column.lookup[row[column.name]]
-		: tdsVscode.l10n.format(row[column.name], (column.displayType || column.type)) || "";
+	let value: string = "";
+	let title: string = "";
 
-	if ((column.type == "number")) {
+	//Campo DATE, TIME e DATETIME
+	if ((column.type == "date") || (column.type == "time") || (column.type == "datetime")) {
+		value = tdsVscode.l10n.format(row[column.name], (column.displayType || column.type) as "date" | "time" | "datetime") || "";
+		title = value.startsWith("Invalid") ? row[column.name] : value;
+	} else if ((column.type == "number")) {
 		alignClass = alignClass || "tds-text-right";
+		value = tdsVscode.l10n.formatNumber(row[column.name], (column.displayType || column.type) as "int" | "float" | "hex" | "HEX" | "number") || "";
+		title = value.startsWith("Invalid") ? row[column.name] : value;
+	} else { // string
+		value = (column.lookup && column.lookup[row[column.name]])
+			? column.lookup[row[column.name]]
+			: tdsVscode.l10n.format(row[column.name], (column.displayType || column.type)) || "";
+		title = value;
 	}
 
-	if (text === undefined || text === null) {
-		throw new Error(`Field Definition or field value not found. Field: ${column.name}, Value: ${row[column.name]}`);
-	}
 
 	return (
-		<VscodeTextfield
-			className={alignClass}
-			title={text}
+		<TdsTextField2
 			data-type={column.type}
 			key={`${props.fieldName}`}
 			name={props.fieldName}
-		></VscodeTextfield>
+			className={alignClass}
+			title={title}
+			value={value}
+		/>
 	)
 }
 
@@ -337,7 +311,7 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 
 function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 	const {
-		dataSource, setDataSource,
+		rows, setRows,
 		filter, setFilter,
 		sortedColumn, setSortedColumn,
 		sortedDirection, setSortedDirection,
@@ -351,7 +325,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 	} = useDataSourceContext();
 	//const methods = useFormContext();
 	const handlePageClick = (newPage: number) => {
-		const newOffset = (newPage * (props.options.pageSize)) % dataSource.length;
+		const newOffset = (newPage * (props.options.pageSize)) % rows.length;
 
 		setCurrentPage(newPage);
 		setItemOffset(newOffset);
@@ -373,7 +347,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 
 	const handleGroupingClick = (columnDef: TTdsDataGridColumnDef | undefined) => {
 		if (columnDef) {
-			const groupingValues: Record<string, number> = dataSource.reduce((acc: Record<string, number>, item: any) => {
+			const groupingValues: Record<string, number> = rows.reduce((acc: Record<string, number>, item: any) => {
 				if (acc[item[columnDef.name]]) {
 					acc[item[columnDef.name]] += 1;
 				} else {
@@ -448,9 +422,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 							.filter(column => column.visible)
 							.filter((column) => (column.rowGroup || 0) == rowNumber)
 							.map((column, _index: number) => (
-								<VscodeTableCell
-									cell-type="columnheader"
-									grid-column={_index + 1}
+								<VscodeTableHeaderCell
 									key={`${props.id}_header_column_${rowNumber}_${_index}`}
 								>
 									{column.label || column.name}&nbsp;
@@ -475,7 +447,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 											}}
 										/>
 									}
-								</VscodeTableCell>
+								</VscodeTableHeaderCell>
 							))
 					}
 				</VscodeTableRow >
@@ -508,7 +480,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 		const data = prepareDataSource(props.columnsDef, props.dataSource,
 			filter, filterByField, groupingInfo, groupingFilter,
 			sortedColumn);
-		setDataSource(data);
+		setRows(data);
 	}, [
 		filter,
 		groupingInfo, groupingFilter,
@@ -528,26 +500,33 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 
 			<div className="tds-data-grid-content" key={`${props.id}_content`}>
 				<VscodeTable
+					bordered-columns
+					resizable={true}
 					id={`${props.id}_grid`}
 					key={`${props.id}_grid`}
-					generate-header="sticky"
 				>
 					<VscodeTableHeader slot="header">
 						{buildRowHeader(props.columnsDef)}
 					</VscodeTableHeader>
 
-					<VscodeTableBody slot="body">
-						{showFieldsFilter && <BuildRowFilter
-							id={`${props.id}_grid_filter`}
-							key={`${props.id}_grid_filter`}
-							columnDefs={props.columnsDef}
-							dataSource={dataSource}
-						/>}
+					<VscodeTableBody
+						key={`${props.id}body`}
+						slot="body"
+					>
+						{
+							showFieldsFilter &&
+							<BuildRowFilter
+								id={`${props.id}_grid_filter`}
+								key={`${props.id}_grid_filter`}
+								columnDefs={props.columnsDef}
+								rows={rows}
+							/>
+						}
 
-						{((dataSource == undefined) || (dataSource.length == 0)) ?
+						{((rows == undefined) || (rows.length == 0)) ?
 							<>No data to show.</>
 							: <BuildRows
-								key={`${props.id}`}
+								key={`${props.id}_rows`}
 								id={`${props.id}`}
 								columnsDef={props.columnsDef}
 								rowSeparator={props.options.rowSeparator || false}
@@ -564,7 +543,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 					pageSize={pageSize}
 					currentPage={currentPage}
 					currentItem={itemOffset}
-					totalItems={dataSource ? dataSource.length : 0}
+					totalItems={rows ? rows.length : 0}
 					pageSizeOptions={props.options.pageSizeOptions}
 					onPageChange={handlePageClick}
 					onPageSizeChange={handlePageSizeClick}
@@ -609,18 +588,22 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 						}
 
 						if (action.type == "link") {
-							return (<TdsLink
-								href={action.href}
-								key={action.id}>
-								{action.caption}
-							</TdsLink>)
+							return (
+								<TdsLink
+									href={action.href}
+									key={action.id}>
+									{action.caption}
+								</TdsLink>
+							)
 						} else if (action.type == "checkbox") {
-							return (<VscodeCheckbox
-								key={action.id}
-								className={`tds-button-button ${visible}`}
-								{...propsField} >
-								{action.caption}
-							</VscodeCheckbox>)
+							return (
+								<VscodeCheckbox
+									key={action.id}
+									className={`tds-button-button ${visible}`}
+									{...propsField} >
+									{action.caption}
+								</VscodeCheckbox>
+							)
 						} else {
 							return (<VscodeButton
 								key={action.id}

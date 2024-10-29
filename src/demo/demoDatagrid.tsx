@@ -22,7 +22,6 @@ import { TdsPage } from "../components/page/page";
 import { tdsVscode } from "../utilities/vscodeWrapper";
 import { TdsDataGrid, TTdsDataGridAction, TTdsDataGridColumnDef } from "../components/dataGrid";
 import countries from './countries.json'; // This import style requires "esModuleInterop", see "side notes"
-import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
 
 enum ReceiveCommandEnum {
 }
@@ -164,7 +163,7 @@ function dataGrid(props: TDemoDataGridProps) {
             id: "btnAction2",
             caption: "Action 2",
             hint: "Another Action",
-            type: "button",
+            type: "link",
             onClick: (e: any) => {
                 console.log("TdsDataGridAction: ", e);
             }
@@ -179,13 +178,13 @@ function dataGrid(props: TDemoDataGridProps) {
             type: "button",
             onClick: (e: any) => {
                 console.log("TdsDataGridAction: ", e);
-            }
+            },
         },
         {
             id: "btnAction2",
             caption: "Action 2",
             hint: "Another Action",
-            type: "button",
+            type: "link",
             onClick: (e: any) => {
                 console.log("TdsDataGridAction: ", e);
             }
