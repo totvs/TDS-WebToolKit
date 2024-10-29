@@ -108,7 +108,7 @@ export function FilterBlock(props: TFilterBlockProps) {
 	return (
 		<section className="tds-row-container">
 			<TdsTextField
-				key={`all_filter`}
+				key="filter"
 				name="filter"
 				label={tdsVscode.l10n.t("_Filter")}
 				info={tdsVscode.l10n.t("_Filters on all columns and can accept regular expressions")}
@@ -181,6 +181,7 @@ export function FilterBlock(props: TFilterBlockProps) {
 
 						return (action.type == "link" ?
 							<TdsLink
+								key={action.id}
 								href={action.href}>
 								{action.caption}
 							</TdsLink>
