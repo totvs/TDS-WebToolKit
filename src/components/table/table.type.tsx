@@ -20,7 +20,7 @@ export type TTdsTableColumn = (
 		label?: string;
 		type?: "string" | "number" | "boolean" | "date" | "time" | "datetime";
 		displayType?: "date" | "time" | "datetime" | "int" | "float" | "hex" | "HEX";
-		_width?: string | number;
+		width?: string | number;
 		align?: "left" | "center" | "right";
 	});
 
@@ -45,7 +45,7 @@ export type TTdsOnClickTableCell = (target: HTMLElement,
 // ) => void;
 
 export type TTdsTableProps = {
-	dataSource: any[] //Record<string, string | number | Date | boolean>[]
+	rows: any[] //Record<string, string | number | Date | boolean>[]
 	id?: string;
 	columns?: TTdsTableColumn[],
 	highlightRows?: number[];

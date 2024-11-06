@@ -1,4 +1,4 @@
-# TDS-WebToolKit, standard UI for TDS products
+# TDS-WebToolKit, standard UI for TDS products [English](README-EN.MD)
 
 <!-- prettier-ignore-start -->
 [![GitHub license](https://img.shields.io/github/license/totvs/tds-webtoolKit?style=plastic)](https://github.com/totvs/tds-webtoolKit/blob/master/LICENSE)
@@ -30,15 +30,9 @@ npm i @totvs/tds-webtoolkit
 
 ## Componente não visual
 
-- VSCodeAPIWrapper
-
-### TdsPanel
-
-Abstração de um painel (_WebViewPanel_) com base em modelo de dados e com procedimentos pré-definidos. Além destes, o desenvolvedor por customizar o comportamento do painel, sobrescrevendo métodos, reaproveitando comandos pré-existentes ou adicionando seus próprios comandos.
-
 ## Componentes visuais
 
-Componentes visuais baseados em **React** e **VSCode-WebToolkit**, que agiliza a criação de visões (_views_), simplificando e padronizando-as através da abstração do visual (tema), de definições (propriedades) e de detalhes de funcionamento do **React**, mas sem perder a flexibilidade no desenvolvimento de visões mais complexas.
+Componentes visuais baseados em **React** e **@vscode-elements**, que agiliza a criação de visões (_views_), simplificando e padronizando-as através da abstração do visual (tema), de definições (propriedades) e de detalhes de funcionamento do **React**, mas sem perder a flexibilidade no desenvolvimento de visões mais complexas.
 
 - TdsPage
 - TdsForm
@@ -51,3 +45,19 @@ Componentes visuais baseados em **React** e **VSCode-WebToolkit**, que agiliza a
 - TdsSimpleLabelField
 - TdsTextField
 - TdsButton
+
+## Demonstração
+
+Para executar as demonstrações dos diversos componentes, faça:
+
+1. Compile a extensão
+```bash
+npm run compile
+```
+
+2. Inicie o servidor Vite
+```bash
+npm run start:vite
+```
+
+3. Inicie a execução do lançador ``Demo (port 3000)``

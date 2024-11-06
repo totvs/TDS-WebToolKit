@@ -125,7 +125,7 @@ export default function DemoTable(props: TDemoTableProps) {
         <TdsPage title="Demo: TdsTable" >
             <TdsTable id={"result_table"}
                 columns={columnsDef()}
-                dataSource={model.dataSource}
+                rows={model.dataSource}
                 highlightRows={props.highlightRows}
                 highlightGroups={props.highlightGroups}
                 zebra

@@ -132,7 +132,7 @@ export default function DemoTableCustomBody(props: TDemoTableCustomBodyProps) {
 
                 <TdsTable id={"result_table"}
                     columns={columnsDef()}
-                    dataSource={model.dataSource}
+                    rows={model.dataSource}
                     onCustomBody={(dataSource: any[]) => <>
                         {
                             dataSource.map((row: any, index: number) => {

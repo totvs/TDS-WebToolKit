@@ -57,9 +57,14 @@ export type { TdsLabelFieldProps } from './components/fields/labelField'
 export { TdsTree } from "./components/tree";
 export type { TdsTreeItem, TdsTreeItemAction, TdsTreeItemDecoration, TdsTreeActionEvent, TdsTreeSelectEvent } from "./components/tree";
 
+export { TdsLink } from "./components/decorator/link";
+export type { TdsLinkProps } from "./components/decorator/link";
+
 declare global {
   interface Window {
     initialData: any;
     translations: any;
   }
 }
+
+

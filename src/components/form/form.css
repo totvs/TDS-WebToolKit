@@ -97,6 +97,9 @@ limitations under the License.
 	gap: 10px;
 }
 
+.tds-footer-form vscode-divider {
+	width: 100%;
+}
 
 /*--< Form Content >----------------------------------------------------------------------------*/
 /* .tds-field-container {

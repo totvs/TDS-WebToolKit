@@ -2,7 +2,7 @@
     "configurations": [
         {
             "type": "chrome",
-            "name": "http://localhost:3000",
+            "name": "Demo (port 3000)",
             "request": "launch",
             "url": "http://localhost:3000"
         }

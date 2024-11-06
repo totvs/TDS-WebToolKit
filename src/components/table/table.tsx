@@ -135,7 +135,7 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 		.map((headerColumn: TTdsTableColumn) =>
 			typeof (headerColumn) == "string"
 				? ""
-				: typeof (headerColumn._width) == "string" ? `${headerColumn._width}px` : ""
+				: typeof (headerColumn.width) == "string" ? `${headerColumn.width}px` : ""
 		);
 
 	const headerColumns: string[] = props.columns
@@ -152,7 +152,7 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 				onKeyUp={(event) => console.log("TdsTable keyUp", event)}
 				onKeyUpCapture={(event) => console.log("TdsTable onKeyUpCapture", event)}
 			>
-				{props.dataSource && props.dataSource.length != 0 &&
+				{props.rows && props.rows.length != 0 &&
 					<VscodeTable
 						id={`${props.id}_table`}
 						key={`${props.id}_table`}
@@ -176,8 +176,8 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 							key={`${props.id}_body`}
 							slot="body"
 						>
-							{props.onCustomBody && props.onCustomBody(props.dataSource)}
-							{!props.onCustomBody && props.dataSource.map((row: any, index: number) =>
+							{props.onCustomBody && props.onCustomBody(props.rows)}
+							{!props.onCustomBody && props.rows.map((row: any, index: number) =>
 								<BuildRow
 									id={`${props.id}_table`}
 									key={`${props.id}_row_${index}`}

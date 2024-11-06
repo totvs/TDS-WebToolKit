@@ -14,9 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { TdsAbstractModel } from "../../model/modelData";
-import { ButtonAppearance } from "../vscode-elements";
-
 /**
  * Defines the configuration for a column in the data grid component.
  *
@@ -72,7 +69,7 @@ export type TTdsDataGridAction = {
 	visible?: boolean | ((isDirty: boolean, isValid: boolean) => boolean);
 	isProcessRing?: boolean;
 	type?: "button" | "link" | "checkbox";
-	appearance?: ButtonAppearance;
+	appearance?: "primary" | "secondary";
 	href?: string;
 };
 

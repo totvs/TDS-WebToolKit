@@ -16,20 +16,25 @@ limitations under the License.
 
 import React from "react";
 
-type TTdsLink = {
+export type TdsLinkProps = {
+    id?: string;
     href: string;
     target?: string;
     title?: string;
     onClick?: (event: React.MouseEventHandler<HTMLAnchorElement>) => void;
+    onMouseHover?: (event: any) => void;
     children: React.ReactElement | string;
 }
 
-export function TdsLink(props: TTdsLink): React.ReactElement {
+export function TdsLink(props: TdsLinkProps): React.ReactElement {
     return (<a
+        id={props.id || "linkId"}
         target={props.target}
         title={props.title || ""}
         href={props.href}
-        onClick={(e: any) => props.onClick && props.onClick(e)}>
+        onClick={(e: any) => props.onClick && props.onClick(e)}
+        onMouseEnter={(e: any) => props.onMouseHover && props.onMouseHover(e)}
+    >
         {props.children}
     </a>)
 }

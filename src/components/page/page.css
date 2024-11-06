@@ -100,3 +100,7 @@ limitations under the License.
 	display: flex;
 	flex-grow: 1;
 }
+
+.tds-footer vscode-divider {
+	width: 100%;
+}

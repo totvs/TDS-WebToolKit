@@ -79,6 +79,10 @@ module.exports = (env, argv) => {
       vscode: "commonjs vscode",
     },
     resolve: {
+      alias: {
+        react: path.resolve('./node_modules/react'),
+        "@vscode-elements": path.resolve('./node_modules/@vscode-elements'),
+      },
       extensions: [
         ".js",
         ".ts",
@@ -90,14 +94,23 @@ module.exports = (env, argv) => {
     },
     module: {
       rules: [
+        // {
+        //   test: /\.m?js/,
+        //   type: "javascript/auto",
+        // },
+        // {
+        //   test: /\.m?js/,
+        //   resolve: {
+        //     fullySpecified: true,
+        //   },
+        // },
         {
           test: /\.(ts|tsx)$/,
           use: [
             {
               loader: "ts-loader",
-              options: {
-                //                configFile: path.join(REPLAY_PATH, "./app/tsconfig.json"),
-              },
+              // options: {
+              // },
             },
           ],
         },
