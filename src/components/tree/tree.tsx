@@ -71,10 +71,10 @@ export function TdsTree(props: TdsTreeProps): React.ReactElement {
 		data, setData
 	] = React.useState<TdsTreeItem[]>(props.data);
 
-	React.useEffect(() => {
-		console.log(">>>> useEffect")
-	}, [
-	]);
+	// React.useEffect(() => {
+	// 	console.log(">>>> useEffect")
+	// }, [
+	// ]);
 
 	return (
 		<section className="tds-tree" id={`${props.id}`}>

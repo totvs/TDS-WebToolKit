@@ -127,7 +127,7 @@ export default function DemoTable(props: TDemoTableProps) {
                 rows={model.dataSource}
                 highlightRows={props.highlightRows}
                 highlightGroups={props.highlightGroups}
-                zebra
+                zebra={props.zebra}
             />
         </TdsPage>
     );

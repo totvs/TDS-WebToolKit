@@ -74,7 +74,6 @@ function getColumnAlign(columnDef: TTdsTableColumn): string | undefined {
 		alignClass = "tds-text-right";
 	}
 
-	console.log(">>> getColumnAlign", columnDef, alignClass)
 	return alignClass;
 }
 
@@ -157,6 +156,8 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 				: `${headerColumn.label}`
 		);
 
+	const otherProps: {} = props.zebra ? { "zebra-odd": true } : {};
+
 	return (
 		<section className="tds-table" id={`${props.id}`}>
 			<div className="tds-table-content"
@@ -171,7 +172,7 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 						bordered-columns
 						resizable={true}
 						columns={widthColumns}
-					//zebra={props.zebra}
+						{...otherProps}
 					>
 						{widthColumns.length > 0 &&
 							<VscodeTableHeader slot="header">

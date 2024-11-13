@@ -470,8 +470,6 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 	}
 
 	React.useEffect(() => {
-		console.log(">>>> useEffect")
-
 		props.columnsDef.forEach((columnDef: TTdsDataGridColumnDef) => {
 			if (!sortedColumn && (columnDef.sortDirection != "")) {
 				setSortedColumn(columnDef);
