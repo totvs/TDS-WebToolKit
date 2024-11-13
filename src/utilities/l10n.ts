@@ -230,6 +230,12 @@ export class L10n {
       this._translations["_[{0}] is required."] = "[{0}] é obrigatório.";
       this._translations["_[{0}] is not valid range (min value)."] = "[{0}] não é válido para faixa (valor mínimo).";
       this._translations["_[{0}] is not valid range (max value)."] = "[{0}] não é válido para faixa (valor máximo).";
+      this._translations["_Country"] = "País";
+      this._translations["_Population"] = "População";
+      this._translations["_Capital"] = "Capital";
+      this._translations["_Area"] = "Área";
+      this._translations["_Continent"] = "Continente";
+      this._translations["_Independence"] = "Independência";
     } else {
       this._translations["_Settings"] = "Settings";
       this._translations["_Orientation"] = "Orientation";
@@ -260,6 +266,12 @@ export class L10n {
       this._translations["_[{0}] is required."] = "[{0}] is required.";
       this._translations["_[{0}] is not valid range (min value)."] = "[{0}] is not valid range (min value).";
       this._translations["_[{0}] is not valid range (max value)."] = "[{0}] is not valid range (max value).";
+      this._translations["_Country"] = "Country";
+      this._translations["_Population"] = "Population";
+      this._translations["_Capital"] = "Capital";
+      this._translations["_Area"] = "Area";
+      this._translations["_Continent"] = "Continent";
+      this._translations["_Independence"] = "Independence";
     }
   }
 }

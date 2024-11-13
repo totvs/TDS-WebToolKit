@@ -1,8 +1,3 @@
-#demoDatagrid .tds-page {
-    max-height: 500px;
-    margin: auto;
-}
-
 vscode-data-grid-row[id^="result_dataGrid_row_1"],
 vscode-data-grid-row[id^="result_dataGrid_row_2"],
 vscode-data-grid-row[id^="result_dataGrid_row_3"] {

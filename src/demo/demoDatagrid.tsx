@@ -192,7 +192,7 @@ function dataGrid(props: TDemoDataGridProps) {
     ];
 
     return (
-        <TdsPage title="Demo: TdsDataGrid" >
+        <TdsPage id="demoDataGrid" title="Demo: TdsDataGrid" >
             <TdsDataGrid
                 id={"result_dataGrid"}
                 columnsDef={columnsDef()}
@@ -308,7 +308,7 @@ function dataGridSelectRow(props: TDemoDataGridProps) {
 
     //    actions={formActions}
     return (
-        <TdsPage title="Demo: TdsDataGrid" >
+        <TdsPage id="demoDataGrid" title="Demo: TdsDataGrid" >
             <TdsDataGrid
                 id={"result_dataGrid"}
                 columnsDef={columnsDef()}

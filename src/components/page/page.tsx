@@ -29,9 +29,9 @@ import { TdsForm, TdsFormAction } from "../form/form";
 import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
 import { TdsRadioGroup } from "../fields/checkRadioGroup";
 import { TdsCheckBoxField } from "../fields/checkBoxField";
-import { TdsTextField } from "../fields/textField";
 
 export interface IPageView {
+	id: string;
 	children: any;
 	title?: string;
 	showFooter?: boolean;
@@ -87,7 +87,7 @@ export function TdsPage(props: IPageView): React.ReactElement {
 
 	return (
 		<ErrorBoundary fallback={<p>Something unexpected occurred. See navigator console log for details.</p>}>
-			<section className="tds-page">
+			<section id={props.id} className="tds-page">
 				{props.title &&
 					<TdsHeader title={props.title} extra={extra} />
 				}

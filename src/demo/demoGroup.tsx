@@ -80,7 +80,7 @@ export default function DemoGroup(props: TDemoFormProps) {
     }, []);
 
     return (
-        <TdsPage title="Demo: TdsForm with Groups" showFooter={true}>
+        <TdsPage id="demoGroup" title="Demo: TdsForm with Groups" showFooter={true}>
             <FormProvider {...methods}>
                 <TdsForm<TDemoModel>
                     onSubmit={methods.handleSubmit(onSubmit)}

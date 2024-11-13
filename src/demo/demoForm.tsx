@@ -192,7 +192,7 @@ export default function DemoForm(props: TDemoFormProps) {
                 */
 
     return (
-        <TdsPage title="Demo: TdsForm" showFooter={true} layoutControl={props.layoutControl} >
+        <TdsPage id="demoForm" title="Demo: TdsForm" showFooter={true} layoutControl={props.layoutControl} >
             <FormProvider {...methods}>
                 <TdsForm<TDemoModel>
                     onSubmit={methods.handleSubmit(onSubmit)}

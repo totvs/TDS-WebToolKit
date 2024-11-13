@@ -98,17 +98,17 @@ export default function DemoTableCustomBody(props: TDemoTableCustomBodyProps) {
             {
                 name: "country",
                 type: "string",
-                label: tdsVscode.l10n.t("_Country/Population"),
+                label: `${tdsVscode.l10n.t("_Country")}/${tdsVscode.l10n.t("_Population")}`,
             },
             {
                 name: "capital",
                 type: "string",
-                label: tdsVscode.l10n.t("_Capital/Area"),
+                label: `${tdsVscode.l10n.t("_Capital")}/$tdsVscode.l10n.t("_Area")`,
             },
             {
                 name: "continent",
                 type: "number",
-                label: tdsVscode.l10n.t("_Continent/Independence"),
+                label: `${tdsVscode.l10n.t("_Continent")}/${tdsVscode.l10n.t("_Independence")}`,
             },
         ];
     }
@@ -124,7 +124,7 @@ export default function DemoTableCustomBody(props: TDemoTableCustomBodyProps) {
     }
 
     return (
-        <TdsPage title="Demo: TdsTable (Custom Body)">
+        <TdsPage id="demoTableCustomBody" title="Demo: TdsTable (Custom Body)">
             <TdsForm<TDemoModel>
                 actions={[]}
                 onSubmit={methods.handleSubmit(onSubmit)}

@@ -17,7 +17,6 @@ limitations under the License.
 import "./demoTable.css";
 import React from "react";
 import { sendSaveAndClose, ReceiveMessage, CommonCommandEnum } from "../utilities/common-command-webview";
-import { setDataModel, setErrorModel, TdsForm } from "../components/form/form";
 import { TdsPage } from "../components/page/page";
 import { tdsVscode } from "../utilities/vscodeWrapper";
 import countries from './countries.json'; // This import style requires "esModuleInterop", see "side notes"
@@ -122,7 +121,7 @@ export default function DemoTable(props: TDemoTableProps) {
 
     //    actions={formActions}
     return (
-        <TdsPage title="Demo: TdsTable" >
+        <TdsPage id="demoTable" title="Demo: TdsTable" >
             <TdsTable id={"result_table"}
                 columns={columnsDef()}
                 rows={model.dataSource}

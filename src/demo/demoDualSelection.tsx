@@ -157,7 +157,7 @@ export default function DemoDualSelection() {
     }
 
     return (
-        <TdsPage title="Demo: Dual Selection Model" >
+        <TdsPage id="demoDualSelection" title="Demo: Dual Selection Model" >
             <TdsForm<TDemoModelDualSelectionModel>
                 key="x"
                 actions={[]}
