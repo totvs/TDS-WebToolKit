@@ -29,7 +29,7 @@ export interface IHeader {
  * @param props.title - Page title to display
  */
 export default function TdsHeader(props: IHeader): React.ReactElement {
-	const context = React.useContext(PageContext);
+	//const context = React.useContext(PageContext);
 
 	return (
 		<section className="tds-header">

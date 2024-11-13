@@ -19,7 +19,6 @@ import React from "react";
 import { TTdsTableColumn, TTdsOnClickTableCell, TTdsTableProps } from "./table.type";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { VscodeCheckbox, VscodeTable, VscodeTableBody, VscodeTableCell, VscodeTableHeader, VscodeTableHeaderCell, VscodeTableRow, VscodeTextfield } from "@vscode-elements/react-elements";
-import { TdsTextField2 } from "../fields/textField";
 
 type TBuildRowsProps = {
 	id: string;  //ID tabela 
@@ -62,16 +61,7 @@ function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColu
 		title = value;
 	}
 
-	return (
-		<TdsTextField2
-			data-type={column.type}
-			key={`${rowKey}_${colIndex}`}
-			name={""}
-			className={alignClass}
-			title={title}
-			value={value}
-		/>
-	)
+	return <span title={value}>{value}</span>;
 }
 
 function BuildRow(props: TBuildRowsProps) {

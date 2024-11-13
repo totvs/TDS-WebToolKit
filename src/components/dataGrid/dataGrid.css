@@ -69,10 +69,6 @@ limitations under the License.
 	margin-left: calc(var(--tds-hor-spacing) * 1);
 }
 
-.tds-data-grid-content vscode-text-field {
-	width: 100%;
-}
-
 .tds-data-grid-footer {
 	display: flex;
 	flex-grow: 0;
@@ -114,8 +110,18 @@ limitations under the License.
 	margin-right: var(--tds-hor-spacing);
 }
 
-.tds-data-grid-header vscode-form-group {
+.tds-data-grid-header .tds-filter-block vscode-form-group,
+.tds-data-grid-header .tds-filter-compact-block vscode-form-group {
+	margin: 0px;
 	flex-grow: 1;
+}
+
+.tds-data-grid-header .tds-filter-compact-block {
+	align-items: unset;
+}
+
+.tds-data-grid-header .tds-filter-compact-block>vscode-icon {
+	align-self: flex-end;
 }
 
 .tds-data-grid-header vscode-textfield[name="filter"] {
@@ -132,4 +138,9 @@ vscode-icon.rotate025 {
 
 vscode-icon.scale070 {
 	transform: scale(0.7);
+}
+
+.tds-data-grid vscode-table-cell {
+	overflow: hidden;
+	text-overflow: ellipsis;
 }

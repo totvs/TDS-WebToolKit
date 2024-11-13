@@ -104,9 +104,10 @@ type TFilterBlockProps = {
 
 export function FilterBlock(props: TFilterBlockProps) {
 	const { setFilter, filter, showFieldsFilter, setShowFieldsFilter } = useDataSourceContext();
+	const contextPage = React.useContext(PageContext);
 
 	return (
-		<section className="tds-row-container">
+		<section className={`tds-row-container tds-filter-${contextPage.compact ? "compact-" : ""}block`}>
 			<TdsTextField
 				key="filter"
 				name="filter"
@@ -195,7 +196,7 @@ export function FilterBlock(props: TFilterBlockProps) {
 					})}
 				</div>
 			}
-		</section>
+		</section >
 	)
 }
 
@@ -212,6 +213,27 @@ export function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[]
 	} = useDataSourceContext();
 	let reactElements: React.ReactElement[] = [];
 	let rowNumber: number = 0;
+
+	const separatorRow = () => {
+		return (
+			<VscodeTableRow row-type="default"
+				key={`${props.id}_filter_separator_${reactElements.length + 1}`}
+			>
+				{props.columnDefs.filter(column => column.visible)
+					.filter(column => (column.rowGroup || 0) == 0)
+					.map((_column, indexCol: number) => (
+						<VscodeTableCell
+							key={`${props.id}_filter_separator_${indexCol}`}
+							grid-column={indexCol + 1}
+							cell-type="rowseparator"
+						>
+							<VscodeDivider role="separator"></VscodeDivider>
+						</VscodeTableCell>
+					))}
+			</VscodeTableRow>
+
+		)
+	};
 
 	while (rowNumber != -1) {
 		let gridTemplate: string = "";
@@ -282,23 +304,7 @@ export function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[]
 		});
 
 	//gridTemplateColumns={gridTemplate}
-	reactElements.push(
-		<VscodeTableRow row-type="default"
-			key={`${props.id}_filter_separator`}
-		>
-			{props.columnDefs.filter(column => column.visible)
-				.filter(column => (column.rowGroup || 0) == 0)
-				.map((_column, indexCol: number) => (
-					<VscodeTableCell
-						key={`${props.id}_filter_separator_${indexCol}`}
-						grid-column={indexCol + 1}
-						cell-type="rowseparator"
-					>
-						<VscodeDivider role="separator"></VscodeDivider>
-					</VscodeTableCell>
-				))}
-		</VscodeTableRow>
-	);
+	reactElements.push(separatorRow());
 
 	return reactElements;
 }

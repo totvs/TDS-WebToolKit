@@ -25,8 +25,6 @@ import { GroupingPanel } from "./groupingPanel";
 import { VscodeButton, VscodeCheckbox, VscodeDivider, VscodeIcon, VscodeTable, VscodeTableCell, VscodeTableHeader, VscodeTableHeaderCell, VscodeTableRow, VscodeTextfield } from "@vscode-elements/react-elements";
 import { VscodeTableBody } from "@vscode-elements/react-elements";
 import { TdsLink } from './../decorator/link';
-import { useFormContext } from "react-hook-form";
-import { TdsTextField, TdsTextField2 } from "../fields/textField";
 
 /**
  * Renders the data grid component.
@@ -136,7 +134,7 @@ function BuildRows(props: TBuildRowsProps) {
 function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 	const column = props.fieldDef;
 	const row = props.row;
-	let alignClass: string | undefined = column.align ? `tds-text-${column.align}` : undefined;
+	let alignClass: string | undefined = column.align ? `tds-text-${column.align}` : "tds-text-left";
 
 	if (column.type == "boolean") {
 		alignClass = alignClass || "tds-text-center";
@@ -169,16 +167,7 @@ function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 	}
 
 
-	return (
-		<TdsTextField2
-			data-type={column.type}
-			key={`${props.fieldName}`}
-			name={props.fieldName}
-			className={alignClass}
-			title={title}
-			value={value}
-		/>
-	)
+	return <span title={value}>{value}</span>;
 }
 
 function prepareDataSource(columnsDef: TTdsDataGridColumnDef[], dataSource: any[],
@@ -303,9 +292,10 @@ function prepareDataSource(columnsDef: TTdsDataGridColumnDef[], dataSource: any[
  * @returns A React element representing the data grid.
  */
 export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
-	return (<DataSourceProvider modelField={props.modelField} >
-		<TdsDataGrid2 {...props} />
-	</DataSourceProvider>
+	return (
+		<DataSourceProvider modelField={props.modelField} >
+			<TdsDataGrid2 {...props} />
+		</DataSourceProvider>
 	)
 }
 
@@ -323,7 +313,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 		groupingInfo, setGroupingInfo,
 		groupingFilter, setGroupingFilter
 	} = useDataSourceContext();
-	//const methods = useFormContext();
+
 	const handlePageClick = (newPage: number) => {
 		const newOffset = (newPage * (props.options.pageSize)) % rows.length;
 
@@ -492,9 +482,9 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 	return (
 		<section className="tds-data-grid" id={`${props.id}`}>
 			<div className="tds-data-grid-header">
-				{(props.options.filter) && <FilterBlock
-					actions={props.options.topActions}
-				/>}
+				{(props.options.filter) &&
+					<FilterBlock actions={props.options.topActions} />
+				}
 				{groupingInfo && <GroupingPanel />}
 			</div>
 

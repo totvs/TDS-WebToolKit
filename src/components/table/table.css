@@ -53,3 +53,8 @@ limitations under the License.
 	color: var(--list-active-selection-foreground);
 	outline: none;
 }
+
+.tds-table vscode-table-cell {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
