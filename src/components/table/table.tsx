@@ -33,13 +33,10 @@ type TBuildRowsProps = {
 
 function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColumn, value: any) {
 	const column: TTdsTableColumn = headerColumn;
-	let alignClass: string | undefined = column.align !== undefined ? `tds-text-${column.align}` : undefined;
 
 	if (column.type == "boolean") {
-		alignClass = alignClass || "tds-text-center";
 		return (
 			<VscodeCheckbox
-				className={alignClass}
 				key={`${rowKey}_${colIndex}`}
 				checked={value || value.toString() == "true"}
 			></VscodeCheckbox>
@@ -54,7 +51,6 @@ function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColu
 		value = tdsVscode.l10n.format(value, (column.displayType || column.type) as "date" | "time" | "datetime") || "";
 		title = value.startsWith("Invalid") ? originalValue : value;
 	} else if ((column.type == "number")) {
-		alignClass = alignClass || "tds-text-right";
 		value = tdsVscode.l10n.formatNumber(value, (column.displayType || column.type) as "int" | "float" | "hex" | "HEX" | "number") || "";
 		title = value.startsWith("Invalid") ? originalValue : value;
 	} else { // string
@@ -62,6 +58,24 @@ function fieldData(rowKey: string, colIndex: number, headerColumn: TTdsTableColu
 	}
 
 	return <span title={value}>{value}</span>;
+}
+
+function getColumnAlign(columnDef: TTdsTableColumn): string | undefined {
+	let alignClass: string | undefined = columnDef.align ? `tds-text-${columnDef.align}` : undefined;
+	let type: string = columnDef.displayType || columnDef.type;
+
+	if (type == "boolean") {
+		alignClass = "tds-text-center";
+	} else if ((type == "date") || (type == "time")) {
+		alignClass = "tds-text-center";
+	} else if (type == "datetime") {
+		alignClass = "tds-text-right";
+	} else if ((columnDef.type == "number")) {
+		alignClass = "tds-text-right";
+	}
+
+	console.log(">>> getColumnAlign", columnDef, alignClass)
+	return alignClass;
 }
 
 function BuildRow(props: TBuildRowsProps) {
@@ -88,6 +102,7 @@ function BuildRow(props: TBuildRowsProps) {
 		reactElements.push(
 			<VscodeTableCell
 				key={`${props.id}_cell_${props.rowIndex}_${index}`}
+				className={getColumnAlign(props.headerColumn[index])}
 			>
 				{fieldData(
 					`${props.id}_cell_${props.rowIndex}_${index}`,
@@ -121,6 +136,13 @@ function BuildRow(props: TBuildRowsProps) {
  * @returns The rendered table component.
  */
 export function TdsTable(props: TTdsTableProps): React.ReactElement {
+	const alignColumns: string[] = props.columns
+		.map((headerColumn: TTdsTableColumn) =>
+			typeof (headerColumn) == "string"
+				? undefined
+				: getColumnAlign(headerColumn)
+		);
+
 	const widthColumns: string[] = props.columns
 		.map((headerColumn: TTdsTableColumn) =>
 			typeof (headerColumn) == "string"
@@ -156,6 +178,7 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 								{headerColumns.map((header: string, index: number) =>
 									<VscodeTableHeaderCell
 										key={`${props.id}_header_${index}`}
+										className={alignColumns[index]}
 									>
 										{header}
 									</VscodeTableHeaderCell>)}
@@ -189,6 +212,7 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 													return key;
 												}
 											}
+
 											return ""
 										})}
 								/>

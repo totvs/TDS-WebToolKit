@@ -133,7 +133,7 @@ function dataGrid(props: TDemoDataGridProps) {
                 name: "independenceDate",
                 label: tdsVscode.l10n.t("Independence"),
                 width: "10fr",
-                displayType: "datetime",
+                displayType: "date",
                 rowGroup: props.multiRow ? 1 : undefined,
             }
         ];
@@ -289,7 +289,7 @@ function dataGridSelectRow(props: TDemoDataGridProps) {
                 name: "independenceDate",
                 label: tdsVscode.l10n.t("Independence"),
                 width: "10fr",
-                displayType: "datetime",
+                displayType: "date",
                 rowGroup: props.multiRow ? 1 : undefined,
             }
         ];

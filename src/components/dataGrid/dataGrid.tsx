@@ -22,7 +22,7 @@ import TdsPaginator from "./paginator";
 import { BuildRowFilter, FilterBlock } from "./fieldFilter";
 import { DataSourceProvider, useDataSourceContext } from "./dataSourceContext";
 import { GroupingPanel } from "./groupingPanel";
-import { VscodeButton, VscodeCheckbox, VscodeDivider, VscodeIcon, VscodeTable, VscodeTableCell, VscodeTableHeader, VscodeTableHeaderCell, VscodeTableRow, VscodeTextfield } from "@vscode-elements/react-elements";
+import { VscodeButton, VscodeCheckbox, VscodeDivider, VscodeIcon, VscodeTable, VscodeTableCell, VscodeTableHeader, VscodeTableHeaderCell, VscodeTableRow } from "@vscode-elements/react-elements";
 import { VscodeTableBody } from "@vscode-elements/react-elements";
 import { TdsLink } from './../decorator/link';
 
@@ -44,6 +44,23 @@ type TBuildRowsProps = {
 	//rows: any[];
 	rowSeparator: boolean;
 	itemOffset: number;
+}
+
+function getColumnAlign(columnDef: TTdsDataGridColumnDef): string | undefined {
+	let alignClass: string | undefined = columnDef.align ? `tds-text-${columnDef.align}` : undefined;
+	let type: string = columnDef.displayType || columnDef.type;
+
+	if (type == "boolean") {
+		alignClass = "tds-text-center";
+	} else if ((type == "date") || (type == "time")) {
+		alignClass = "tds-text-center";
+	} else if (type == "datetime") {
+		alignClass = "tds-text-right";
+	} else if ((columnDef.type == "number")) {
+		alignClass = "tds-text-right";
+	}
+
+	return alignClass;
 }
 
 function BuildRows(props: TBuildRowsProps) {
@@ -71,13 +88,15 @@ function BuildRows(props: TBuildRowsProps) {
 					{
 						//gridTemplateColumns = { gridTemplate }
 					}
-					{props.columnsDef.filter(column => column.visible)
+					{props.columnsDef.filter((column: TTdsDataGridColumnDef) => column.visible)
 						.filter(column => (column.rowGroup || 0) == rowNumber)
 						.map((column, indexCol: number) => (
 							<VscodeTableCell
 								id={`${props.id}_cell_${rowNumber}_${index + itemOffset}${indexCol + 1}`}
 								key={`${props.id}_cell__${rowNumber}_${index + itemOffset}${indexCol + 1}`}
-								grid-column={indexCol + 1}>
+								grid-column={indexCol + 1}
+								className={getColumnAlign(column)}
+							>
 								{
 									fieldData(
 										{
@@ -134,13 +153,10 @@ function BuildRows(props: TBuildRowsProps) {
 function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 	const column = props.fieldDef;
 	const row = props.row;
-	let alignClass: string | undefined = column.align ? `tds-text-${column.align}` : "tds-text-left";
 
 	if (column.type == "boolean") {
-		alignClass = alignClass || "tds-text-center";
 		return (
 			<VscodeCheckbox
-				className={alignClass}
 				key={`${props.fieldName}`}
 				checked={row.mark || false}
 				name={props.fieldName}
@@ -156,7 +172,6 @@ function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 		value = tdsVscode.l10n.format(row[column.name], (column.displayType || column.type) as "date" | "time" | "datetime") || "";
 		title = value.startsWith("Invalid") ? row[column.name] : value;
 	} else if ((column.type == "number")) {
-		alignClass = alignClass || "tds-text-right";
 		value = tdsVscode.l10n.formatNumber(row[column.name], (column.displayType || column.type) as "int" | "float" | "hex" | "HEX" | "number") || "";
 		title = value.startsWith("Invalid") ? row[column.name] : value;
 	} else { // string
@@ -166,8 +181,8 @@ function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 		title = value;
 	}
 
-
-	return <span title={value}>{value}</span>;
+	//return <VscodeLabel title={value}>{title}</VscodeLabel>
+	return <span title={title}>{value}</span>;
 }
 
 function prepareDataSource(columnsDef: TTdsDataGridColumnDef[], dataSource: any[],
@@ -414,6 +429,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 							.map((column, _index: number) => (
 								<VscodeTableHeaderCell
 									key={`${props.id}_header_column_${rowNumber}_${_index}`}
+									className={getColumnAlign(column)}
 								>
 									{column.label || column.name}&nbsp;
 									{props.options.sortable && column.sortable &&

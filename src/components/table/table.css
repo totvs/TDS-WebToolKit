@@ -58,3 +58,15 @@ limitations under the License.
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+.tds-table vscode-table-cell.tds-text-left {
+	text-align: left;
+}
+
+.tds-table vscode-table-cell.tds-text-center {
+	text-align: center;
+}
+
+.tds-table vscode-table-cell.tds-text-right {
+	text-align: right;
+}

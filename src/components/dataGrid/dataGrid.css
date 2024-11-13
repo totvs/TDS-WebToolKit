@@ -144,3 +144,15 @@ vscode-icon.scale070 {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+.tds-data-grid vscode-table-cell.tds-text-left {
+	text-align: left;
+}
+
+.tds-data-grid vscode-table-cell.tds-text-center {
+	text-align: center;
+}
+
+.tds-data-grid vscode-table-cell.tds-text-right {
+	text-align: right;
+}
