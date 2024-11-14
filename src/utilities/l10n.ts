@@ -48,40 +48,39 @@ export class L10n {
    * @returns The formatted date or date&time string.
    */
   public formatDate(value: Date, type: TDateFormat = "datetime"): string {
+    const formatLocale: string = this._formatLocale || undefined;
     let result: string = (value || "").toLocaleString();
 
-    if (this._formatLocale !== "") {
-      try {
-        let options: Intl.DateTimeFormatOptions = {};
+    try {
+      let options: Intl.DateTimeFormatOptions = {};
 
-        if (type === "date") {
-          options = {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          };
-        } else if (type === "time") {
-          options = {
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric"
-          };
-        } else if (type === "datetime") {
-          options = {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric"
-          };
-        }
-
-        const dateTimeFormat = new Intl.DateTimeFormat(this._formatLocale, options);
-        result = dateTimeFormat.format(value);
-      } catch (error) {
-        result = value.toLocaleString()
+      if (type === "date") {
+        options = {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit"
+        };
+      } else if (type === "time") {
+        options = {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        };
+      } else if (type === "datetime") {
+        options = {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        };
       }
+
+      const dateTimeFormat = new Intl.DateTimeFormat(formatLocale, options);
+      result = dateTimeFormat.format(value);
+    } catch (error) {
+      result = value.toLocaleString()
     }
 
     return result;

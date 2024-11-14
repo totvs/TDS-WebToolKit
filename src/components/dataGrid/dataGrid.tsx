@@ -153,8 +153,11 @@ function BuildRows(props: TBuildRowsProps) {
 function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 	const column = props.fieldDef;
 	const row = props.row;
+	const type: string = column.displayType || column.type;
+	let value: string = "";
+	let title: string = "";
 
-	if (column.type == "boolean") {
+	if (type == "boolean") {
 		return (
 			<VscodeCheckbox
 				key={`${props.fieldName}`}
@@ -164,12 +167,11 @@ function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 		)
 	}
 
-	let value: string = "";
-	let title: string = "";
-
 	//Campo DATE, TIME e DATETIME
-	if ((column.type == "date") || (column.type == "time") || (column.type == "datetime")) {
+	if ((type == "date") || (type == "time") || (type == "datetime")) {
+		console.log(">>> before", (column.displayType || column.type), row[column.name]);
 		value = tdsVscode.l10n.format(row[column.name], (column.displayType || column.type) as "date" | "time" | "datetime") || "";
+		console.log(">>> after", (column.displayType || column.type), value);
 		title = value.startsWith("Invalid") ? row[column.name] : value;
 	} else if ((column.type == "number")) {
 		value = tdsVscode.l10n.formatNumber(row[column.name], (column.displayType || column.type) as "int" | "float" | "hex" | "HEX" | "number") || "";
