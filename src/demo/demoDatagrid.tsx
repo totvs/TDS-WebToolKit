@@ -94,7 +94,7 @@ function dataGrid(props: TDemoDataGridProps) {
             {
                 type: "string",
                 name: "name",
-                label: tdsVscode.l10n.t("Country"),
+                label: tdsVscode.l10n.t("_Country"),
                 width: "8fr",
                 sortDirection: "asc",
                 rowGroup: props.multiRow ? 0 : undefined,
@@ -102,28 +102,28 @@ function dataGrid(props: TDemoDataGridProps) {
             {
                 type: "string",
                 name: "capital",
-                label: tdsVscode.l10n.t("Capital"),
+                label: tdsVscode.l10n.t("_Capital"),
                 width: "10fr",
                 rowGroup: props.multiRow ? 0 : undefined,
             },
             {
                 type: "number",
                 name: "population",
-                label: tdsVscode.l10n.t("Population"),
+                label: tdsVscode.l10n.t("_Population"),
                 width: "5fr",
                 rowGroup: props.multiRow ? 1 : undefined,
             },
             {
                 type: "number",
                 name: "area",
-                label: tdsVscode.l10n.t("Area"),
+                label: tdsVscode.l10n.t("_Area"),
                 width: "4fr",
                 rowGroup: props.multiRow ? 1 : undefined,
             },
             {
                 type: "string",
                 name: "continent",
-                label: tdsVscode.l10n.t("Continent"),
+                label: tdsVscode.l10n.t("_Continent"),
                 width: "10fr",
                 grouping: true,
                 rowGroup: props.multiRow ? 0 : undefined,
@@ -131,7 +131,7 @@ function dataGrid(props: TDemoDataGridProps) {
             {
                 type: "datetime",
                 name: "independenceDate",
-                label: tdsVscode.l10n.t("Independence"),
+                label: tdsVscode.l10n.t("_Independence"),
                 width: "10fr",
                 displayType: "date",
                 rowGroup: props.multiRow ? 1 : undefined,
@@ -200,7 +200,7 @@ function dataGrid(props: TDemoDataGridProps) {
                 modelField=""
                 options={{
                     grouping: true,
-                    pageSize: 10,
+                    pageSize: 20,
                     pageSizeOptions: [5, 10, 15, 20, 25, 50, 100],
                     rowSeparator: props.multiRow,
                     topActions: topActions,
@@ -242,7 +242,7 @@ function dataGridSelectRow(props: TDemoDataGridProps) {
             {
                 type: "boolean",
                 name: "mark",
-                label: tdsVscode.l10n.t("Mark"),
+                label: tdsVscode.l10n.t("_Mark"),
                 width: "1fr",
                 rowGroup: props.multiRow ? 0 : undefined,
                 readOnly: false
@@ -250,7 +250,7 @@ function dataGridSelectRow(props: TDemoDataGridProps) {
             {
                 type: "string",
                 name: "name",
-                label: tdsVscode.l10n.t("Country"),
+                label: tdsVscode.l10n.t("_Country"),
                 width: "8fr",
                 sortDirection: "asc",
                 rowGroup: props.multiRow ? 0 : undefined,
@@ -258,28 +258,28 @@ function dataGridSelectRow(props: TDemoDataGridProps) {
             {
                 type: "string",
                 name: "capital",
-                label: tdsVscode.l10n.t("Capital"),
+                label: tdsVscode.l10n.t("_Capital"),
                 width: "10fr",
                 rowGroup: props.multiRow ? 0 : undefined,
             },
             {
                 type: "number",
                 name: "population",
-                label: tdsVscode.l10n.t("Population"),
+                label: tdsVscode.l10n.t("_Population"),
                 width: "5fr",
                 rowGroup: props.multiRow ? 1 : undefined,
             },
             {
                 type: "number",
                 name: "area",
-                label: tdsVscode.l10n.t("Area"),
+                label: tdsVscode.l10n.t("_Area"),
                 width: "4fr",
                 rowGroup: props.multiRow ? 1 : undefined,
             },
             {
                 type: "string",
                 name: "continent",
-                label: tdsVscode.l10n.t("Continent"),
+                label: tdsVscode.l10n.t("_Continent"),
                 width: "10fr",
                 grouping: true,
                 rowGroup: props.multiRow ? 0 : undefined,
@@ -287,7 +287,7 @@ function dataGridSelectRow(props: TDemoDataGridProps) {
             {
                 type: "datetime",
                 name: "independenceDate",
-                label: tdsVscode.l10n.t("Independence"),
+                label: tdsVscode.l10n.t("_Independence"),
                 width: "10fr",
                 displayType: "date",
                 rowGroup: props.multiRow ? 1 : undefined,
@@ -304,9 +304,7 @@ function dataGridSelectRow(props: TDemoDataGridProps) {
             }
         })
     }
-    //const indexFirstPathFree: number = model.includePaths.findIndex((row: TIncludePath) => row.path == "");
 
-    //    actions={formActions}
     return (
         <TdsPage id="demoDataGrid" title="Demo: TdsDataGrid" >
             <TdsDataGrid
@@ -316,7 +314,7 @@ function dataGridSelectRow(props: TDemoDataGridProps) {
                 modelField=""
                 options={{
                     grouping: true,
-                    pageSize: 10,
+                    pageSize: 20,
                     pageSizeOptions: [5, 10, 15, 20, 25, 50, 100],
                     rowSeparator: props.multiRow
                 }} />
