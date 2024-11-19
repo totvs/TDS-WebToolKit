@@ -197,7 +197,6 @@ function dataGrid(props: TDemoDataGridProps) {
                 id={"result_dataGrid"}
                 columnsDef={columnsDef()}
                 dataSource={model.dataSource}
-                zebra
                 modelField=""
                 options={{
                     grouping: true,
