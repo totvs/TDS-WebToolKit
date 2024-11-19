@@ -40,6 +40,7 @@ Componentes visuais baseados em **React** e **@vscode-elements**, que agiliza a 
 - TdsLabelField
 - TdsNumericField
 - TdsSelectionField
+- TdsMultiSelectionField
 - TdsSelectionResourceField
 - TdsSimpleCheckBoxField
 - TdsSimpleLabelField
