@@ -141,6 +141,10 @@ vscode-icon.scale070 {
 	transform: scale(0.7);
 }
 
+.tds-data-grid vscode-table {
+	height: 280px;
+}
+
 .tds-data-grid vscode-table-cell {
 	overflow: hidden;
 	text-overflow: ellipsis;
