@@ -67,6 +67,7 @@ export type TdsFormAction = {
 type TdsFormProps<M extends TdsAbstractModel> = {
 	onSubmit: React.FormEventHandler<HTMLFormElement>;
 	id?: string;
+	name?: string;
 	title?: string;
 	onManualReset?: () => void;
 	actions?: TdsFormAction[];
@@ -85,10 +86,15 @@ type TdsFormProps<M extends TdsAbstractModel> = {
  * @param [props.showFooter] - Show footer page
  */
 export function TdsForm<M extends TdsAbstractModel>(props: TdsFormProps<M>): React.ReactElement {
+	if (!props.id && !props.name) {
+		throw new Error("ID or name properties must be informed.");
+	}
+
 	return (
 		<section className="tds-form">
 			<form className="tds-form"
 				id={props.id}
+				name={props.name}
 				autoComplete="off"
 				onSubmit={props.onSubmit}
 			>

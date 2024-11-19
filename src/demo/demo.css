@@ -1,12 +1,15 @@
 .demo-left-side {
     background-color: slategrey;
-    flex-shrink: 0;
-    align-items: flex-start;
     order: 0;
     height: 650px;
-    flex-direction: row;
-    width: max-content;
+    width: 100%;
     padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+    margin: 0px;
+    row-gap: 5px;
 }
 
 .demo-left-side #formLayout {
@@ -14,12 +17,10 @@
 }
 
 .demo-left-side>vscode-button {
-    margin-bottom: 5px;
+    width: 85%;
 }
 
 .demo-right-side {
-    flex-grow: 1;
-    flex-shrink: 0;
     order: 0;
     height: 600px;
     color: var(--foreground);

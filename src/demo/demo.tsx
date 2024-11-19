@@ -49,7 +49,7 @@ export function Demo() {
 
   return (
     <React.StrictMode>
-      <div className="demo-left-side tds-column-container">
+      <div className="demo-left-side">
         <VscodeButton onClick={() => setDemo(DemoEnum.Page)}>TdsPage</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.Form)}>TdsForm</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.FormWithoutLayoutControl)}>TdsForm (WithoutLayoutControl)</VscodeButton>

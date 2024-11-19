@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import "./dialog.css";
 import "../page/page.css";
+import "./dialog.css";
 import React from 'react';
 import { ErrorBoundary } from "../error-boundary";
 import { VscodeIcon } from "@vscode-elements/react-elements";

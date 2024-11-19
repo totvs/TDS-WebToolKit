@@ -20,6 +20,7 @@ limitations under the License.
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
+	row-gap: calc(var(--tds-hor-spacing)*5);
 }
 
 .tds-data-grid .tds-row-container {
@@ -32,7 +33,7 @@ limitations under the License.
 	flex-shrink: 1;
 	order: 0;
 	flex-direction: column;
-	margin-bottom: var(--tds-ver-spacing);
+	margin-bottom: var(--tds-ver-spacing)*1;
 	gap: calc(var(--tds-hor-spacing)*2);
 }
 

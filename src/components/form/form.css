@@ -143,10 +143,8 @@ vscode-text-field.tds-text-center::part(control) {
 	box-sizing: border-box;
 	display: flex;
 	flex-flow: column;
-	/* align-items: flex-end; */
 	justify-content: flex-start;
 	margin: 0px;
-	/* width: 100%; */
 }
 
 .tds-row-container {
