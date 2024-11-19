@@ -215,6 +215,7 @@ export class L10n {
       this._translations["_Filters on all columns and can accept regular expressions"] = "Filtros em todas as colunas e aceita expressões regulares";
       this._translations["_Filter using this column and can accept regular expressions"] = "_Filtro nesta coluna e aceita expressões regulares";
       this._translations["_Elements/page"] = "Elementos/página";
+      this._translations["_Zebra"] = "Zebrado";
       this._translations["_Save"] = "Salvar";
       this._translations["_Save the information and close the page"] = "Salva as informações e fecha a página";
       this._translations["_Close"] = "Fechar";
@@ -251,6 +252,7 @@ export class L10n {
       this._translations["_Filters on all columns and can accept regular expressions"] = "Filters on all columns and can accept regular expressions";
       this._translations["_Filter using this column and can accept regular expressions"] = "_Filter using this column and can accept regular expressions";
       this._translations["_Elements/page"] = "Elements/page";
+      this._translations["_Zebra"] = "Zebra";
       this._translations["_Save"] = "Save";
       this._translations["_Save the information and close the page"] = "Save the information and close the page";
       this._translations["_Close"] = "Close";

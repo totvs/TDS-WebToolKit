@@ -40,7 +40,6 @@ type TDemoModel = {
 }
 
 type TDemoTableProps = {
-    zebra?: boolean;
     highlightRows?: number[];
     highlightGroups?: Record<string, number[]> | Record<string, (row: any[], index: number) => boolean>;
 }
@@ -127,7 +126,6 @@ export default function DemoTable(props: TDemoTableProps) {
                 rows={model.dataSource}
                 highlightRows={props.highlightRows}
                 highlightGroups={props.highlightGroups}
-                zebra={props.zebra}
             />
         </TdsPage>
     );

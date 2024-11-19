@@ -23,7 +23,8 @@ export interface IPageState {
   compact: boolean;
   gridOptions: {
     elementsPerPage: number,
-    pageSizes: number[]
+    pageSizes: number[],
+    zebra: boolean
   }
 }
 
@@ -32,7 +33,8 @@ export const DEFAULT_PAGE_STATE: IPageState = {
   compact: false,
   gridOptions: {
     elementsPerPage: 10,
-    pageSizes: [10, 25, 50, 100, 200]
+    pageSizes: [10, 25, 50, 100, 200],
+    zebra: true
   }
 }
 

@@ -40,7 +40,6 @@ enum DemoEnum {
   Table,
   TableHighlightRows,
   TableHighlightGroup,
-  TableZebra,
   Tree,
   ReactForm
 }
@@ -61,7 +60,6 @@ export function Demo() {
         <VscodeButton onClick={() => setDemo(DemoEnum.Table)}>TdsTable</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.TableHighlightRows)}>TdsTable (highlight rows)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.TableHighlightGroup)}>TdsTable (highlight groups)</VscodeButton>
-        <VscodeButton onClick={() => setDemo(DemoEnum.TableZebra)}>TdsTable (zebra)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.DualSelection)}>Dual Selection List</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.Tree)}>Tree</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.ReactForm)}>React Form</VscodeButton>
@@ -89,7 +87,6 @@ export function Demo() {
           "demo-table-g2": [6, 7, 8],
         }}
         />}
-        {demo == DemoEnum.TableZebra && <DemoTable zebra />}
         {demo == DemoEnum.Tree && <DemoTree />}
         {demo == DemoEnum.ReactForm && <DemoReactForm />}
 

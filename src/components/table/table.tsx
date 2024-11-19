@@ -19,6 +19,7 @@ import React from "react";
 import { TTdsTableColumn, TTdsOnClickTableCell, TTdsTableProps } from "./table.type";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { VscodeCheckbox, VscodeTable, VscodeTableBody, VscodeTableCell, VscodeTableHeader, VscodeTableHeaderCell, VscodeTableRow, VscodeTextfield } from "@vscode-elements/react-elements";
+import { PageContext } from "../page/pageContext";
 
 type TBuildRowsProps = {
 	id: string;  //ID tabela 
@@ -135,6 +136,7 @@ function BuildRow(props: TBuildRowsProps) {
  * @returns The rendered table component.
  */
 export function TdsTable(props: TTdsTableProps): React.ReactElement {
+	const pageContext = React.useContext(PageContext);
 	const alignColumns: string[] = props.columns
 		.map((headerColumn: TTdsTableColumn) =>
 			typeof (headerColumn) == "string"
@@ -156,7 +158,7 @@ export function TdsTable(props: TTdsTableProps): React.ReactElement {
 				: `${headerColumn.label}`
 		);
 
-	const otherProps: {} = props.zebra ? { "zebra-odd": true } : {};
+	const otherProps: {} = pageContext.gridOptions.zebra ? { "zebra-odd": true } : {};
 
 	return (
 		<section className="tds-table" id={`${props.id}`}>
