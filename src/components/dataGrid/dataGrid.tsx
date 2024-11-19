@@ -315,8 +315,20 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 	)
 }
 
+function initialColumnsDef(columnsDef: TTdsDataGridColumnDef[]): TTdsDataGridColumnDef[] {
+	return columnsDef.map((columnDef: TTdsDataGridColumnDef) => {
+		columnDef.sortable = columnDef.sortable == undefined ? true : columnDef.sortable;
+		columnDef.sortDirection = columnDef.sortDirection == undefined ? "" : columnDef.sortDirection;
+		columnDef.visible = columnDef.visible == undefined ? true : columnDef.visible;
+		columnDef.grouping = columnDef.grouping == undefined ? false : columnDef.grouping;
+
+		return columnDef;
+	});
+
+}
 function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 	const pageContext = React.useContext(PageContext);
+	const [_columnsDef, _setColumnsDef] = React.useState<TTdsDataGridColumnDef[]>(initialColumnsDef(props.columnsDef));
 	const {
 		rows, setRows,
 		filter, setFilter,
@@ -337,13 +349,12 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 		setItemOffset(newOffset);
 	}
 
-	const handlePageSizeClick = (newSize: number) => {
-		//setPageSize(newSize);
-		setCurrentPage(0);
-		setItemOffset(0);
-	};
-
 	const handleSortClick = (columnSort: TTdsDataGridColumnDef) => {
+		_columnsDef.filter((column: TTdsDataGridColumnDef) => column.name != columnSort.name)
+			.forEach((column: TTdsDataGridColumnDef) => {
+				column.sortDirection = "";
+			})
+
 		columnSort.sortDirection = columnSort.sortDirection === "asc" ? "desc"
 			: columnSort.sortDirection === "desc" ? "" : "asc";
 
@@ -363,9 +374,9 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 				return acc;
 			}, []);
 
-			const indexColumn = props.columnsDef.indexOf(columnDef);
+			const indexColumn = _columnsDef.indexOf(columnDef);
 			setGroupingInfo({
-				groupingCol: props.columnsDef[indexColumn],
+				groupingCol: _columnsDef[indexColumn],
 				groupingValues: groupingValues
 			});
 			setGroupingFilter([]);
@@ -395,21 +406,14 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 		props.options.pageSizeOptions = [50, 100, 250, 500, 1000];
 	}
 
-	props.columnsDef.forEach((columnDef: TTdsDataGridColumnDef) => {
-		columnDef.sortable = columnDef.sortable == undefined ? true : columnDef.sortable;
-		columnDef.sortDirection = columnDef.sortDirection == undefined ? "" : columnDef.sortDirection;
-		columnDef.visible = columnDef.visible == undefined ? true : columnDef.visible;
-		columnDef.grouping = columnDef.grouping == undefined ? false : columnDef.grouping;
-	});
-
-	const buildRowHeader = (columnDefs: TTdsDataGridColumnDef[]): React.ReactElement[] => {
+	const buildRowHeader = (): React.ReactElement[] => {
 		let reactElements: React.ReactElement[] = [];
 		let rowNumber: number = 0;
 
 		while (rowNumber != -1) {
 			let gridTemplate: string = "";
 
-			columnDefs
+			_columnsDef
 				.filter(column => column.visible)
 				.filter((column) => (column.rowGroup || 0) == rowNumber)
 				.map((column, _index: number) => {
@@ -424,7 +428,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 					key={`${props.id}_header_${rowNumber}`}
 				>
 					{
-						columnDefs
+						_columnsDef
 							.filter(column => column.visible)
 							.filter((column) => (column.rowGroup || 0) == rowNumber)
 							.map((column, _index: number) => (
@@ -463,7 +467,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 
 			rowNumber = rowNumber + 1;
 
-			if (columnDefs.findIndex(column => (column.rowGroup || 0) == rowNumber) == -1) {
+			if (_columnsDef.findIndex(column => (column.rowGroup || 0) == rowNumber) == -1) {
 				rowNumber = -1;
 			}
 		}
@@ -472,18 +476,18 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 	}
 
 	React.useEffect(() => {
-		props.columnsDef.forEach((columnDef: TTdsDataGridColumnDef) => {
-			if (!sortedColumn && (columnDef.sortDirection != "")) {
-				setSortedColumn(columnDef);
-				setSortedDirection(columnDef.sortDirection);
-			}
-		});
+		// props.columnsDef.forEach((columnDef: TTdsDataGridColumnDef) => {
+		// 	if (!sortedColumn && (columnDef.sortDirection != "")) {
+		// 		setSortedColumn(columnDef);
+		// 		setSortedDirection(columnDef.sortDirection);
+		// 	}
+		// });
 
 		// if (props.options.pageSize !== pageSize) {
 		// 	setPageSize(props.options.pageSize);
 		// }
 
-		const data = prepareDataSource(props.columnsDef, props.dataSource,
+		const data = prepareDataSource(_columnsDef, props.dataSource,
 			filter, filterByField, groupingInfo, groupingFilter,
 			sortedColumn);
 		setRows(data);
@@ -520,7 +524,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 					{...otherProps}
 				>
 					<VscodeTableHeader slot="header">
-						{buildRowHeader(props.columnsDef)}
+						{buildRowHeader()}
 					</VscodeTableHeader>
 
 					<VscodeTableBody
@@ -532,7 +536,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 							<BuildRowFilter
 								id={`${props.id}_grid_filter`}
 								key={`${props.id}_grid_filter`}
-								columnDefs={props.columnsDef}
+								columnDefs={_columnsDef}
 								rows={rows}
 							/>
 						}
@@ -542,7 +546,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 							: <BuildRows
 								key={`${props.id}_rows`}
 								id={`${props.id}`}
-								columnsDef={props.columnsDef}
+								columnsDef={_columnsDef}
 								rowSeparator={props.options.rowSeparator || false}
 								itemOffset={itemOffset}
 								elementsPerPage={pageContext.gridOptions.elementsPerPage}
