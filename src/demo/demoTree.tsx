@@ -153,6 +153,7 @@ export default function DemoTree(props: TDemoTreeProps) {
     return (
         <TdsPage id="demoTree" title="Demo: TdsTree" >
             <TdsForm<TDemoModel>
+                id="frmDemoTree"
                 actions={[]}
                 onSubmit={methods.handleSubmit(onSubmit)}
                 onActionEvent={(action) => console.log(action)}

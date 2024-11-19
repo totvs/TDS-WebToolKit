@@ -159,6 +159,7 @@ export default function DemoDualSelection() {
     return (
         <TdsPage id="demoDualSelection" title="Demo: Dual Selection Model" >
             <TdsForm<TDemoModelDualSelectionModel>
+                id="frmDualSelection"
                 key="x"
                 actions={[]}
                 onSubmit={methods.handleSubmit(onSubmit)}

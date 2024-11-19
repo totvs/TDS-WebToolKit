@@ -126,6 +126,7 @@ export default function DemoTableCustomBody(props: TDemoTableCustomBodyProps) {
     return (
         <TdsPage id="demoTableCustomBody" title="Demo: TdsTable (Custom Body)">
             <TdsForm<TDemoModel>
+                id="frmDemoTableCustomBody"
                 actions={[]}
                 onSubmit={methods.handleSubmit(onSubmit)}
                 onActionEvent={(action: TdsFormAction) => { }}>

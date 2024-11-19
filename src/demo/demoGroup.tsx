@@ -83,6 +83,7 @@ export default function DemoGroup(props: TDemoFormProps) {
         <TdsPage id="demoGroup" title="Demo: TdsForm with Groups" showFooter={true}>
             <FormProvider {...methods}>
                 <TdsForm<TDemoModel>
+                    id="frmDemoGroup"
                     onSubmit={methods.handleSubmit(onSubmit)}
                     description={tdsVscode.l10n.t("_Form with Groups Fields")}
                     onActionEvent={(action: any) => {

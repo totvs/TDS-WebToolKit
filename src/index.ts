@@ -27,6 +27,7 @@ export { TdsCheckBoxGroup } from './components/fields/checkBoxGroup'
 export { TdsNumericField } from './components/fields/numericField'
 export { TdsPage } from './components/page/page'
 export { TdsSelectionField } from './components/fields/selectionField'
+export { TdsMultiSelectionField } from './components/fields/multiSelectionField'
 export { TdsSelectionFileField, TdsSelectionFolderField, TdsSelectionResourceField } from './components/fields/selectionResourceField'
 export { TdsTextField } from './components/fields/textField'
 
