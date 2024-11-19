@@ -21,11 +21,19 @@ import { FormGroupVariant } from '@vscode-elements/elements/dist/vscode-form-gro
 export interface IPageState {
   formOrientation: FormGroupVariant;
   compact: boolean;
+  gridOptions: {
+    elementsPerPage: number,
+    pageSizes: number[]
+  }
 }
 
 export const DEFAULT_PAGE_STATE: IPageState = {
   formOrientation: "vertical",
-  compact: false
+  compact: false,
+  gridOptions: {
+    elementsPerPage: 10,
+    pageSizes: [10, 25, 50, 100, 200]
+  }
 }
 
 var NODE_MODE = false;
@@ -151,11 +159,13 @@ class VSCodeAPIWrapper {
 
     if (!pageState) {
       pageState = {
-        formOrientation: DEFAULT_PAGE_STATE.formOrientation,
-        compact: DEFAULT_PAGE_STATE.compact
+        ...DEFAULT_PAGE_STATE
       }
-
-      this.setState(pageState);
+    } else {
+      pageState = {
+        ...DEFAULT_PAGE_STATE, //evita erro ao recuperar versões anteriores
+        ...pageState
+      }
     }
 
     return pageState;

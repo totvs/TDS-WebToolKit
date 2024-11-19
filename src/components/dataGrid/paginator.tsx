@@ -16,25 +16,28 @@ limitations under the License.
 
 import React, { useState } from "react";
 import { tdsVscode } from './../../utilities/vscodeWrapper';
-import { VscodeIcon, VscodeOption, VscodeSingleSelect, VscodeTextfield } from "@vscode-elements/react-elements";
+import { VscodeIcon, VscodeTextfield } from "@vscode-elements/react-elements";
+import { PageContext } from "../page/pageContext";
 
 export interface ITdsPaginatorProps {
 	currentPage: number;
 	currentItem: number;
 	totalItems: number;
-	pageSize: number;
-	pageSizeOptions: number[];
+	//pageSize: number;
+	//pageSizeOptions: number[];
 
 	onPageChange(selectedPage: number): void;
-	onPageSizeChange(size: number): void;
+	//onPageSizeChange(size: number): void;
 }
 
 export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElement {
+	const pageContext = React.useContext(PageContext);
 	const [currentPage, setCurrentPage] = useState(props.currentPage);
 	const [totalPages, setTotalPages] = useState(0);
 	const [currentItem, setCurrentItem] = useState(0);
 	const [totalItems, setTotalItems] = useState(props.totalItems);
-	const lastItem: number = currentItem + props.pageSize > totalItems ? totalItems : currentItem + props.pageSize;
+	const [pageSize] = useState(pageContext.gridOptions.elementsPerPage);
+	const lastItem: number = currentItem + pageSize > totalItems ? totalItems : currentItem + pageSize;
 
 	const changePage = (selectedPage: number) => {
 		if (currentPage != selectedPage) {
@@ -49,42 +52,49 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 			}
 
 			setCurrentPage(selectedPage);
-			setCurrentItem((selectedPage * props.pageSize));
+			setCurrentItem((selectedPage * pageSize));
 		}
 	}
 
 	React.useEffect(() => {
+		//setPageSize(props.pageSize);
 		setCurrentItem(props.currentItem);
 		setCurrentPage(props.currentPage);
 		setTotalItems(props.totalItems);
-		setTotalPages(Math.ceil(props.totalItems / props.pageSize));
-	}, [props.totalItems, props.pageSize]);
+		setTotalPages(Math.ceil(props.totalItems / pageSize));
+	}, [props.totalItems, pageSize]);
 
+	console.log(">>>>>", props)
 	return (
 		<div className="tds-data-grid-paginator">
-			{(props.pageSizeOptions.length > 0) &&
+			{
+				/*
+				(props.pageSizeOptions.length > 0) &&
 				<>
 					<span>{tdsVscode.l10n.t("_Elements/page")}</span>
 					<VscodeSingleSelect
 						key={`dropdown_elements_page`}
-						value={`${props.pageSize}`}
+						value={`${pageSize}`}
 						onChange={(event: any) => {
 							if (props.onPageSizeChange) {
+								event.preventDefault();
 								props.onPageSizeChange(parseInt(event.target.value));
 							}
 						}}
+						position="above"
 					>
 						{props.pageSizeOptions.map((size: number, index: number) => (
 							<VscodeOption
 								key={`${index}`}
 								value={`${size}`}
-								selected={props.pageSize === size}
+								selected={pageSize === size}
 							>
 								{size}
 							</VscodeOption>
 						))}
 					</VscodeSingleSelect>
-				</>
+			</>
+			*/
 			}
 
 			<VscodeIcon

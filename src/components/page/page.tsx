@@ -20,7 +20,7 @@ import TdsHeader from "./header";
 import TdsFooter from "./footer";
 import TdsContent from "./content";
 import { ErrorBoundary } from "../error-boundary";
-import { VscodeRadio, VscodeRadioGroup, VscodeLabel, VscodeIcon, VscodeCheckbox } from "@vscode-elements/react-elements";
+import { VscodeRadio, VscodeRadioGroup, VscodeLabel, VscodeIcon, VscodeCheckbox, VscodeSingleSelect, VscodeOption } from "@vscode-elements/react-elements";
 import { DEFAULT_PAGE_STATE, tdsVscode } from "../../utilities/vscodeWrapper";
 import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
 import { PageContext } from "./pageContext";
@@ -29,6 +29,10 @@ import { TdsForm, TdsFormAction } from "../form/form";
 import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
 import { TdsRadioGroup } from "../fields/checkRadioGroup";
 import { TdsCheckBoxField } from "../fields/checkBoxField";
+import { TdsLabelField } from "../fields/labelField";
+import { TdsSelectionField } from "../fields/selectionField";
+import { VscodeMultiSelect } from '@vscode-elements/react-elements';
+import { TdsMultiOptionsSelection, TdsMultiSelectionField } from "../fields/multiSelectionField";
 
 export interface IPageView {
 	id: string;
@@ -52,19 +56,19 @@ export function TdsPage(props: IPageView): React.ReactElement {
 	const [configDialog, setConfigDialog] = React.useState<boolean>(false);
 	const [formOrientation, setFormOrientation] = React.useState<FormGroupVariant>(tdsVscode.pageState.formOrientation);
 	const [compact, setCompact] = React.useState<boolean>(tdsVscode.pageState.compact);
-	const closeSettings = (ok: boolean, data: any) => {
-		console.log("close");
+	const [gridOptions, setGridOptions] = React.useState(tdsVscode.pageState.gridOptions);
 
+	const closeSettings = (ok: boolean, data: any) => {
 		if (ok) {
 			tdsVscode.pageState = {
 				formOrientation: data.formOrientation,
-				compact: data.compact
+				compact: data.compact,
+				gridOptions: { ...data.gridOptions }
 			}
-		}
 
-		if (ok) {
 			setFormOrientation(tdsVscode.pageState.formOrientation);
 			setCompact(tdsVscode.pageState.compact);
+			setGridOptions(tdsVscode.pageState.gridOptions);
 		}
 
 		setConfigDialog(false);
@@ -95,7 +99,8 @@ export function TdsPage(props: IPageView): React.ReactElement {
 				<TdsContent>
 					<PageContext.Provider value={{
 						formOrientation: formOrientation,
-						compact: compact
+						compact: compact,
+						gridOptions: gridOptions
 					}}>
 						{props.children}
 					</PageContext.Provider>
@@ -112,6 +117,9 @@ export function TdsPage(props: IPageView): React.ReactElement {
 type TSettingsModel = {
 	formOrientation: FormGroupVariant;
 	compact: boolean;
+	gridOptions: {
+		elementsPerPage: number;
+	}
 }
 
 function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
@@ -119,6 +127,7 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 		defaultValues: {
 			formOrientation: tdsVscode.pageState.formOrientation,
 			compact: tdsVscode.pageState.compact,
+			gridOptions: { elementsPerPage: tdsVscode.pageState.gridOptions.elementsPerPage }
 		},
 		mode: "all"
 	})
@@ -145,12 +154,17 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 
 	return (
 		<PageContext.Provider value={{
-			formOrientation: "vertical",
-			compact: false
+			formOrientation: "horizontal",
+			compact: false,
+			gridOptions: {
+				pageSizes: [],
+				elementsPerPage: 0
+			}
 		}}>
 			<TdsDialog title={tdsVscode.l10n.t("_Settings")} onClose={props.onClose} >
 				<FormProvider {...methods}>
 					<TdsForm<TSettingsModel>
+						id="frmConfigDialog"
 						onSubmit={(e) => {
 							//methods.handleSubmit(onSubmit)
 						}}
@@ -161,13 +175,15 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 							} else if (action.id == 1) {
 								props.onClose(false, undefined);
 							} else if (action.id == 2) {
-								methods.setValue("formOrientation", DEFAULT_PAGE_STATE.formOrientation)
-								methods.setValue("compact", DEFAULT_PAGE_STATE.compact)
+								methods.setValue("formOrientation", DEFAULT_PAGE_STATE.formOrientation);
+								methods.setValue("compact", DEFAULT_PAGE_STATE.compact);
+								methods.setValue("gridOptions.elementsPerPage", DEFAULT_PAGE_STATE.gridOptions.elementsPerPage);
 							}
 						}}
 						description={tdsVscode.l10n.t("_Settings")}
 					>
 						<TdsRadioGroup
+							key={"formOrientation"}
 							orientation="horizontal"
 							name={"formOrientation"}
 							label={tdsVscode.l10n.t("_Orientation")}
@@ -193,6 +209,48 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 							value={"true"}
 							checked={model.compact}
 						/>
+
+						<TdsLabelField name={""} label={"_Grid Options"} />
+
+						<TdsSelectionField
+							key={`dropdown_elements_page`}
+							name="gridOptions.elementsPerPage"
+							label={"_Elements/page"}
+							position="above"
+							options={
+								DEFAULT_PAGE_STATE.gridOptions.pageSizes
+									.map((size: number, index: number) => {
+										return {
+											label: `${size}`,
+											value: `${size}`,
+											selected: methods.getValues("gridOptions.elementsPerPage") == size
+										}
+									}
+									)
+							}
+						/>
+
+						{/* <TdsMultiSelectionField
+							key={`dropdown_page_sizes`}
+							name="gridOptions.pageSizes"
+							label={"_Page Size Options"}
+							position="above"
+							options={
+								DEFAULT_PAGE_STATE.gridOptions.pageSizes
+									.map((size: number, index: number) => {
+										return {
+											label: `${size}`,
+											value: `${size}`,
+											selected: model.gridOptions_pageSizes.includes(size)
+										}
+									}
+									)
+							}
+							onChange={(event) => {
+								console.log(event);
+							}}
+						/> */}
+
 					</TdsForm>
 				</FormProvider>
 			</TdsDialog >

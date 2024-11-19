@@ -18,8 +18,8 @@ interface DataSourceContextInterface {
     setSortedDirection: (direction: string) => void;
     currentPage: number;
     setCurrentPage: (page: number) => void;
-    pageSize: number;
-    setPageSize: (page: number) => void;
+    //pageSize: number;
+    //setPageSize: (page: number) => void;
     itemOffset: number;
     setItemOffset: (offset: number) => void;
     groupingInfo: TGroupingInfo | undefined;
@@ -52,7 +52,7 @@ export function DataSourceProvider(props: DataSourceProviderProps) {
     const [sortedColumn, setSortedColumn] = React.useState<TTdsDataGridColumnDef | undefined>(undefined);
     const [sortedDirection, setSortedDirection] = React.useState<string>(undefined);
     const [currentPage, setCurrentPage] = React.useState<number>(0);
-    const [pageSize, setPageSize] = React.useState<number>(0);
+    //const [pageSize, setPageSize] = React.useState<number>(0);
     const [itemOffset, setItemOffset] = React.useState<number>(0);
     const [groupingInfo, setGroupingInfo] = React.useState<TGroupingInfo | undefined>(undefined);
     const [groupingFilter, setGroupingFilter] = React.useState<string[]>([]);
@@ -73,8 +73,8 @@ export function DataSourceProvider(props: DataSourceProviderProps) {
             setSortedDirection: setSortedDirection,
             currentPage: currentPage,
             setCurrentPage: setCurrentPage,
-            pageSize: pageSize,
-            setPageSize: setPageSize,
+            //pageSize: pageSize,
+            //setPageSize: setPageSize,
             itemOffset: itemOffset,
             setItemOffset: setItemOffset,
             filterByField: filterByField,

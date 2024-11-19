@@ -25,6 +25,7 @@ import { GroupingPanel } from "./groupingPanel";
 import { VscodeButton, VscodeCheckbox, VscodeDivider, VscodeIcon, VscodeTable, VscodeTableCell, VscodeTableHeader, VscodeTableHeaderCell, VscodeTableRow } from "@vscode-elements/react-elements";
 import { VscodeTableBody } from "@vscode-elements/react-elements";
 import { TdsLink } from './../decorator/link';
+import { PageContext } from "../page/pageContext";
 
 /**
  * Renders the data grid component.
@@ -41,7 +42,7 @@ type TFieldDataProps = {
 type TBuildRowsProps = {
 	id: string;  //ID Datagrid 
 	columnsDef: TTdsDataGridColumnDef[];
-	//rows: any[];
+	elementsPerPage: number;
 	rowSeparator: boolean;
 	itemOffset: number;
 }
@@ -140,7 +141,7 @@ function BuildRows(props: TBuildRowsProps) {
 	}
 
 	return rows
-		.slice(itemOffset, itemOffset + 10)
+		.slice(itemOffset, itemOffset + props.elementsPerPage)
 		.map((row: any, index: number) => {
 			if (row.index_) {
 				return buildRow(row, row.index_, props.itemOffset)
@@ -169,9 +170,7 @@ function fieldData(props: TFieldDataProps) { //, forceRefresh: number = -1
 
 	//Campo DATE, TIME e DATETIME
 	if ((type == "date") || (type == "time") || (type == "datetime")) {
-		console.log(">>> before", (column.displayType || column.type), row[column.name]);
 		value = tdsVscode.l10n.format(row[column.name], (column.displayType || column.type) as "date" | "time" | "datetime") || "";
-		console.log(">>> after", (column.displayType || column.type), value);
 		title = value.startsWith("Invalid") ? row[column.name] : value;
 	} else if ((column.type == "number")) {
 		value = tdsVscode.l10n.formatNumber(row[column.name], (column.displayType || column.type) as "int" | "float" | "hex" | "HEX" | "number") || "";
@@ -317,13 +316,14 @@ export function TdsDataGrid(props: TTdsDataGridProps): React.ReactElement {
 }
 
 function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
+	const pageContext = React.useContext(PageContext);
 	const {
 		rows, setRows,
 		filter, setFilter,
 		sortedColumn, setSortedColumn,
 		sortedDirection, setSortedDirection,
 		currentPage, setCurrentPage,
-		pageSize, setPageSize,
+		//pageSize, setPageSize,
 		itemOffset, setItemOffset,
 		showFieldsFilter, setShowFieldsFilter,
 		filterByField, setFilterByField,
@@ -339,7 +339,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 	}
 
 	const handlePageSizeClick = (newSize: number) => {
-		setPageSize(newSize);
+		//setPageSize(newSize);
 		setCurrentPage(0);
 		setItemOffset(0);
 	};
@@ -471,7 +471,9 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 		return reactElements;
 	}
 
+	console.log(">>>>> elements/page", pageContext.gridOptions.elementsPerPage)
 	React.useEffect(() => {
+		console.log(">>>>> useEffect", pageContext.gridOptions.elementsPerPage)
 		props.columnsDef.forEach((columnDef: TTdsDataGridColumnDef) => {
 			if (!sortedColumn && (columnDef.sortDirection != "")) {
 				setSortedColumn(columnDef);
@@ -479,9 +481,9 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 			}
 		});
 
-		if (props.options.pageSize !== pageSize) {
-			setPageSize(props.options.pageSize);
-		}
+		// if (props.options.pageSize !== pageSize) {
+		// 	setPageSize(props.options.pageSize);
+		// }
 
 		const data = prepareDataSource(props.columnsDef, props.dataSource,
 			filter, filterByField, groupingInfo, groupingFilter,
@@ -490,10 +492,13 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 	}, [
 		filter,
 		groupingInfo, groupingFilter,
-		itemOffset, currentPage, pageSize,
+		itemOffset, currentPage,
+		pageContext.gridOptions.elementsPerPage,
 		showFieldsFilter, filterByField,
 		sortedColumn, sortedDirection
 	]);
+
+	const otherProps: {} = props.zebra ? { "zebra-odd": true } : {};
 
 	return (
 		<section className="tds-data-grid" id={`${props.id}`}>
@@ -509,7 +514,8 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 					id={`${props.id}_grid`}
 					key={`${props.id}_grid`}
 					bordered-columns
-					resizable={true}
+					resizable={props.resizable == undefined ? true : props.resizable}
+					{...otherProps}
 				>
 					<VscodeTableHeader slot="header">
 						{buildRowHeader(props.columnsDef)}
@@ -537,6 +543,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 								columnsDef={props.columnsDef}
 								rowSeparator={props.options.rowSeparator || false}
 								itemOffset={itemOffset}
+								elementsPerPage={pageContext.gridOptions.elementsPerPage}
 							/>
 						}
 					</VscodeTableBody>
@@ -546,13 +553,10 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 			<div className="tds-data-grid-footer">
 				<TdsPaginator
 					key={"paginator"}
-					pageSize={pageSize}
 					currentPage={currentPage}
 					currentItem={itemOffset}
 					totalItems={rows ? rows.length : 0}
-					pageSizeOptions={props.options.pageSizeOptions}
 					onPageChange={handlePageClick}
-					onPageSizeChange={handlePageSizeClick}
 				/>
 				{props.options.bottomActions && <div className="tds-data-grid-actions">
 					{props.options.bottomActions.map((action: TTdsDataGridAction) => {

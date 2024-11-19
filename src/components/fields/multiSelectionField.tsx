@@ -1,14 +1,13 @@
 import React from "react";
-import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { TdsFieldProps } from "../form/form";
 import { mdToHtml } from "../mdToHtml";
 import { PageContext, TStatePage } from "../page/pageContext";
 import PopupMessage from "../popup-message/popup-message";
-import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeOption, VscodeSingleSelect } from "@vscode-elements/react-elements";
+import { VscodeFormGroup, VscodeFormHelper, VscodeLabel, VscodeMultiSelect, VscodeOption } from "@vscode-elements/react-elements";
 import { useFormContext } from "react-hook-form";
 import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
 
-export type TdsOptionsSelection = {
+export type TdsMultiOptionsSelection = {
 	label: string;
 	value: string;
 	description?: string;
@@ -16,10 +15,10 @@ export type TdsOptionsSelection = {
 	disabled?: boolean;
 };
 
-type TdsSelectionFieldProps = TdsFieldProps & {
-	options: TdsOptionsSelection[];
+type TdsMultiSelectionFieldProps = TdsFieldProps & {
+	options: TdsMultiOptionsSelection[];
+	position?: "above" | "below";
 	orientation?: FormGroupVariant;
-	position?: "above" | "below"
 }
 
 /**
@@ -33,7 +32,7 @@ type TdsSelectionFieldProps = TdsFieldProps & {
  *
  * @returns
  */
-export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactElement {
+export function TdsMultiSelectionField(props: TdsMultiSelectionFieldProps): React.ReactElement {
 	const options = props.options || [];
 	const pageContext: TStatePage = React.useContext(PageContext);
 	const methods = useFormContext();
@@ -42,7 +41,7 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 
 	const buildElement = (attributes: any) => {
 		return (
-			<VscodeSingleSelect
+			<VscodeMultiSelect
 				{...attributes}
 				name={props.name}
 				combobox
@@ -51,7 +50,7 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 				}}
 				position={props.position}
 			>
-				{options.map((option: TdsOptionsSelection, index: number) => {
+				{options.map((option: TdsMultiOptionsSelection, index: number) => {
 					return (
 						<VscodeOption
 							key={`${index}`}
@@ -64,7 +63,7 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 						</VscodeOption>
 					)
 				})}
-			</VscodeSingleSelect>
+			</VscodeMultiSelect>
 		)
 	}
 
@@ -77,19 +76,16 @@ export function TdsSelectionField(props: TdsSelectionFieldProps): React.ReactEle
 			>
 				{mdToHtml(props.label || props.name)}
 			</VscodeLabel>
-			{register
-				? buildElement({
+			{register ?
+				buildElement({
 					...register(`${props.name}`,
 						{
 							disabled: props.readOnly,
 							required: props.rules?.required,
-						}) as any
-				}
-				)
-				: buildElement({
-					disabled: props.readOnly || false,
-					required: props.rules?.required || false
+						})
 				})
+				:
+				buildElement({})
 			}
 			{props.info && !pageContext.compact &&
 				<VscodeFormHelper>
