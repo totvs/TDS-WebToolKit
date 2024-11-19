@@ -3,6 +3,8 @@ import { TGroupingInfo, TTdsDataGridColumnDef } from "./dataGrid.type";
 
 interface DataSourceContextInterface {
     modelField: string;
+    columnsDef: TTdsDataGridColumnDef[];
+    setColumnsDef: (columnsDef: TTdsDataGridColumnDef[]) => void;
     setModelField: (fieldName: string) => void;
     rows: any[];
     setRows: (dataSource: any[]) => void;
@@ -40,10 +42,12 @@ export function useDataSourceContext() {
 
 interface DataSourceProviderProps {
     modelField: string;
+    columnsDef: TTdsDataGridColumnDef[];
     children: React.ReactElement;
 }
 
 export function DataSourceProvider(props: DataSourceProviderProps) {
+    const [columnsDef, setColumnsDef] = React.useState<TTdsDataGridColumnDef[]>(props.columnsDef);
     const [filter, setFilter] = React.useState<string>(undefined);
     const [filterByField, setFilterByField] = React.useState<Record<string, string>>(undefined);
     const [showFieldsFilter, setShowFieldsFilter] = React.useState<boolean>(false);
@@ -58,6 +62,8 @@ export function DataSourceProvider(props: DataSourceProviderProps) {
 
     return (
         <DataSourceContext.Provider value={{
+            columnsDef: columnsDef,
+            setColumnsDef: setColumnsDef,
             rows: rows,
             setRows: setRows,
             setFilter: setFilter,

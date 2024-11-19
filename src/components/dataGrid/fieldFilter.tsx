@@ -277,7 +277,7 @@ export function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[]
 											filters = undefined;;
 										}
 
-										setFilterByField(filters);
+										setFilterByField({...filters});
 									}
 								}
 								dataSource={props.rows}
