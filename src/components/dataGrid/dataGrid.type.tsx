@@ -87,7 +87,7 @@ export type TTdsDataGridProps = {
 	columnsDef: TTdsDataGridColumnDef[]
 	dataSource: any[] //Record<string, string | number | Date | boolean>[]
 	modelField?: string;
-	zebra?: boolean;
+	//zebra?: boolean;
 	resizable?: boolean;
 	options: {
 		bottomActions?: TTdsDataGridAction[];

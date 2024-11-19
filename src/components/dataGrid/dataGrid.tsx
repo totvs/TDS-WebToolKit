@@ -323,7 +323,6 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 		sortedColumn, setSortedColumn,
 		sortedDirection, setSortedDirection,
 		currentPage, setCurrentPage,
-		//pageSize, setPageSize,
 		itemOffset, setItemOffset,
 		showFieldsFilter, setShowFieldsFilter,
 		filterByField, setFilterByField,
@@ -432,6 +431,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 								<VscodeTableHeaderCell
 									key={`${props.id}_header_column_${rowNumber}_${_index}`}
 									className={getColumnAlign(column)}
+									title={column.label || column.name}
 								>
 									{column.label || column.name}&nbsp;
 									{props.options.sortable && column.sortable &&
@@ -471,9 +471,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 		return reactElements;
 	}
 
-	console.log(">>>>> elements/page", pageContext.gridOptions.elementsPerPage)
 	React.useEffect(() => {
-		console.log(">>>>> useEffect", pageContext.gridOptions.elementsPerPage)
 		props.columnsDef.forEach((columnDef: TTdsDataGridColumnDef) => {
 			if (!sortedColumn && (columnDef.sortDirection != "")) {
 				setSortedColumn(columnDef);
@@ -498,7 +496,11 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 		sortedColumn, sortedDirection
 	]);
 
-	const otherProps: {} = props.zebra ? { "zebra-odd": true } : {};
+	React.useEffect(() => {
+		setCurrentPage(0);
+	}, [currentPage]);
+
+	const otherProps: {} = pageContext.gridOptions.zebra ? { "zebra-odd": true } : {};
 
 	return (
 		<section className="tds-data-grid" id={`${props.id}`}>
@@ -557,6 +559,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 					currentItem={itemOffset}
 					totalItems={rows ? rows.length : 0}
 					onPageChange={handlePageClick}
+					pageSize={pageContext.gridOptions.elementsPerPage}
 				/>
 				{props.options.bottomActions && <div className="tds-data-grid-actions">
 					{props.options.bottomActions.map((action: TTdsDataGridAction) => {

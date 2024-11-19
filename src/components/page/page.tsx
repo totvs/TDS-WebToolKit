@@ -119,6 +119,7 @@ type TSettingsModel = {
 	compact: boolean;
 	gridOptions: {
 		elementsPerPage: number;
+		zebra: boolean;
 	}
 }
 
@@ -127,7 +128,10 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 		defaultValues: {
 			formOrientation: tdsVscode.pageState.formOrientation,
 			compact: tdsVscode.pageState.compact,
-			gridOptions: { elementsPerPage: tdsVscode.pageState.gridOptions.elementsPerPage }
+			gridOptions: {
+				elementsPerPage: tdsVscode.pageState.gridOptions.elementsPerPage,
+				zebra: tdsVscode.pageState.gridOptions.zebra
+			}
 		},
 		mode: "all"
 	})
@@ -158,7 +162,8 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 			compact: false,
 			gridOptions: {
 				pageSizes: [],
-				elementsPerPage: 0
+				elementsPerPage: 0,
+				zebra: false
 			}
 		}}>
 			<TdsDialog title={tdsVscode.l10n.t("_Settings")} onClose={props.onClose} >
@@ -228,6 +233,13 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 									}
 									)
 							}
+						/>
+
+						<TdsCheckBoxField
+							name="gridOptions.zebra"
+							label={tdsVscode.l10n.t("_Zebra")}
+							value={"true"}
+							checked={model.gridOptions.zebra}
 						/>
 
 						{/* <TdsMultiSelectionField

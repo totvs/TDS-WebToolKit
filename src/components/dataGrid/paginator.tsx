@@ -23,7 +23,7 @@ export interface ITdsPaginatorProps {
 	currentPage: number;
 	currentItem: number;
 	totalItems: number;
-	//pageSize: number;
+	pageSize: number;
 	//pageSizeOptions: number[];
 
 	onPageChange(selectedPage: number): void;
@@ -31,12 +31,11 @@ export interface ITdsPaginatorProps {
 }
 
 export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElement {
-	const pageContext = React.useContext(PageContext);
+	const pageSize = props.pageSize;
 	const [currentPage, setCurrentPage] = useState(props.currentPage);
 	const [totalPages, setTotalPages] = useState(0);
 	const [currentItem, setCurrentItem] = useState(0);
 	const [totalItems, setTotalItems] = useState(props.totalItems);
-	const [pageSize] = useState(pageContext.gridOptions.elementsPerPage);
 	const lastItem: number = currentItem + pageSize > totalItems ? totalItems : currentItem + pageSize;
 
 	const changePage = (selectedPage: number) => {
@@ -57,14 +56,12 @@ export default function TdsPaginator(props: ITdsPaginatorProps): React.ReactElem
 	}
 
 	React.useEffect(() => {
-		//setPageSize(props.pageSize);
 		setCurrentItem(props.currentItem);
 		setCurrentPage(props.currentPage);
 		setTotalItems(props.totalItems);
 		setTotalPages(Math.ceil(props.totalItems / pageSize));
-	}, [props.totalItems, pageSize]);
+	}, [props.totalItems, props.pageSize]);
 
-	console.log(">>>>>", props)
 	return (
 		<div className="tds-data-grid-paginator">
 			{
