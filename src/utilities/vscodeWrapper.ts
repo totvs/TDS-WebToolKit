@@ -20,6 +20,7 @@ import { FormGroupVariant } from '@vscode-elements/elements/dist/vscode-form-gro
 
 export interface IPageState {
   formOrientation: FormGroupVariant;
+  formColumns: string;
   compact: boolean;
   gridOptions: {
     elementsPerPage: number,
@@ -30,6 +31,7 @@ export interface IPageState {
 
 export const DEFAULT_PAGE_STATE: IPageState = {
   formOrientation: "vertical",
+  formColumns: "1",
   compact: false,
   gridOptions: {
     elementsPerPage: 10,

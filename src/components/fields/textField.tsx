@@ -163,6 +163,7 @@ export function TdsTextField(props: TdsTextFieldProps): any {
     return (
         <VscodeFormGroup variant={pageContext.formOrientation}
             key={props.name}
+            id={`grp_${props.name}`}
         >
             {
                 props.label &&

@@ -1,5 +1,4 @@
 // @ts-nocheck
-
 "use strict";
 const path = require("path");
 //@ts-check
@@ -81,7 +80,7 @@ module.exports = (env, argv) => {
     resolve: {
       alias: {
         react: path.resolve('./node_modules/react'),
-        "@vscode-elements": path.resolve('./node_modules/@vscode-elements'),
+        // "@vscode-elements": path.resolve('./node_modules/@vscode-elements'),
       },
       extensions: [
         ".js",
@@ -94,16 +93,6 @@ module.exports = (env, argv) => {
     },
     module: {
       rules: [
-        // {
-        //   test: /\.m?js/,
-        //   type: "javascript/auto",
-        // },
-        // {
-        //   test: /\.m?js/,
-        //   resolve: {
-        //     fullySpecified: true,
-        //   },
-        // },
         {
           test: /\.(ts|tsx)$/,
           use: [

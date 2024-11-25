@@ -18,6 +18,7 @@ import React from "react";
 
 export interface IHeader {
 	title: string;
+	description?: string;
 }
 
 /**
@@ -30,7 +31,9 @@ export default function TdsHeaderForm(props: IHeader): React.ReactElement {
 
 	return (
 		<section className="tds-header-form">
-			<h3>{props.title}</h3>
+			{props.title && <h3>{props.title}</h3>}
+			{props.description && <p>{props.description}</p>
+			}
 		</section>
 	);
 }

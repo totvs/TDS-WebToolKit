@@ -55,6 +55,7 @@ export interface IPageView {
 export function TdsPage(props: IPageView): React.ReactElement {
 	const [configDialog, setConfigDialog] = React.useState<boolean>(false);
 	const [formOrientation, setFormOrientation] = React.useState<FormGroupVariant>(tdsVscode.pageState.formOrientation);
+	const [formColumns, setFormColumns] = React.useState<string>(tdsVscode.pageState.formColumns);
 	const [compact, setCompact] = React.useState<boolean>(tdsVscode.pageState.compact);
 	const [gridOptions, setGridOptions] = React.useState(tdsVscode.pageState.gridOptions);
 
@@ -62,11 +63,13 @@ export function TdsPage(props: IPageView): React.ReactElement {
 		if (ok) {
 			tdsVscode.pageState = {
 				formOrientation: data.formOrientation,
+				formColumns: data.formColumns,
 				compact: data.compact,
 				gridOptions: { ...data.gridOptions }
 			}
 
 			setFormOrientation(tdsVscode.pageState.formOrientation);
+			setFormColumns(tdsVscode.pageState.formColumns);
 			setCompact(tdsVscode.pageState.compact);
 			setGridOptions(tdsVscode.pageState.gridOptions);
 		}
@@ -99,6 +102,7 @@ export function TdsPage(props: IPageView): React.ReactElement {
 				<TdsContent>
 					<PageContext.Provider value={{
 						formOrientation: formOrientation,
+						formColumns: formColumns,
 						compact: compact,
 						gridOptions: gridOptions
 					}}>
@@ -116,6 +120,7 @@ export function TdsPage(props: IPageView): React.ReactElement {
 
 type TSettingsModel = {
 	formOrientation: FormGroupVariant;
+	formColumns: string;
 	compact: boolean;
 	gridOptions: {
 		elementsPerPage: number;
@@ -127,6 +132,7 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 	const methods: UseFormReturn<TSettingsModel> = useForm<TSettingsModel>({
 		defaultValues: {
 			formOrientation: tdsVscode.pageState.formOrientation,
+			formColumns: tdsVscode.pageState.formColumns,
 			compact: tdsVscode.pageState.compact,
 			gridOptions: {
 				elementsPerPage: tdsVscode.pageState.gridOptions.elementsPerPage,
@@ -159,6 +165,7 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 	return (
 		<PageContext.Provider value={{
 			formOrientation: "horizontal",
+			formColumns: "1",
 			compact: false,
 			gridOptions: {
 				pageSizes: [],
@@ -180,7 +187,9 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 							} else if (action.id == 1) {
 								props.onClose(false, undefined);
 							} else if (action.id == 2) {
+								tdsVscode.pageStateReset();
 								methods.setValue("formOrientation", DEFAULT_PAGE_STATE.formOrientation);
+								methods.setValue("formColumns", DEFAULT_PAGE_STATE.formColumns);
 								methods.setValue("compact", DEFAULT_PAGE_STATE.compact);
 								methods.setValue("gridOptions.elementsPerPage", DEFAULT_PAGE_STATE.gridOptions.elementsPerPage);
 							}
@@ -203,6 +212,27 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 										value: "horizontal",
 										label: tdsVscode.l10n.t("_Horizontal"),
 										checked: model.formOrientation == "horizontal"
+									}
+								]
+							}
+						/>
+
+						<TdsRadioGroup
+							key={"formColumns"}
+							orientation="horizontal"
+							name={"formColumns"}
+							label={tdsVscode.l10n.t("_Form Columns")}
+							options={
+								[
+									{
+										value: "1",
+										label: tdsVscode.l10n.t("_One"),
+										checked: model.formColumns == "1"
+									},
+									{
+										value: "2",
+										label: tdsVscode.l10n.t("_Two"),
+										checked: model.formColumns == "2"
 									}
 								]
 							}

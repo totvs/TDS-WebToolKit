@@ -1,0 +1,31 @@
+#demoForm {
+    height: 520px;
+}
+
+#grp_fieldR2C1 {
+    grid-column: span 2;
+}
+
+#grp_fieldR2C2 {
+    grid-column: span 2;
+}
+
+#grp_fieldR2C3 {
+    grid-column: span 1;
+}
+
+#grp_fieldR3C1 {
+    grid-column: span 3;
+}
+
+#grp_fieldR3C2 {
+    grid-column: span 2;
+}
+
+#grp_fieldR4C1 {
+    grid-column: span 2;
+}
+
+#grp_fieldR4C2 {
+    grid-column: span 3;
+}

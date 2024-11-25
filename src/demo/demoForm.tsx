@@ -39,6 +39,7 @@ type TDemoModel = {
 type TDemoFormProps = {
     layoutControl?: boolean;
     customActions?: boolean;
+    twoColumns?: boolean;
 }
 
 export default function DemoForm(props: TDemoFormProps) {
@@ -100,97 +101,6 @@ export default function DemoForm(props: TDemoFormProps) {
         //href: "command:tds-gaia.help",
     }];
 
-    /*
-                    <section className="tds-row-container" >
-                    <TdsTextField
-                        name="name"
-                        label={tdsVscode.l10n.t("_Name")}
-                        info={tdsVscode.l10n.t("_Enter a name to identify the user")}
-                        rules={{ required: true }}
-                    />
-
-                    <TdsNumericField
-                        name="age"
-                        label={tdsVscode.l10n.t("_Age")}
-                        info={tdsVscode.l10n.t("_Enter the Age")}
-                        rules={{
-                            required: true,
-                            min: { value: 1, message: tdsVscode.l10n.t("_[Age] is not valid range. Min: 18 Max: 60") },
-                            max: { value: 60, message: tdsVscode.l10n.t("_[Age] is not valid range. Min: 1 Max: 60") }
-                        }} />
-                </section>
-
-                <section className="tds-row-container" >
-                    <TdsTextField
-                        name="name"
-                        label={tdsVscode.l10n.t("_First Column")}
-                        rules={{ required: true }}
-                        placeholder="First Columns: sempre ocupa o máximo da largura"
-                    />
-                </section>
-
-                {!props.customActions && <>
-                    <section className="tds-row-container" >
-                        <TdsTextField
-                            name="name"
-                            label={tdsVscode.l10n.t("_First Column")}
-                            rules={{ required: true }}
-                            placeholder="First Columns: sempre ocupa o máximo da largura"
-                        />
-                        <TdsTextField
-                            name="name"
-                            label={tdsVscode.l10n.t("_Second Column")}
-                            rules={{ required: true }}
-                            placeholder="Second Column"
-                        />
-                    </section>
-
-                    <section className="tds-row-container" >
-                        <TdsTextField
-                            name="name"
-                            label={tdsVscode.l10n.t("_First Column")}
-                            rules={{ required: true }}
-                            placeholder="First Columns: sempre ocupa o máximo da largura"
-                        />
-
-                        <TdsTextField
-                            name="name"
-                            label={tdsVscode.l10n.t("_Second Column")}
-                            rules={{ required: true }}
-                            placeholder="Second Column"
-                        />
-
-                    </section>
-
-                    <section className="tds-row-container" >
-                        <TdsCheckBoxField
-                            checked={false}
-                            name="ofLegalAge"
-                            label={tdsVscode.l10n.t("_CheckBox")}
-                        />
-
-                        <TdsSelectionField
-                            name="name"
-                            label={tdsVscode.l10n.t("_Selection List")}
-                            options={[
-                                { value: "1",label: "Option 1" },
-                                { value: "2",label: "Option 2" },
-                                { value: "3",label: "Option 3" },
-                                { value: "4",label: "Option 4" },
-                                { value: "5",label: "Option 5" },
-                            ]}
-                        />
-
-                    </section>
-
-                    <section className="tds-row-container" >
-                        <TdsSelectionFileField />
-                        <TdsSelectionFolderField />
-                    </section>
-                </>
-                }
-                */
-
     return (
         <TdsPage id="demoForm" title="Demo: TdsForm" showFooter={true} layoutControl={props.layoutControl} >
             <FormProvider {...methods}>
@@ -201,7 +111,8 @@ export default function DemoForm(props: TDemoFormProps) {
                     onActionEvent={(action: TdsFormAction) => {
                         console.log(action);
                     }}
-                    description={props.customActions ? tdsVscode.l10n.t("_Customized Food Operations") : tdsVscode.l10n.t("_Main components of a form")}
+                    description={props.customActions ? tdsVscode.l10n.t("_Customized Form Operations") : tdsVscode.l10n.t("_Main components of a form")}
+                    columns={props.twoColumns ? 2 : undefined}
                 >
                     <TdsTextField
                         name="name"
@@ -221,6 +132,7 @@ export default function DemoForm(props: TDemoFormProps) {
                     />
                     <TdsSelectionField
                         name="fieldType"
+                        info="_Select the field type to be applied beside"
                         label={tdsVscode.l10n.t("_Field Type")} options={[
                             { value: "text", label: "text", selected: true },
                             { value: "password", label: "password" },

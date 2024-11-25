@@ -52,15 +52,59 @@ limitations under the License.
 }
 
 /*--< Form Content >----------------------------------------------------------------------------*/
-.tds-form .tds-content-form {
+.tds-form .tds-content-flex-form {
 	flex-grow: 1;
 	flex-shrink: 1;
 	flex-basis: auto;
 	order: 0;
 }
 
-.tds-form vscode-scrollable {
-	overflow: auto;
+.tds-form .tds-content-grid-form {
+	order: 0;
+	flex-grow: 1;
+	flex-shrink: 1;
+	display: grid;
+	grid-column-gap: 10px;
+}
+
+.tds-form .tds-content-grid-form.tds-content-cols-2 {
+	grid-template-columns: repeat(2, 50%);
+}
+
+.tds-form .tds-content-grid-form.tds-content-cols-3 {
+	grid-template-columns: repeat(3, 33.33%);
+}
+
+.tds-form .tds-content-grid-form.tds-content-cols-4 {
+	grid-template-columns: repeat(4, 25%);
+}
+
+.tds-form .tds-content-grid-form.tds-content-cols-5 {
+	grid-template-columns: repeat(5, 20%);
+}
+
+.tds-form .tds-content-grid-form.tds-content-cols-6 {
+	grid-template-columns: repeat(6, 16.66%);
+}
+
+.tds-form .tds-content-grid-form.tds-content-cols-7 {
+	grid-template-columns: repeat(7, 14.28%);
+}
+
+.tds-form .tds-content-grid-form.tds-content-cols-8 {
+	grid-template-columns: repeat(8, 12.5%);
+}
+
+.tds-form .tds-content-grid-form.tds-content-cols-9 {
+	grid-template-columns: repeat(9, 11.11%);
+}
+
+.tds-form .tds-content-grid-form.tds-content-cols-10 {
+	grid-template-columns: repeat(10, 10%);
+}
+
+.tds-form vscode-textfield {
+	width: 100%;
 }
 
 /*--< Form Footer >----------------------------------------------------------------------------*/
@@ -102,18 +146,14 @@ limitations under the License.
 }
 
 /*--< Form Content >----------------------------------------------------------------------------*/
-/* .tds-field-container {
-	box-sizing: border-box;
-	display: flex;
-	flex-flow: column nowrap;
-}
-
-.tds-field-container vscode-text-field {
+vscode-text-field>>>input {
 	width: 100%;
-} */
+	background-color: red;
+}
 
 vscode-text-field::part(control) {
 	text-overflow: ellipsis;
+	background-color: blue;
 }
 
 vscode-text-field[readonly]::part(control),
@@ -134,18 +174,7 @@ vscode-text-field.tds-text-center::part(control) {
 	text-align: center;
 }
 
-/* .tds-field-container vscode-button {
-	max-width: 250px;
-	text-wrap: "nowrap";
-} */
-
-.tds-column-container {
-	box-sizing: border-box;
-	display: flex;
-	flex-flow: column;
-	justify-content: flex-start;
-	margin: 0px;
-}
+/*
 
 .tds-row-container {
 	box-sizing: border-box;
@@ -154,57 +183,18 @@ vscode-text-field.tds-text-center::part(control) {
 	align-items: flex-end;
 	justify-content: flex-start;
 	margin: 0px;
-	/* width: 100%; */
-}
-
-/* 
-.tds-row-container .tds-field-container:nth-child(1),
-.tds-row-container .tds-field-container:nth-child(2),
-.tds-row-container .tds-field-container:nth-child(3) {
-	flex-grow: 0;
-	flex-shrink: 0;
-	flex-basis: auto;
-	align-self: auto;
-	order: 0;
-}
-
-.tds-row-container .tds-field-container:nth-child(1) {
-	flex-grow: 1;
-}
-
-.tds-same-width,
-.tds-same-width div,
-.tds-same-width .tds-field-container:nth-child(1),
-.tds-same-width .tds-field-container:nth-child(2),
-.tds-same-width .tds-field-container:nth-child(3) {
-	flex-grow: 1;
-}
-
-.tds-row-container+.tds-field-container,
-.tds-field-container+.tds-field-container,
-.tds-field-container+.tds-row-container,
-.tds-row-container+.tds-row-container {
-	margin-top: calc(var(--tds-hor-spacing) / 2);
-}
-
-.tds-row-container .tds-field-container+.tds-field-container {
-	margin-top: 0;
-	margin-left: 1rem;
-}
-
-.tds-field-container label {
-	margin-bottom: calc(var(--tds-hor-spacing) / 2);
-}
-
-.tds-scroll {
-	overflow: scroll;
 }
 
 span.tds-required::after {
 	content: "*";
 	color: var(--vscode-editorError-foreground);
 }
- */
+
+*/
+
+/* .wrapper.required::after {
+	color: var(--vscode-editorError-foreground);
+} */
 
 .tds-error {
 	background-color: var(--vscode-inputValidation-errorBackground);

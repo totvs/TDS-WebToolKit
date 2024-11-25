@@ -64,6 +64,20 @@ function getColumnAlign(columnDef: TTdsDataGridColumnDef): string | undefined {
 	return alignClass;
 }
 
+function getColumnsWidth(columnsDef: TTdsDataGridColumnDef[]): any {
+	const defaultWidth: string = `${Math.ceil(100 / columnsDef.length)}%`;
+
+	const cols = columnsDef
+		.filter(column => column.visible)
+		//.filter((column) => (column.rowGroup || 0) == rowNumber)
+		.map((column, _index: number) => {
+			return `${column.width || defaultWidth}`;
+		});
+
+	return []
+}
+
+
 function BuildRows(props: TBuildRowsProps) {
 	const { rows, itemOffset, modelField } = useDataSourceContext();
 
@@ -95,7 +109,6 @@ function BuildRows(props: TBuildRowsProps) {
 							<VscodeTableCell
 								id={`${props.id}_cell_${rowNumber}_${index + itemOffset}${indexCol + 1}`}
 								key={`${props.id}_cell__${rowNumber}_${index + itemOffset}${indexCol + 1}`}
-								grid-column={indexCol + 1}
 								className={getColumnAlign(column)}
 							>
 								{
@@ -121,13 +134,15 @@ function BuildRows(props: TBuildRowsProps) {
 
 		if (props.rowSeparator) {
 			reactElements.push(
-				<VscodeTableRow row-type="default" key={`${props.id}_row_separator_${index + itemOffset}`}>
+				<VscodeTableRow
+					row-type="default"
+					key={`${props.id}_row_separator_${index + itemOffset}`}
+				>
 					{props.columnsDef.filter(column => column.visible)
 						.filter(column => (column.rowGroup || 0) == 0)
 						.map((_column, indexCol: number) => (
 							<VscodeTableCell
 								key={`${props.id}_cell_separator_${index + itemOffset}${indexCol + 1}`}
-								grid-column={indexCol + 1}
 								cell-type="rowseparator"
 							>
 								<VscodeDivider role="separator"></VscodeDivider>
@@ -418,16 +433,7 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 		let rowNumber: number = 0;
 
 		while (rowNumber != -1) {
-			let gridTemplate: string = "";
-
-			columnsDef
-				.filter(column => column.visible)
-				.filter((column) => (column.rowGroup || 0) == rowNumber)
-				.map((column, _index: number) => {
-					gridTemplate += ` ${column.width || "1fr"} `;
-				});
-
-			//gridTemplateColumns={gridTemplate}
+			//let gridTemplate: string = getColumnsWidth(columnsDef);
 			reactElements.push(
 				<VscodeTableRow
 					row-type="header"
@@ -517,6 +523,8 @@ function TdsDataGrid2(props: TTdsDataGridProps): React.ReactElement {
 					key={`${props.id}_grid`}
 					bordered-columns
 					resizable={props.resizable == undefined ? true : props.resizable}
+					columns={getColumnsWidth(columnsDef)}
+					min-column-width="15"
 					{...otherProps}
 				>
 					<VscodeTableHeader slot="header">

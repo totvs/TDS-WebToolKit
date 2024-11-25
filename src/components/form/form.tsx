@@ -22,6 +22,7 @@ import TdsFooterForm from "./footer";
 import { TdsAbstractModel } from "../../model/modelData";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
 import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
+import { PageContext } from "../page/pageContext";
 
 export type TdsFieldRules = {
 	required?: boolean;
@@ -75,6 +76,8 @@ type TdsFormProps<M extends TdsAbstractModel> = {
 	onActionEvent?: (action: TdsFormAction) => void;
 	isProcessRing?: boolean;
 	description?: string;
+	//If the columns are customized, enter any value between 2 and 10
+	columns?: number;
 };
 
 /**
@@ -86,6 +89,8 @@ type TdsFormProps<M extends TdsAbstractModel> = {
  * @param [props.showFooter] - Show footer page
  */
 export function TdsForm<M extends TdsAbstractModel>(props: TdsFormProps<M>): React.ReactElement {
+	const pageContext = React.useContext(PageContext);
+
 	if (!props.id && !props.name) {
 		throw new Error("ID or name properties must be informed.");
 	}
@@ -98,9 +103,14 @@ export function TdsForm<M extends TdsAbstractModel>(props: TdsFormProps<M>): Rea
 				autoComplete="off"
 				onSubmit={props.onSubmit}
 			>
-				{props.title && <TdsHeaderForm title={props.title} />}
+				{(props.title || props.description) &&
+					<TdsHeaderForm
+						title={props.title}
+						description={props.description}
+					/>}
 
-				<TdsContentForm>
+
+				<TdsContentForm columns={props.columns || ((pageContext.formColumns == "2") ? 2 : 1)}>
 					{React.Children.toArray(props.children).map((child: any) => {
 						return child;
 					})}

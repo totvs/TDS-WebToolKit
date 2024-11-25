@@ -160,4 +160,5 @@ vscode-icon.scale070 {
 
 .tds-data-grid vscode-table-cell.tds-text-right {
 	text-align: right;
+	padding-right: calc(var(--tds-hor-spacing)*10);
 }

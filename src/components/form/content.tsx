@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { VscodeScrollable, VscodeSplitLayout } from "@vscode-elements/react-elements";
-import React from "react";
+import { VscodeFormContainer, VscodeScrollable, VscodeSplitLayout } from "@vscode-elements/react-elements";
+import React, { Children } from "react";
 
 export interface IContent {
+	columns?: number;
 	children: any
 }
 
@@ -26,11 +27,28 @@ export interface IContent {
  * @param props - The content section props.
  */
 export default function TdsContentForm(props: IContent) {
-	let children = React.Children.toArray(props.children);
+	let result: React.ReactElement = undefined;
 
-	return (
-		<VscodeScrollable className="tds-content-form">
-			{...children}
-		</VscodeScrollable>
-	);
+	if ((props.columns || 1) > 1) {
+		result = (
+			<VscodeScrollable className="tds-content-flex-form">
+				<div className={`tds-content-grid-form tds-content-cols-${props.columns || 2}`}>
+					{...React.Children.toArray(props.children)}
+				</div>
+			</VscodeScrollable>
+		);
+	} else {
+		result = (
+			<VscodeScrollable className="tds-content-flex-form">
+				{...React.Children.toArray(props.children)}
+			</VscodeScrollable>
+		);
+	}
+
+	return React.Children.toArray(result);
+	// return (
+	// 	<VscodeFormContainer responsive={true}>
+	// 		{React.Children.toArray(result)}
+	// 	</VscodeFormContainer>
+	// )
 }

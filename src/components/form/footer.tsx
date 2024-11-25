@@ -53,14 +53,14 @@ export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
 		action.isProcessRing = (action.isProcessRing !== undefined ? action.isProcessRing && isProcessRing : undefined)
 	});
 
-	console.log(
-		"isProcessRing", isProcessRing,
-		"isSubmitting", isSubmitting,
-		"isLoading", isLoading,
-		"isValid", isValid,
-		"isDirty", isDirty
-	);
-	console.log(formState.errors);
+	// console.log(
+	// 	"isProcessRing", isProcessRing,
+	// 	"isSubmitting", isSubmitting,
+	// 	"isLoading", isLoading,
+	// 	"isValid", isValid,
+	// 	"isDirty", isDirty
+	// );
+	// console.log(formState.errors);
 
 	return (
 		<section className="tds-footer-form">

@@ -3,3 +3,9 @@ vscode-data-grid-row[id^="result_dataGrid_row_2"],
 vscode-data-grid-row[id^="result_dataGrid_row_3"] {
     margin-left: var(--tds-indent-group);
 }
+
+.tds-data-grid vscode-table {
+    height: 580px;
+    width: 1000px;
+    columns: ;
+}

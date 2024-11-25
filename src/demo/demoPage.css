@@ -1,0 +1,5 @@
+div.textLorem {
+    columns: 3 auto;
+    column-gap: 20px;
+    column-rule-style: dashed;
+}

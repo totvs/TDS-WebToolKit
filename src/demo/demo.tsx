@@ -25,14 +25,17 @@ import { VscodeButton, VscodeRadio, VscodeRadioGroup } from "@vscode-elements/re
 import DemoGroup from "./demoGroup";
 import DemoTree from "./demoTree";
 import DemoReactForm from "./demoReactForm";
+import DemoCustomColumnsForm from "./demoCustomColumnsForm";
 
 enum DemoEnum {
   None,
   Page,
   Form,
+  Form2Cols,
   FormWithoutLayoutControl,
   FormCustomActions,
   FormGroups,
+  FormCustomColumns,
   DataGrid,
   DataGridMultiRow,
   DataGridLocale,
@@ -51,9 +54,11 @@ export function Demo() {
       <div className="demo-left-side">
         <VscodeButton onClick={() => setDemo(DemoEnum.Page)}>TdsPage</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.Form)}>TdsForm</VscodeButton>
+        <VscodeButton onClick={() => setDemo(DemoEnum.Form2Cols)}>TdsForm (Two Columns)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.FormWithoutLayoutControl)}>TdsForm (WithoutLayoutControl)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.FormCustomActions)}>TdsForm (custom actions)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.FormGroups)}>TdsForm with Groups</VscodeButton>
+        <VscodeButton onClick={() => setDemo(DemoEnum.FormCustomColumns)}>TdsForm (custom columns)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.DataGrid)}>TdsDataGrid</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.DataGridMultiRow)}>TdsDataGrid (MultiRow)</VscodeButton>
         <VscodeButton onClick={() => setDemo(DemoEnum.DataGridLocale)}>TdsDataGrid (pt-BR)</VscodeButton>
@@ -73,9 +78,11 @@ export function Demo() {
         </>}
         {demo == DemoEnum.Page && <DemoPage />}
         {demo == DemoEnum.Form && <DemoForm />}
+        {demo == DemoEnum.Form2Cols && <DemoForm twoColumns={true} />}
         {demo == DemoEnum.FormWithoutLayoutControl && <DemoForm layoutControl={false} />}
         {demo == DemoEnum.FormCustomActions && <DemoForm customActions={true} />}
         {demo == DemoEnum.FormGroups && <DemoGroup />}
+        {demo == DemoEnum.FormCustomColumns && <DemoCustomColumnsForm />}
         {demo == DemoEnum.DataGrid && <DemoDataGrid />}
         {demo == DemoEnum.DataGridMultiRow && <DemoDataGrid multiRow={true} />}
         {demo == DemoEnum.DataGridLocale && <DemoDataGrid locale="pt-BR" />}
