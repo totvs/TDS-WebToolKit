@@ -64,7 +64,7 @@ export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
 
 	return (
 		<section className="tds-footer-form">
-			<VscodeDivider role="presentation" />
+			<VscodeDivider key="divider" role="presentation" />
 			<div className="tds-message">
 				{!isValid &&
 					<>
@@ -77,7 +77,7 @@ export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
 				{isProcessRing && isSubmitting && <><TdsProgressRing /><span>{tdsVscode.l10n.t("_Wait please. Processing...")}</span></>}
 			</div>
 			<div className="tds-actions">
-				{props.actions.map((action: TdsFormAction) => {
+				{props.actions.map((action: TdsFormAction, index: number) => {
 					let propsField: any = {};
 					let visible: string = "";
 					if (typeof action.id === "string") {
@@ -114,7 +114,7 @@ export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
 					//} else
 					if (action.type == "checkbox") {
 						return (<VscodeCheckbox
-							key={action.id}
+							key={index}
 							className={`tds-button-button ${visible}`}
 							onChange={(e: any) => {
 								e.preventDefault();
@@ -125,7 +125,7 @@ export default function TdsFooterForm(props: TdsFooter): React.ReactElement {
 						</VscodeCheckbox>)
 					} else {
 						return (<VscodeButton
-							key={action.id}
+							key={index}
 							type={action.type || "button"}
 							className={`tds-button-button ${visible}`}
 							title={action.hint}
