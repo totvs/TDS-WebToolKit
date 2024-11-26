@@ -65,46 +65,13 @@ limitations under the License.
 	flex-shrink: 1;
 	display: grid;
 	grid-column-gap: 10px;
+	grid-row-gap: 10px;
+	padding-right: 10px;
 }
 
-.tds-form .tds-content-grid-form.tds-content-cols-2 {
-	grid-template-columns: repeat(2, 50%);
-}
-
-.tds-form .tds-content-grid-form.tds-content-cols-3 {
-	grid-template-columns: repeat(3, 33.33%);
-}
-
-.tds-form .tds-content-grid-form.tds-content-cols-4 {
-	grid-template-columns: repeat(4, 25%);
-}
-
-.tds-form .tds-content-grid-form.tds-content-cols-5 {
-	grid-template-columns: repeat(5, 20%);
-}
-
-.tds-form .tds-content-grid-form.tds-content-cols-6 {
-	grid-template-columns: repeat(6, 16.66%);
-}
-
-.tds-form .tds-content-grid-form.tds-content-cols-7 {
-	grid-template-columns: repeat(7, 14.28%);
-}
-
-.tds-form .tds-content-grid-form.tds-content-cols-8 {
-	grid-template-columns: repeat(8, 12.5%);
-}
-
-.tds-form .tds-content-grid-form.tds-content-cols-9 {
-	grid-template-columns: repeat(9, 11.11%);
-}
-
-.tds-form .tds-content-grid-form.tds-content-cols-10 {
-	grid-template-columns: repeat(10, 10%);
-}
-
-.tds-form vscode-textfield {
-	width: 100%;
+.tds-form vscode-form-group {
+	margin-bottom: calc(var(--tds-ver-spacing) * 0);
+	margin-top: calc(var(--tds-ver-spacing) * 0);
 }
 
 /*--< Form Footer >----------------------------------------------------------------------------*/

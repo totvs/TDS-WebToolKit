@@ -21,7 +21,6 @@ import { TdsPage } from "../components/page/page";
 import { tdsVscode } from "../utilities/vscodeWrapper";
 import { getDefaultActionsForm, TdsForm, TdsFormAction } from "../components/form/form";
 import { TdsTextField, TdsTypeField } from "../components/fields/textField";
-import { TdsSelectionField } from "../components/fields/selectionField";
 import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
 
 enum ReceiveCommandEnum {
@@ -104,7 +103,7 @@ export default function DemoCustomColumnsForm(props: TDemoFormProps) {
                         console.log(action);
                     }}
                     description={tdsVscode.l10n.t("_Customized Columns")}
-                    columns={5}
+                    columnWidths={"repeat(3, auto)"}
                 >
                     <TdsTextField
                         name="fieldR1C1"

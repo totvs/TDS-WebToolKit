@@ -112,7 +112,7 @@ export default function DemoForm(props: TDemoFormProps) {
                         console.log(action);
                     }}
                     description={props.customActions ? tdsVscode.l10n.t("_Customized Form Operations") : tdsVscode.l10n.t("_Main components of a form")}
-                    columns={props.twoColumns ? 2 : undefined}
+                    columnWidths={props.twoColumns ? ["1fr", "1fr"] : undefined}
                 >
                     <TdsTextField
                         name="name"

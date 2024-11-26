@@ -76,8 +76,7 @@ type TdsFormProps<M extends TdsAbstractModel> = {
 	onActionEvent?: (action: TdsFormAction) => void;
 	isProcessRing?: boolean;
 	description?: string;
-	//If the columns are customized, enter any value between 2 and 10
-	columns?: number;
+	columnWidths?: string[] | string;
 };
 
 /**
@@ -97,20 +96,18 @@ export function TdsForm<M extends TdsAbstractModel>(props: TdsFormProps<M>): Rea
 
 	return (
 		<section className="tds-form">
+			<TdsHeaderForm
+				title={props.title}
+				description={props.description}
+			/>
+			
 			<form className="tds-form"
 				id={props.id}
 				name={props.name}
 				autoComplete="off"
 				onSubmit={props.onSubmit}
 			>
-				{(props.title || props.description) &&
-					<TdsHeaderForm
-						title={props.title}
-						description={props.description}
-					/>}
-
-
-				<TdsContentForm columns={props.columns || ((pageContext.formColumns == "2") ? 2 : 1)}>
+				<TdsContentForm columnWidth={props.columnWidths || ((pageContext.formColumns == "2") ? ["auto", "auto"] : ["auto"])}>
 					{React.Children.toArray(props.children).map((child: any) => {
 						return child;
 					})}

@@ -28,12 +28,14 @@ export interface IHeader {
  * @param props.title - Page title to display
  */
 export default function TdsHeaderForm(props: IHeader): React.ReactElement {
+	if (props.title || props.description) {
+		return (
+			<section className="tds-header-form">
+				{props.title && <h3 title={props.description}>{props.title}</h3>}
+				{props.description && <p>{props.description}</p>}
+			</section>
+		);
+	};
 
-	return (
-		<section className="tds-header-form">
-			{props.title && <h3>{props.title}</h3>}
-			{props.description && <p>{props.description}</p>
-			}
-		</section>
-	);
+	return <></>
 }

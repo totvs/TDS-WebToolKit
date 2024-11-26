@@ -194,7 +194,7 @@ function ConfigDialog(props: { onClose: (ok: boolean, data: any) => void }) {
 								methods.setValue("gridOptions.elementsPerPage", DEFAULT_PAGE_STATE.gridOptions.elementsPerPage);
 							}
 						}}
-						description={tdsVscode.l10n.t("_Settings")}
+						description={tdsVscode.l10n.t("_Form and grid layout settings")}
 					>
 						<TdsRadioGroup
 							key={"formOrientation"}
