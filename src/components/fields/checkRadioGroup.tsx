@@ -46,6 +46,7 @@ export function TdsRadioGroup(props: TdsRadioGroupProps): React.ReactElement {
 			</VscodeLabel>
 			{register ?
 				<VscodeRadioGroup
+					key={"radio_group"}
 					variant={props.orientation}
 				>
 					{props.children && React.Children.toArray(props.children.map((e: any) => {
@@ -53,6 +54,7 @@ export function TdsRadioGroup(props: TdsRadioGroupProps): React.ReactElement {
 					}))}
 					{props.options && props.options.map((radioProps: TdsRadioFieldProps, index: number) =>
 						<VscodeRadio
+							key={radioProps.name}
 							{...register(`${props.name}`,
 								{
 									disabled: props.readOnly,
@@ -76,12 +78,14 @@ export function TdsRadioGroup(props: TdsRadioGroupProps): React.ReactElement {
 				:
 				<VscodeRadioGroup
 					variant={props.orientation}
+					key={"radio_group"}
 				>
 					{props.children && React.Children.toArray(props.children.map((e: any) => {
 						return { ...e, name: props.name, rules: e.rules }
 					}))}
 					{props.options && props.options.map((e: TdsRadioFieldProps, index: number) =>
 						<VscodeRadio
+							key={e.name}
 							disabled={props.readOnly || false}
 							required={props.rules?.required || false}
 							value={e.value}
