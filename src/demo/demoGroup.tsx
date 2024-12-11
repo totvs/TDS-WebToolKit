@@ -24,7 +24,6 @@ import { TdsCheckBox } from "../components/fields/checkBoxField";
 import { TdsCheckBoxGroup } from "../components/fields/checkBoxGroup";
 import { TdsRadioGroup } from "../components/fields/checkRadioGroup";
 import { TdsRadio } from "../components/fields/radioField";
-import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
 import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
 
 enum ReceiveCommandEnum {
