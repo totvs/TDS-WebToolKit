@@ -113,31 +113,29 @@ limitations under the License.
 }
 
 /*--< Form Content >----------------------------------------------------------------------------*/
-vscode-text-field>>>input {
+vscode-textfield {
 	width: 100%;
-	background-color: red;
 }
 
-vscode-text-field::part(control) {
-	text-overflow: ellipsis;
-	background-color: blue;
+vscode-single-select {
+	width: 100%;
 }
 
-vscode-text-field[readonly]::part(control),
-vscode-text-field[disabled]::part(control) {
+vscode-textfield[readonly]::part(control),
+vscode-textfield[disabled]::part(control) {
 	filter: brightness(80%);
 	cursor: default;
 }
 
-vscode-text-field.tds-text-left::part(control) {
+vscode-textfield.tds-text-left::part(control) {
 	text-align: left;
 }
 
-vscode-text-field.tds-text-right::part(control) {
+vscode-textfield.tds-text-right::part(control) {
 	text-align: right;
 }
 
-vscode-text-field.tds-text-center::part(control) {
+vscode-textfield.tds-text-center::part(control) {
 	text-align: center;
 }
 

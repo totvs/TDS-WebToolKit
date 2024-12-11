@@ -22,7 +22,7 @@ import { VscodeLabel, VscodeFormHelper } from "@vscode-elements/react-elements";
 import { PageContext, TStatePage } from "../page/pageContext";
 import { FieldError, GlobalError, useFormContext } from "react-hook-form";
 import { tdsVscode } from "../../utilities/vscodeWrapper";
-import { Children } from 'react';
+import { FormGroupVariant } from "@vscode-elements/elements/dist/vscode-form-group";
 
 export type TdsTypeField = "text" | "password" | "email" | "number" | "tel" | "url" | "date" | "time" | "datetime-local" | "month" | "week" | "color" | "search";
 
@@ -37,6 +37,7 @@ type TdsTextFieldProps = TdsFieldProps & {
     format?: (value: string) => string;
     title?: string;
     children?: any
+    variant?: FormGroupVariant
 };
 
 type TdsTextFieldProps2 = Omit<TdsFieldProps, "label"> & {
@@ -161,7 +162,7 @@ export function TdsTextField(props: TdsTextFieldProps): any {
     const fieldError: FieldError | undefined = getFieldState ? getFieldState(props.name).error : undefined;
 
     return (
-        <VscodeFormGroup variant={pageContext.formOrientation}
+        <VscodeFormGroup variant={props.variant || pageContext.formOrientation}
             key={props.name}
             id={`grp_${props.name}`}
         >

@@ -35,6 +35,9 @@ limitations under the License.
 ---------------------------------------------------------------------------------------------------
 */
 .tds-page {
+	display: grid;
+	grid-row: 120px auto 120px;
+	/*
 	display: flex;
 	flex-direction: column;
 	height: -webkit-fill-available;
@@ -43,6 +46,7 @@ limitations under the License.
 	margin-bottom: 0px;
 	margin-top: 0px;
 	width: 85%;
+*/
 }
 
 /*--< Header Page >-------------------------------------------------------------------------------*/

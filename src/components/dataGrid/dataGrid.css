@@ -30,9 +30,10 @@ limitations under the License.
 .tds-data-grid .tds-data-grid-header {
 	display: flex;
 	flex-grow: 0;
-	flex-shrink: 1;
+	flex-shrink: 0;
 	order: 0;
-	flex-direction: column;
+	/* flex-direction: column; */
+	align-items: center;
 	margin-bottom: var(--tds-ver-spacing)*1;
 	gap: calc(var(--tds-hor-spacing)*2);
 }
@@ -125,8 +126,9 @@ limitations under the License.
 	align-self: flex-end;
 }
 
-.tds-data-grid-header vscode-textfield[name="filter"] {
-	width: 100%;
+
+.tds-data-grid-header vscode-form-group#grp_filter {
+	flex-grow: 1;
 }
 
 vscode-icon.mirrorX {

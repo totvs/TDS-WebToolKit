@@ -104,10 +104,9 @@ type TFilterBlockProps = {
 
 export function FilterBlock(props: TFilterBlockProps) {
 	const { setFilter, filter, showFieldsFilter, setShowFieldsFilter } = useDataSourceContext();
-	const contextPage = React.useContext(PageContext);
 
 	return (
-		<section className={`tds-row-container tds-filter-${contextPage.compact ? "compact-" : ""}block`}>
+		<>
 			<TdsTextField
 				key="filter"
 				name="filter"
@@ -196,7 +195,7 @@ export function FilterBlock(props: TFilterBlockProps) {
 					})}
 				</div>
 			}
-		</section >
+		</>
 	)
 }
 
@@ -277,7 +276,7 @@ export function BuildRowFilter(props: BuildRowFilterProps): React.ReactElement[]
 											filters = undefined;;
 										}
 
-										setFilterByField({...filters});
+										setFilterByField({ ...filters });
 									}
 								}
 								dataSource={props.rows}
